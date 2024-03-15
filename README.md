@@ -1,2 +1,2 @@
 # DuoArm
-ROS2 controll system for a bachelor thesis
+ROS2 control system for a bachelor thesis
