@@ -1,0 +1,63 @@
+PanelFactory:
+  {}
+Panels:
+  - Class: rviz_common::panels::DisplaysPanel
+    Name: Displays
+  - Class: rviz_common::panels::SelectionPanel
+    Name: Selection
+  - Class: rviz_common::panels::ToolPropertiesPanel
+    Name: Tool Properties
+  - Class: rviz_common::panels::ViewsPanel
+    Name: Views
+VisualizationManager:
+  Displays:
+    - Alpha: 1
+      Class: rviz_default_plugins::displays::RobotModelDisplay
+      Description: ''
+      Enabled: true
+      Name: RobotModel
+      Robot Description: robot_description
+      TF Prefix: ''
+      Topic: ''
+      Visual Enabled: true
+    - Class: rviz_default_plugins::displays::TFDisplay
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: true
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+  Global Options:
+    Background Color: 48; 48; 48
+    Fixed Frame: world
+    Frame Rate: 30
+Toolbars:
+  - Class: rviz_common::Tool
+    Name: interact
+  - Class: rviz_common::Tool
+    Name: move
+  - Class: rviz_common::Tool
+    Name: select
+  - Class: rviz_common::Tool
+    Name: focus_camera
+  - Class: rviz_common::Tool
+    Name: measure
+Tools:
+  - Class: rviz_common::tools::InteractTool
+    Name: 
+  - Class: rviz_common::tools::MoveTool
+    Name: 
+  - Class: rviz_common::tools::SelectTool
+    Name: 
+  - Class: rviz_common::tools::FocusCameraTool
+    Name: 
+  - Class: rviz_common::tools::MeasureTool
+    Name: 
+Window Geometry:
+  Height: 1000
+  Hide: false
+  Width: 1600
+  X: 50
+  Y: 50
