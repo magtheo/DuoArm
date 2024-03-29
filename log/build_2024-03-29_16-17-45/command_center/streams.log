@@ -1,0 +1,11 @@
+[0.014s] Invoking command in '/home/theo/DuoArm/build/command_center': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/theo/DuoArm/build/command_center -- -j20 -l20
+[0.033s] Invoked command in '/home/theo/DuoArm/build/command_center' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/theo/DuoArm/build/command_center -- -j20 -l20
+[0.048s] Invoking command in '/home/theo/DuoArm/build/command_center': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/theo/DuoArm/build/command_center
+[0.056s] -- Install configuration: ""
+[0.056s] [31mCMake Error at cmake_install.cmake:46 (file):
+[0.057s]   file INSTALL cannot find
+[0.057s]   "/home/theo/DuoArm/src/command_center/command_center": No such file or
+[0.057s]   directory.
+[0.057s] 
+[0.057s] [0m
+[0.064s] Invoked command in '/home/theo/DuoArm/build/command_center' returned '1': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/theo/DuoArm/build/command_center

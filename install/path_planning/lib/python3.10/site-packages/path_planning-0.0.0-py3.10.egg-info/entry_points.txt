@@ -1,0 +1,3 @@
+[console_scripts]
+command_listener = path_planning.command_listener:main
+

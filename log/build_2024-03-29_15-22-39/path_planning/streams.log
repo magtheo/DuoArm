@@ -1,0 +1,42 @@
+[0.010s] Invoking command in '/home/theo/DuoArm/build/path_planning': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /home/theo/DuoArm/src/path_planning -DCMAKE_INSTALL_PREFIX=/home/theo/DuoArm/install/path_planning
+[0.176s] -- The C compiler identification is GNU 11.4.0
+[0.498s] -- The CXX compiler identification is GNU 11.4.0
+[0.689s] -- Detecting C compiler ABI info
+[0.765s] -- Detecting C compiler ABI info - done
+[0.769s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.770s] -- Detecting C compile features
+[0.770s] -- Detecting C compile features - done
+[0.773s] -- Detecting CXX compiler ABI info
+[0.855s] -- Detecting CXX compiler ABI info - done
+[0.860s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.860s] -- Detecting CXX compile features
+[0.860s] -- Detecting CXX compile features - done
+[0.865s] -- Found ament_cmake: 1.3.8 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.958s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[1.031s] -- Found ament_lint_auto: 0.12.10 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[1.090s] -- Added test 'lint_cmake' to check CMake code style
+[1.092s] -- Added test 'xmllint' to check XML markup files
+[1.094s] -- Configuring done
+[1.096s] -- Generating done
+[1.096s] -- Build files have been written to: /home/theo/DuoArm/build/path_planning
+[1.099s] Invoked command in '/home/theo/DuoArm/build/path_planning' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /home/theo/DuoArm/src/path_planning -DCMAKE_INSTALL_PREFIX=/home/theo/DuoArm/install/path_planning
+[1.100s] Invoking command in '/home/theo/DuoArm/build/path_planning': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/theo/DuoArm/build/path_planning -- -j20 -l20
+[1.123s] Invoked command in '/home/theo/DuoArm/build/path_planning' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/theo/DuoArm/build/path_planning -- -j20 -l20
+[1.135s] Invoking command in '/home/theo/DuoArm/build/path_planning': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/theo/DuoArm/build/path_planning
+[1.139s] -- Install configuration: ""
+[1.139s] -- Installing: /home/theo/DuoArm/install/path_planning/share/ament_index/resource_index/package_run_dependencies/path_planning
+[1.139s] -- Installing: /home/theo/DuoArm/install/path_planning/share/ament_index/resource_index/parent_prefix_path/path_planning
+[1.140s] -- Installing: /home/theo/DuoArm/install/path_planning/share/path_planning/environment/ament_prefix_path.sh
+[1.140s] -- Installing: /home/theo/DuoArm/install/path_planning/share/path_planning/environment/ament_prefix_path.dsv
+[1.140s] -- Installing: /home/theo/DuoArm/install/path_planning/share/path_planning/environment/path.sh
+[1.141s] -- Installing: /home/theo/DuoArm/install/path_planning/share/path_planning/environment/path.dsv
+[1.141s] -- Installing: /home/theo/DuoArm/install/path_planning/share/path_planning/local_setup.bash
+[1.141s] -- Installing: /home/theo/DuoArm/install/path_planning/share/path_planning/local_setup.sh
+[1.141s] -- Installing: /home/theo/DuoArm/install/path_planning/share/path_planning/local_setup.zsh
+[1.141s] -- Installing: /home/theo/DuoArm/install/path_planning/share/path_planning/local_setup.dsv
+[1.141s] -- Installing: /home/theo/DuoArm/install/path_planning/share/path_planning/package.dsv
+[1.141s] -- Installing: /home/theo/DuoArm/install/path_planning/share/ament_index/resource_index/packages/path_planning
+[1.141s] -- Installing: /home/theo/DuoArm/install/path_planning/share/path_planning/cmake/path_planningConfig.cmake
+[1.141s] -- Installing: /home/theo/DuoArm/install/path_planning/share/path_planning/cmake/path_planningConfig-version.cmake
+[1.141s] -- Installing: /home/theo/DuoArm/install/path_planning/share/path_planning/package.xml
+[1.143s] Invoked command in '/home/theo/DuoArm/build/path_planning' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/theo/DuoArm/build/path_planning

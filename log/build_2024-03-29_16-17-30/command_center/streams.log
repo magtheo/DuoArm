@@ -1,0 +1,20 @@
+[0.017s] Invoking command in '/home/theo/DuoArm/build/command_center': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/theo/DuoArm/build/command_center -- -j20 -l20
+[0.022s] -- Found ament_cmake: 1.3.8 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.096s] -- Found ament_lint_auto: 0.12.10 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[0.137s] -- Added test 'flake8' to check Python code syntax and style conventions
+[0.137s] -- Added test 'lint_cmake' to check CMake code style
+[0.137s] -- Added test 'pep257' to check Python code against some of the docstring style conventions in PEP 257
+[0.137s] -- Added test 'xmllint' to check XML markup files
+[0.138s] -- Configuring done
+[0.139s] -- Generating done
+[0.140s] -- Build files have been written to: /home/theo/DuoArm/build/command_center
+[0.151s] Invoked command in '/home/theo/DuoArm/build/command_center' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/theo/DuoArm/build/command_center -- -j20 -l20
+[0.162s] Invoking command in '/home/theo/DuoArm/build/command_center': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/theo/DuoArm/build/command_center
+[0.165s] -- Install configuration: ""
+[0.165s] [31mCMake Error at cmake_install.cmake:46 (file):
+[0.165s]   file INSTALL cannot find
+[0.165s]   "/home/theo/DuoArm/src/command_center/command_center": No such file or
+[0.165s]   directory.
+[0.165s] 
+[0.165s] [0m
+[0.166s] Invoked command in '/home/theo/DuoArm/build/command_center' returned '1': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/theo/DuoArm/build/command_center
