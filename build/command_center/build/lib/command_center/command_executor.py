@@ -9,7 +9,7 @@ class CommandExecutor(Node):
         super().__init__('command_executor')
         self.subscription = self.create_subscription(
             String,
-            'high_level_commands',
+            'command_topic',
             self.command_callback,
             10)
         self.subscription  # prevent unused variable warning
@@ -21,8 +21,9 @@ class CommandExecutor(Node):
         self.process_command(command)
 
     def process_command(self, command):
-        if command == 'start_navigation':
-            os.system("ros2 launch my_robot_navigation navigation.launch.py")
+        if command == 'start_path':
+            os.system("ros2 launch path_planning path_planning_launch.py")
+            print("Launching path_planner")
         elif command == 'stop_navigation':
             os.system("ros2 service call /navigation_node/some_service std_srvs/srv/Trigger '{}'")  # Example of stopping a node or action
 

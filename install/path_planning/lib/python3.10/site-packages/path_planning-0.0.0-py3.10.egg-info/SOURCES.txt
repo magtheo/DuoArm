@@ -9,8 +9,9 @@ setup.py
 ../../build/path_planning/path_planning.egg-info/requires.txt
 ../../build/path_planning/path_planning.egg-info/top_level.txt
 ../../build/path_planning/path_planning.egg-info/zip-safe
+launch/path_planning_launch.py
 path_planning/__init__.py
-path_planning/path.py
+path_planning/path_planner.py
 resource/path_planning
 test/test_copyright.py
 test/test_flake8.py
