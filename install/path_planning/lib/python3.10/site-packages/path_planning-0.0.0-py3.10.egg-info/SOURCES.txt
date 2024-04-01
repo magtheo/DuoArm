@@ -11,6 +11,7 @@ setup.py
 ../../build/path_planning/path_planning.egg-info/zip-safe
 launch/path_planning_launch.py
 path_planning/__init__.py
+path_planning/auto_mapper.py
 path_planning/path_planner.py
 resource/path_planning
 test/test_copyright.py

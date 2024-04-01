@@ -3,6 +3,7 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
 import os
+import subprocess
 
 class CommandExecutor(Node):
     def __init__(self):
@@ -22,8 +23,10 @@ class CommandExecutor(Node):
 
     def process_command(self, command):
         if command == 'start_path':
-            os.system("ros2 launch path_planning path_planning_launch.py")
-            print("Launching path_planner")
+            result = subprocess.run(["ros2", "launch", "path_planning", "path_planning_launch.py"],
+                capture_output=True, text=True, shell=True)
+            print("Launching path_planner:", result.stdout, result.stderr)
+        
         elif command == 'stop_navigation':
             os.system("ros2 service call /navigation_node/some_service std_srvs/srv/Trigger '{}'")  # Example of stopping a node or action
 

@@ -1,0 +1,21 @@
+running egg_info
+writing ../../build/command_center/command_center.egg-info/PKG-INFO
+writing dependency_links to ../../build/command_center/command_center.egg-info/dependency_links.txt
+writing entry points to ../../build/command_center/command_center.egg-info/entry_points.txt
+writing requirements to ../../build/command_center/command_center.egg-info/requires.txt
+writing top-level names to ../../build/command_center/command_center.egg-info/top_level.txt
+reading manifest file '../../build/command_center/command_center.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file '../../build/command_center/command_center.egg-info/SOURCES.txt'
+running build
+running build_py
+running install
+running install_lib
+running install_data
+running install_egg_info
+removing '/home/theo/DuoArm/install/command_center/lib/python3.10/site-packages/command_center-0.0.0-py3.10.egg-info' (and everything under it)
+Copying ../../build/command_center/command_center.egg-info to /home/theo/DuoArm/install/command_center/lib/python3.10/site-packages/command_center-0.0.0-py3.10.egg-info
+running install_scripts
+Installing command_executor script to /home/theo/DuoArm/install/command_center/lib/command_center
+Installing command_window script to /home/theo/DuoArm/install/command_center/lib/command_center
+writing list of installed files to '/home/theo/DuoArm/build/command_center/install.log'

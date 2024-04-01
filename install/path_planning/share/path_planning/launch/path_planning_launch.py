@@ -6,12 +6,13 @@ from launch_ros.actions import Node
 def generate_launch_description():
     ld = LaunchDescription()
 
-    path_planner = Node(
+    auto_mapper = Node(
         package='path_planning',
-        executable='path_planner',
-        name='path_planner_node'
+        executable='auto_mapper',
+        name='auto_mapper_node'
+        
     )
 
-    ld.add_action(path_planner)
+    ld.add_action(auto_mapper)
 
     return ld
