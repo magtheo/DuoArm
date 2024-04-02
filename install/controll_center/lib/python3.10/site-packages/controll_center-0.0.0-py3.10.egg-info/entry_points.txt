@@ -1,0 +1,4 @@
+[console_scripts]
+command_executor = controll_center.command_executor:main
+command_window = controll_center.command_window:main
+

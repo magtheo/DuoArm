@@ -1,8 +1,10 @@
 /home/theo/DuoArm/install/path_planning/lib/python3.10/site-packages/path_planning/path_planner.py
 /home/theo/DuoArm/install/path_planning/lib/python3.10/site-packages/path_planning/__init__.py
+/home/theo/DuoArm/install/path_planning/lib/python3.10/site-packages/path_planning/read_motor_angles.py
 /home/theo/DuoArm/install/path_planning/lib/python3.10/site-packages/path_planning/auto_mapper.py
 /home/theo/DuoArm/install/path_planning/lib/python3.10/site-packages/path_planning/__pycache__/path_planner.cpython-310.pyc
 /home/theo/DuoArm/install/path_planning/lib/python3.10/site-packages/path_planning/__pycache__/__init__.cpython-310.pyc
+/home/theo/DuoArm/install/path_planning/lib/python3.10/site-packages/path_planning/__pycache__/read_motor_angles.cpython-310.pyc
 /home/theo/DuoArm/install/path_planning/lib/python3.10/site-packages/path_planning/__pycache__/auto_mapper.cpython-310.pyc
 /home/theo/DuoArm/install/path_planning/share/ament_index/resource_index/packages/path_planning
 /home/theo/DuoArm/install/path_planning/share/path_planning/package.xml

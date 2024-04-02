@@ -1,0 +1,17 @@
+[0.620s] Invoking command in '/home/theo/DuoArm/src/controll_center': PYTHONPATH=/home/theo/DuoArm/build/controll_center/prefix_override:/home/theo/DuoArm/install/controll_center/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/controll_center build --build-base /home/theo/DuoArm/build/controll_center/build install --record /home/theo/DuoArm/build/controll_center/install.log --single-version-externally-managed install_data
+[0.740s] running egg_info
+[0.740s] writing ../../build/controll_center/controll_center.egg-info/PKG-INFO
+[0.741s] writing dependency_links to ../../build/controll_center/controll_center.egg-info/dependency_links.txt
+[0.741s] writing entry points to ../../build/controll_center/controll_center.egg-info/entry_points.txt
+[0.741s] writing requirements to ../../build/controll_center/controll_center.egg-info/requires.txt
+[0.741s] writing top-level names to ../../build/controll_center/controll_center.egg-info/top_level.txt
+[0.742s] reading manifest file '../../build/controll_center/controll_center.egg-info/SOURCES.txt'
+[0.742s] adding license file 'LICENSE'
+[0.742s] writing manifest file '../../build/controll_center/controll_center.egg-info/SOURCES.txt'
+[0.742s] running build
+[0.742s] running build_py
+[0.742s] running install
+[0.742s] running install_lib
+[0.744s] running install_data
+[0.744s] error: can't copy 'resource/controll_center': doesn't exist or not a regular file
+[0.757s] Invoked command in '/home/theo/DuoArm/src/controll_center' returned '1': PYTHONPATH=/home/theo/DuoArm/build/controll_center/prefix_override:/home/theo/DuoArm/install/controll_center/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/controll_center build --build-base /home/theo/DuoArm/build/controll_center/build install --record /home/theo/DuoArm/build/controll_center/install.log --single-version-externally-managed install_data
