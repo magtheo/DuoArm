@@ -1,0 +1,25 @@
+[0.691s] Invoking command in '/home/theo/DuoArm/src/path_planning': PYTHONPATH=/home/theo/DuoArm/build/path_planning/prefix_override:/home/theo/DuoArm/install/path_planning/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/path_planning build --build-base /home/theo/DuoArm/build/path_planning/build install --record /home/theo/DuoArm/build/path_planning/install.log --single-version-externally-managed install_data
+[0.832s] running egg_info
+[0.832s] writing ../../build/path_planning/path_planning.egg-info/PKG-INFO
+[0.833s] writing dependency_links to ../../build/path_planning/path_planning.egg-info/dependency_links.txt
+[0.833s] writing entry points to ../../build/path_planning/path_planning.egg-info/entry_points.txt
+[0.833s] writing requirements to ../../build/path_planning/path_planning.egg-info/requires.txt
+[0.834s] writing top-level names to ../../build/path_planning/path_planning.egg-info/top_level.txt
+[0.835s] reading manifest file '../../build/path_planning/path_planning.egg-info/SOURCES.txt'
+[0.835s] adding license file 'LICENSE'
+[0.836s] writing manifest file '../../build/path_planning/path_planning.egg-info/SOURCES.txt'
+[0.836s] running build
+[0.837s] running build_py
+[0.837s] copying path_planning/path_planner.py -> /home/theo/DuoArm/build/path_planning/build/lib/path_planning
+[0.837s] running install
+[0.837s] running install_lib
+[0.838s] copying /home/theo/DuoArm/build/path_planning/build/lib/path_planning/path_planner.py -> /home/theo/DuoArm/install/path_planning/lib/python3.10/site-packages/path_planning
+[0.838s] byte-compiling /home/theo/DuoArm/install/path_planning/lib/python3.10/site-packages/path_planning/path_planner.py to path_planner.cpython-310.pyc
+[0.838s] running install_data
+[0.838s] running install_egg_info
+[0.838s] removing '/home/theo/DuoArm/install/path_planning/lib/python3.10/site-packages/path_planning-0.0.0-py3.10.egg-info' (and everything under it)
+[0.839s] Copying ../../build/path_planning/path_planning.egg-info to /home/theo/DuoArm/install/path_planning/lib/python3.10/site-packages/path_planning-0.0.0-py3.10.egg-info
+[0.839s] running install_scripts
+[0.853s] Installing auto_mapper script to /home/theo/DuoArm/install/path_planning/lib/path_planning
+[0.853s] writing list of installed files to '/home/theo/DuoArm/build/path_planning/install.log'
+[0.885s] Invoked command in '/home/theo/DuoArm/src/path_planning' returned '0': PYTHONPATH=/home/theo/DuoArm/build/path_planning/prefix_override:/home/theo/DuoArm/install/path_planning/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/path_planning build --build-base /home/theo/DuoArm/build/path_planning/build install --record /home/theo/DuoArm/build/path_planning/install.log --single-version-externally-managed install_data

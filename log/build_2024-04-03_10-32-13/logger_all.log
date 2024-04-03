@@ -1,0 +1,237 @@
+[0.483s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build']
+[0.483s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=20, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, mixin_files=None, mixin=None, verb_parser=<colcon_mixin.mixin.mixin_argument.MixinArgumentDecorator object at 0x7f7ec9509930>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7f7ec967b310>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7f7ec967b310>>, mixin_verb=('build',))
+[0.759s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.759s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.759s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.759s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.759s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.759s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.759s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/theo/DuoArm'
+[0.759s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.759s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.760s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.760s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.760s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.760s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.760s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.760s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.760s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.774s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[0.774s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[0.774s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[0.774s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[0.774s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[0.774s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[0.774s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[0.774s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[0.775s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[0.775s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[0.775s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[0.775s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[0.775s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[0.775s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[0.775s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ignore', 'ignore_ament_install']
+[0.775s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore'
+[0.775s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore_ament_install'
+[0.775s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_pkg']
+[0.775s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_pkg'
+[0.775s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_meta']
+[0.775s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_meta'
+[0.775s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ros']
+[0.775s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ros'
+[0.776s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['cmake', 'python']
+[0.776s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'cmake'
+[0.776s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python'
+[0.776s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['python_setup_py']
+[0.776s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python_setup_py'
+[0.776s] Level 1:colcon.colcon_core.package_identification:_identify(src/arm) by extensions ['ignore', 'ignore_ament_install']
+[0.776s] Level 1:colcon.colcon_core.package_identification:_identify(src/arm) by extension 'ignore'
+[0.776s] Level 1:colcon.colcon_core.package_identification:_identify(src/arm) by extension 'ignore_ament_install'
+[0.776s] Level 1:colcon.colcon_core.package_identification:_identify(src/arm) by extensions ['colcon_pkg']
+[0.776s] Level 1:colcon.colcon_core.package_identification:_identify(src/arm) by extension 'colcon_pkg'
+[0.776s] Level 1:colcon.colcon_core.package_identification:_identify(src/arm) by extensions ['colcon_meta']
+[0.776s] Level 1:colcon.colcon_core.package_identification:_identify(src/arm) by extension 'colcon_meta'
+[0.776s] Level 1:colcon.colcon_core.package_identification:_identify(src/arm) by extensions ['ros']
+[0.776s] Level 1:colcon.colcon_core.package_identification:_identify(src/arm) by extension 'ros'
+[0.780s] DEBUG:colcon.colcon_core.package_identification:Package 'src/arm' with type 'ros.ament_python' and name 'arm'
+[0.780s] Level 1:colcon.colcon_core.package_identification:_identify(src/controll_center) by extensions ['ignore', 'ignore_ament_install']
+[0.780s] Level 1:colcon.colcon_core.package_identification:_identify(src/controll_center) by extension 'ignore'
+[0.780s] Level 1:colcon.colcon_core.package_identification:_identify(src/controll_center) by extension 'ignore_ament_install'
+[0.781s] Level 1:colcon.colcon_core.package_identification:_identify(src/controll_center) by extensions ['colcon_pkg']
+[0.781s] Level 1:colcon.colcon_core.package_identification:_identify(src/controll_center) by extension 'colcon_pkg'
+[0.781s] Level 1:colcon.colcon_core.package_identification:_identify(src/controll_center) by extensions ['colcon_meta']
+[0.781s] Level 1:colcon.colcon_core.package_identification:_identify(src/controll_center) by extension 'colcon_meta'
+[0.781s] Level 1:colcon.colcon_core.package_identification:_identify(src/controll_center) by extensions ['ros']
+[0.781s] Level 1:colcon.colcon_core.package_identification:_identify(src/controll_center) by extension 'ros'
+[0.782s] DEBUG:colcon.colcon_core.package_identification:Package 'src/controll_center' with type 'ros.ament_python' and name 'controll_center'
+[0.782s] Level 1:colcon.colcon_core.package_identification:_identify(src/path_planning) by extensions ['ignore', 'ignore_ament_install']
+[0.782s] Level 1:colcon.colcon_core.package_identification:_identify(src/path_planning) by extension 'ignore'
+[0.782s] Level 1:colcon.colcon_core.package_identification:_identify(src/path_planning) by extension 'ignore_ament_install'
+[0.782s] Level 1:colcon.colcon_core.package_identification:_identify(src/path_planning) by extensions ['colcon_pkg']
+[0.782s] Level 1:colcon.colcon_core.package_identification:_identify(src/path_planning) by extension 'colcon_pkg'
+[0.782s] Level 1:colcon.colcon_core.package_identification:_identify(src/path_planning) by extensions ['colcon_meta']
+[0.782s] Level 1:colcon.colcon_core.package_identification:_identify(src/path_planning) by extension 'colcon_meta'
+[0.782s] Level 1:colcon.colcon_core.package_identification:_identify(src/path_planning) by extensions ['ros']
+[0.782s] Level 1:colcon.colcon_core.package_identification:_identify(src/path_planning) by extension 'ros'
+[0.783s] DEBUG:colcon.colcon_core.package_identification:Package 'src/path_planning' with type 'ros.ament_python' and name 'path_planning'
+[0.783s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.783s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.783s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.783s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.783s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.818s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.819s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.822s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 4 installed packages in /home/theo/DuoArm/install
+[0.823s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 322 installed packages in /opt/ros/humble
+[0.833s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[0.888s] Level 5:colcon.colcon_core.verb:set package 'arm' build argument 'cmake_args' from command line to 'None'
+[0.888s] Level 5:colcon.colcon_core.verb:set package 'arm' build argument 'cmake_target' from command line to 'None'
+[0.888s] Level 5:colcon.colcon_core.verb:set package 'arm' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.888s] Level 5:colcon.colcon_core.verb:set package 'arm' build argument 'cmake_clean_cache' from command line to 'False'
+[0.888s] Level 5:colcon.colcon_core.verb:set package 'arm' build argument 'cmake_clean_first' from command line to 'False'
+[0.888s] Level 5:colcon.colcon_core.verb:set package 'arm' build argument 'cmake_force_configure' from command line to 'False'
+[0.888s] Level 5:colcon.colcon_core.verb:set package 'arm' build argument 'ament_cmake_args' from command line to 'None'
+[0.888s] Level 5:colcon.colcon_core.verb:set package 'arm' build argument 'catkin_cmake_args' from command line to 'None'
+[0.888s] Level 5:colcon.colcon_core.verb:set package 'arm' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.888s] DEBUG:colcon.colcon_core.verb:Building package 'arm' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/theo/DuoArm/build/arm', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/theo/DuoArm/install/arm', 'merge_install': False, 'path': '/home/theo/DuoArm/src/arm', 'symlink_install': False, 'test_result_base': None}
+[0.889s] Level 5:colcon.colcon_core.verb:set package 'controll_center' build argument 'cmake_args' from command line to 'None'
+[0.889s] Level 5:colcon.colcon_core.verb:set package 'controll_center' build argument 'cmake_target' from command line to 'None'
+[0.889s] Level 5:colcon.colcon_core.verb:set package 'controll_center' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.889s] Level 5:colcon.colcon_core.verb:set package 'controll_center' build argument 'cmake_clean_cache' from command line to 'False'
+[0.889s] Level 5:colcon.colcon_core.verb:set package 'controll_center' build argument 'cmake_clean_first' from command line to 'False'
+[0.889s] Level 5:colcon.colcon_core.verb:set package 'controll_center' build argument 'cmake_force_configure' from command line to 'False'
+[0.889s] Level 5:colcon.colcon_core.verb:set package 'controll_center' build argument 'ament_cmake_args' from command line to 'None'
+[0.889s] Level 5:colcon.colcon_core.verb:set package 'controll_center' build argument 'catkin_cmake_args' from command line to 'None'
+[0.889s] Level 5:colcon.colcon_core.verb:set package 'controll_center' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.889s] DEBUG:colcon.colcon_core.verb:Building package 'controll_center' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/theo/DuoArm/build/controll_center', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/theo/DuoArm/install/controll_center', 'merge_install': False, 'path': '/home/theo/DuoArm/src/controll_center', 'symlink_install': False, 'test_result_base': None}
+[0.889s] Level 5:colcon.colcon_core.verb:set package 'path_planning' build argument 'cmake_args' from command line to 'None'
+[0.889s] Level 5:colcon.colcon_core.verb:set package 'path_planning' build argument 'cmake_target' from command line to 'None'
+[0.889s] Level 5:colcon.colcon_core.verb:set package 'path_planning' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.889s] Level 5:colcon.colcon_core.verb:set package 'path_planning' build argument 'cmake_clean_cache' from command line to 'False'
+[0.889s] Level 5:colcon.colcon_core.verb:set package 'path_planning' build argument 'cmake_clean_first' from command line to 'False'
+[0.889s] Level 5:colcon.colcon_core.verb:set package 'path_planning' build argument 'cmake_force_configure' from command line to 'False'
+[0.889s] Level 5:colcon.colcon_core.verb:set package 'path_planning' build argument 'ament_cmake_args' from command line to 'None'
+[0.889s] Level 5:colcon.colcon_core.verb:set package 'path_planning' build argument 'catkin_cmake_args' from command line to 'None'
+[0.889s] Level 5:colcon.colcon_core.verb:set package 'path_planning' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.889s] DEBUG:colcon.colcon_core.verb:Building package 'path_planning' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/theo/DuoArm/build/path_planning', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/theo/DuoArm/install/path_planning', 'merge_install': False, 'path': '/home/theo/DuoArm/src/path_planning', 'symlink_install': False, 'test_result_base': None}
+[0.889s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.891s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.891s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/theo/DuoArm/src/arm' with build type 'ament_python'
+[0.891s] Level 1:colcon.colcon_core.shell:create_environment_hook('arm', 'ament_prefix_path')
+[0.896s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.896s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/theo/DuoArm/install/arm/share/arm/hook/ament_prefix_path.ps1'
+[0.897s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/theo/DuoArm/install/arm/share/arm/hook/ament_prefix_path.dsv'
+[0.898s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/theo/DuoArm/install/arm/share/arm/hook/ament_prefix_path.sh'
+[0.899s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.899s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.903s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/theo/DuoArm/src/controll_center' with build type 'ament_python'
+[0.903s] Level 1:colcon.colcon_core.shell:create_environment_hook('controll_center', 'ament_prefix_path')
+[0.903s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/theo/DuoArm/install/controll_center/share/controll_center/hook/ament_prefix_path.ps1'
+[0.904s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/theo/DuoArm/install/controll_center/share/controll_center/hook/ament_prefix_path.dsv'
+[0.904s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/theo/DuoArm/install/controll_center/share/controll_center/hook/ament_prefix_path.sh'
+[0.905s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.905s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.908s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/theo/DuoArm/src/path_planning' with build type 'ament_python'
+[0.908s] Level 1:colcon.colcon_core.shell:create_environment_hook('path_planning', 'ament_prefix_path')
+[0.908s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/theo/DuoArm/install/path_planning/share/path_planning/hook/ament_prefix_path.ps1'
+[0.909s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/theo/DuoArm/install/path_planning/share/path_planning/hook/ament_prefix_path.dsv'
+[0.909s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/theo/DuoArm/install/path_planning/share/path_planning/hook/ament_prefix_path.sh'
+[0.910s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.910s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.169s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/theo/DuoArm/src/arm'
+[1.169s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.169s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.430s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/theo/DuoArm/src/controll_center'
+[1.430s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.430s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.662s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/theo/DuoArm/src/path_planning'
+[1.662s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.663s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[2.275s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/theo/DuoArm/src/path_planning': PYTHONPATH=/home/theo/DuoArm/build/path_planning/prefix_override:/home/theo/DuoArm/install/path_planning/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/path_planning build --build-base /home/theo/DuoArm/build/path_planning/build install --record /home/theo/DuoArm/build/path_planning/install.log --single-version-externally-managed install_data
+[2.292s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/theo/DuoArm/src/controll_center': PYTHONPATH=/home/theo/DuoArm/build/controll_center/prefix_override:/home/theo/DuoArm/install/controll_center/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/controll_center build --build-base /home/theo/DuoArm/build/controll_center/build install --record /home/theo/DuoArm/build/controll_center/install.log --single-version-externally-managed install_data
+[2.294s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/theo/DuoArm/src/arm': PYTHONPATH=/home/theo/DuoArm/build/arm/prefix_override:/home/theo/DuoArm/install/arm/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/arm build --build-base /home/theo/DuoArm/build/arm/build install --record /home/theo/DuoArm/build/arm/install.log --single-version-externally-managed install_data
+[2.598s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/theo/DuoArm/src/path_planning' returned '0': PYTHONPATH=/home/theo/DuoArm/build/path_planning/prefix_override:/home/theo/DuoArm/install/path_planning/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/path_planning build --build-base /home/theo/DuoArm/build/path_planning/build install --record /home/theo/DuoArm/build/path_planning/install.log --single-version-externally-managed install_data
+[2.608s] Level 1:colcon.colcon_core.environment:checking '/home/theo/DuoArm/install/path_planning' for CMake module files
+[2.608s] Level 1:colcon.colcon_core.environment:checking '/home/theo/DuoArm/install/path_planning' for CMake config files
+[2.609s] Level 1:colcon.colcon_core.shell:create_environment_hook('path_planning', 'cmake_prefix_path')
+[2.609s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/theo/DuoArm/install/path_planning/share/path_planning/hook/cmake_prefix_path.ps1'
+[2.610s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/theo/DuoArm/install/path_planning/share/path_planning/hook/cmake_prefix_path.dsv'
+[2.610s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/theo/DuoArm/install/path_planning/share/path_planning/hook/cmake_prefix_path.sh'
+[2.611s] Level 1:colcon.colcon_core.environment:checking '/home/theo/DuoArm/install/path_planning/lib'
+[2.611s] Level 1:colcon.colcon_core.environment:checking '/home/theo/DuoArm/install/path_planning/bin'
+[2.612s] Level 1:colcon.colcon_core.environment:checking '/home/theo/DuoArm/install/path_planning/lib/pkgconfig/path_planning.pc'
+[2.612s] Level 1:colcon.colcon_core.environment:checking '/home/theo/DuoArm/install/path_planning/lib/python3.10/site-packages'
+[2.612s] Level 1:colcon.colcon_core.shell:create_environment_hook('path_planning', 'pythonpath')
+[2.613s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/theo/DuoArm/install/path_planning/share/path_planning/hook/pythonpath.ps1'
+[2.614s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/theo/DuoArm/install/path_planning/share/path_planning/hook/pythonpath.dsv'
+[2.614s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/theo/DuoArm/install/path_planning/share/path_planning/hook/pythonpath.sh'
+[2.614s] Level 1:colcon.colcon_core.environment:checking '/home/theo/DuoArm/install/path_planning/bin'
+[2.615s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(path_planning)
+[2.615s] INFO:colcon.colcon_core.shell:Creating package script '/home/theo/DuoArm/install/path_planning/share/path_planning/package.ps1'
+[2.616s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/theo/DuoArm/install/path_planning/share/path_planning/package.dsv'
+[2.617s] INFO:colcon.colcon_core.shell:Creating package script '/home/theo/DuoArm/install/path_planning/share/path_planning/package.sh'
+[2.619s] INFO:colcon.colcon_core.shell:Creating package script '/home/theo/DuoArm/install/path_planning/share/path_planning/package.bash'
+[2.620s] INFO:colcon.colcon_core.shell:Creating package script '/home/theo/DuoArm/install/path_planning/share/path_planning/package.zsh'
+[2.622s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/theo/DuoArm/install/path_planning/share/colcon-core/packages/path_planning)
+[2.625s] Level 1:colcon.colcon_core.environment:checking '/home/theo/DuoArm/install/arm' for CMake module files
+[2.628s] Level 1:colcon.colcon_core.environment:checking '/home/theo/DuoArm/install/arm' for CMake config files
+[2.628s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/theo/DuoArm/src/arm' returned '0': PYTHONPATH=/home/theo/DuoArm/build/arm/prefix_override:/home/theo/DuoArm/install/arm/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/arm build --build-base /home/theo/DuoArm/build/arm/build install --record /home/theo/DuoArm/build/arm/install.log --single-version-externally-managed install_data
+[2.629s] Level 1:colcon.colcon_core.shell:create_environment_hook('arm', 'cmake_prefix_path')
+[2.629s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/theo/DuoArm/install/arm/share/arm/hook/cmake_prefix_path.ps1'
+[2.630s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/theo/DuoArm/install/arm/share/arm/hook/cmake_prefix_path.dsv'
+[2.630s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/theo/DuoArm/install/arm/share/arm/hook/cmake_prefix_path.sh'
+[2.630s] Level 1:colcon.colcon_core.environment:checking '/home/theo/DuoArm/install/arm/lib'
+[2.631s] Level 1:colcon.colcon_core.environment:checking '/home/theo/DuoArm/install/arm/bin'
+[2.631s] Level 1:colcon.colcon_core.environment:checking '/home/theo/DuoArm/install/arm/lib/pkgconfig/arm.pc'
+[2.631s] Level 1:colcon.colcon_core.environment:checking '/home/theo/DuoArm/install/arm/lib/python3.10/site-packages'
+[2.631s] Level 1:colcon.colcon_core.shell:create_environment_hook('arm', 'pythonpath')
+[2.631s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/theo/DuoArm/install/arm/share/arm/hook/pythonpath.ps1'
+[2.632s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/theo/DuoArm/install/arm/share/arm/hook/pythonpath.dsv'
+[2.632s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/theo/DuoArm/install/arm/share/arm/hook/pythonpath.sh'
+[2.633s] Level 1:colcon.colcon_core.environment:checking '/home/theo/DuoArm/install/arm/bin'
+[2.633s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(arm)
+[2.633s] INFO:colcon.colcon_core.shell:Creating package script '/home/theo/DuoArm/install/arm/share/arm/package.ps1'
+[2.634s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/theo/DuoArm/install/arm/share/arm/package.dsv'
+[2.634s] INFO:colcon.colcon_core.shell:Creating package script '/home/theo/DuoArm/install/arm/share/arm/package.sh'
+[2.634s] INFO:colcon.colcon_core.shell:Creating package script '/home/theo/DuoArm/install/arm/share/arm/package.bash'
+[2.635s] INFO:colcon.colcon_core.shell:Creating package script '/home/theo/DuoArm/install/arm/share/arm/package.zsh'
+[2.635s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/theo/DuoArm/install/arm/share/colcon-core/packages/arm)
+[2.635s] Level 1:colcon.colcon_core.environment:checking '/home/theo/DuoArm/install/controll_center' for CMake module files
+[2.637s] Level 1:colcon.colcon_core.environment:checking '/home/theo/DuoArm/install/controll_center' for CMake config files
+[2.638s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/theo/DuoArm/src/controll_center' returned '0': PYTHONPATH=/home/theo/DuoArm/build/controll_center/prefix_override:/home/theo/DuoArm/install/controll_center/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/controll_center build --build-base /home/theo/DuoArm/build/controll_center/build install --record /home/theo/DuoArm/build/controll_center/install.log --single-version-externally-managed install_data
+[2.639s] Level 1:colcon.colcon_core.environment:checking '/home/theo/DuoArm/install/controll_center/lib'
+[2.639s] Level 1:colcon.colcon_core.environment:checking '/home/theo/DuoArm/install/controll_center/bin'
+[2.639s] Level 1:colcon.colcon_core.environment:checking '/home/theo/DuoArm/install/controll_center/lib/pkgconfig/controll_center.pc'
+[2.639s] Level 1:colcon.colcon_core.environment:checking '/home/theo/DuoArm/install/controll_center/lib/python3.10/site-packages'
+[2.639s] Level 1:colcon.colcon_core.shell:create_environment_hook('controll_center', 'pythonpath')
+[2.639s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/theo/DuoArm/install/controll_center/share/controll_center/hook/pythonpath.ps1'
+[2.640s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/theo/DuoArm/install/controll_center/share/controll_center/hook/pythonpath.dsv'
+[2.640s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/theo/DuoArm/install/controll_center/share/controll_center/hook/pythonpath.sh'
+[2.641s] Level 1:colcon.colcon_core.environment:checking '/home/theo/DuoArm/install/controll_center/bin'
+[2.641s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(controll_center)
+[2.641s] INFO:colcon.colcon_core.shell:Creating package script '/home/theo/DuoArm/install/controll_center/share/controll_center/package.ps1'
+[2.641s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/theo/DuoArm/install/controll_center/share/controll_center/package.dsv'
+[2.642s] INFO:colcon.colcon_core.shell:Creating package script '/home/theo/DuoArm/install/controll_center/share/controll_center/package.sh'
+[2.642s] INFO:colcon.colcon_core.shell:Creating package script '/home/theo/DuoArm/install/controll_center/share/controll_center/package.bash'
+[2.643s] INFO:colcon.colcon_core.shell:Creating package script '/home/theo/DuoArm/install/controll_center/share/controll_center/package.zsh'
+[2.643s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/theo/DuoArm/install/controll_center/share/colcon-core/packages/controll_center)
+[2.643s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[2.644s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[2.644s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[2.644s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[2.737s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.notify_send': Could not find 'notify-send'
+[2.738s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[2.738s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[2.738s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[2.738s] DEBUG:colcon.colcon_notification.desktop_notification.notify2:Failed to initialize notify2: org.freedesktop.DBus.Error.FileNotFound: Failed to connect to socket /run/user/1000/bus: No such file or directory
+[2.738s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[2.739s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/theo/DuoArm/install/local_setup.ps1'
+[2.741s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/theo/DuoArm/install/_local_setup_util_ps1.py'
+[2.743s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/theo/DuoArm/install/setup.ps1'
+[2.744s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/theo/DuoArm/install/local_setup.sh'
+[2.745s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/theo/DuoArm/install/_local_setup_util_sh.py'
+[2.745s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/theo/DuoArm/install/setup.sh'
+[2.747s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/theo/DuoArm/install/local_setup.bash'
+[2.748s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/theo/DuoArm/install/setup.bash'
+[2.750s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/theo/DuoArm/install/local_setup.zsh'
+[2.750s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/theo/DuoArm/install/setup.zsh'

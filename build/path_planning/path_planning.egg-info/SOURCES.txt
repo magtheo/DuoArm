@@ -12,8 +12,8 @@ setup.py
 launch/path_planning_launch.py
 path_planning/__init__.py
 path_planning/auto_mapper.py
+path_planning/equation.py
 path_planning/path_planner.py
-path_planning/read_motor_angles.py
 resource/path_planning
 test/test_copyright.py
 test/test_flake8.py
