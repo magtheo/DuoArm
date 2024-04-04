@@ -23,6 +23,7 @@ setup(
     entry_points={
         'console_scripts': [
             'auto_mapper = path_planning.auto_mapper:main',
+            'path_planner = path_planning.path_planner:main',
         ],
     },
 )
