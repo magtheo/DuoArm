@@ -1,0 +1,21 @@
+[6.191s] Invoking command in '/home/theomagnor/DuoArm/src/arm': PYTHONPATH=/home/theomagnor/DuoArm/build/arm/prefix_override:/home/theomagnor/DuoArm/install/arm/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/arm build --build-base /home/theomagnor/DuoArm/build/arm/build install --record /home/theomagnor/DuoArm/build/arm/install.log --single-version-externally-managed install_data
+[7.768s] running egg_info
+[7.788s] writing ../../build/arm/arm.egg-info/PKG-INFO
+[7.791s] writing dependency_links to ../../build/arm/arm.egg-info/dependency_links.txt
+[7.792s] writing entry points to ../../build/arm/arm.egg-info/entry_points.txt
+[7.795s] writing requirements to ../../build/arm/arm.egg-info/requires.txt
+[7.796s] writing top-level names to ../../build/arm/arm.egg-info/top_level.txt
+[7.803s] reading manifest file '../../build/arm/arm.egg-info/SOURCES.txt'
+[7.805s] adding license file 'LICENSE'
+[7.807s] writing manifest file '../../build/arm/arm.egg-info/SOURCES.txt'
+[7.809s] running build
+[7.810s] running build_py
+[7.814s] running install
+[7.816s] running install_lib
+[7.821s] running install_data
+[7.823s] running install_egg_info
+[7.838s] removing '/home/theomagnor/DuoArm/install/arm/lib/python3.10/site-packages/arm-0.0.0-py3.10.egg-info' (and everything under it)
+[7.839s] Copying ../../build/arm/arm.egg-info to /home/theomagnor/DuoArm/install/arm/lib/python3.10/site-packages/arm-0.0.0-py3.10.egg-info
+[7.840s] running install_scripts
+[7.926s] writing list of installed files to '/home/theomagnor/DuoArm/build/arm/install.log'
+[8.185s] Invoked command in '/home/theomagnor/DuoArm/src/arm' returned '0': PYTHONPATH=/home/theomagnor/DuoArm/build/arm/prefix_override:/home/theomagnor/DuoArm/install/arm/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/arm build --build-base /home/theomagnor/DuoArm/build/arm/build install --record /home/theomagnor/DuoArm/build/arm/install.log --single-version-externally-managed install_data

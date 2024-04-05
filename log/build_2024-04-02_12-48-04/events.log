@@ -1,0 +1,157 @@
+[0.000000] (-) TimerEvent: {}
+[0.001008] (arm) JobQueued: {'identifier': 'arm', 'dependencies': OrderedDict()}
+[0.001229] (controll_center) JobQueued: {'identifier': 'controll_center', 'dependencies': OrderedDict()}
+[0.001456] (path_planning) JobQueued: {'identifier': 'path_planning', 'dependencies': OrderedDict()}
+[0.001655] (arm) JobStarted: {'identifier': 'arm'}
+[0.039131] (controll_center) JobStarted: {'identifier': 'controll_center'}
+[0.067545] (path_planning) JobStarted: {'identifier': 'path_planning'}
+[0.097483] (-) TimerEvent: {}
+[0.198325] (-) TimerEvent: {}
+[0.299066] (-) TimerEvent: {}
+[0.399864] (-) TimerEvent: {}
+[0.506806] (-) TimerEvent: {}
+[0.607583] (-) TimerEvent: {}
+[0.708261] (-) TimerEvent: {}
+[0.808979] (-) TimerEvent: {}
+[0.909665] (-) TimerEvent: {}
+[1.010321] (-) TimerEvent: {}
+[1.111012] (-) TimerEvent: {}
+[1.211771] (-) TimerEvent: {}
+[1.312671] (-) TimerEvent: {}
+[1.415273] (-) TimerEvent: {}
+[1.516082] (-) TimerEvent: {}
+[1.616833] (-) TimerEvent: {}
+[1.717581] (-) TimerEvent: {}
+[1.818300] (-) TimerEvent: {}
+[1.919028] (-) TimerEvent: {}
+[2.019835] (-) TimerEvent: {}
+[2.120845] (-) TimerEvent: {}
+[2.221551] (-) TimerEvent: {}
+[2.322250] (-) TimerEvent: {}
+[2.423004] (-) TimerEvent: {}
+[2.523870] (-) TimerEvent: {}
+[2.625018] (-) TimerEvent: {}
+[2.725769] (-) TimerEvent: {}
+[2.826535] (-) TimerEvent: {}
+[2.927304] (-) TimerEvent: {}
+[3.028089] (-) TimerEvent: {}
+[3.128917] (-) TimerEvent: {}
+[3.229603] (-) TimerEvent: {}
+[3.330308] (-) TimerEvent: {}
+[3.431055] (-) TimerEvent: {}
+[3.531779] (-) TimerEvent: {}
+[3.632527] (-) TimerEvent: {}
+[3.733268] (-) TimerEvent: {}
+[3.834134] (-) TimerEvent: {}
+[3.935321] (-) TimerEvent: {}
+[4.036683] (-) TimerEvent: {}
+[4.139688] (-) TimerEvent: {}
+[4.240952] (-) TimerEvent: {}
+[4.342030] (-) TimerEvent: {}
+[4.443962] (-) TimerEvent: {}
+[4.545171] (-) TimerEvent: {}
+[4.646374] (-) TimerEvent: {}
+[4.747814] (-) TimerEvent: {}
+[4.849057] (-) TimerEvent: {}
+[4.950305] (-) TimerEvent: {}
+[5.052865] (-) TimerEvent: {}
+[5.155658] (-) TimerEvent: {}
+[5.256513] (-) TimerEvent: {}
+[5.357319] (-) TimerEvent: {}
+[5.459674] (-) TimerEvent: {}
+[5.561326] (-) TimerEvent: {}
+[5.662166] (-) TimerEvent: {}
+[5.763044] (-) TimerEvent: {}
+[5.864795] (-) TimerEvent: {}
+[5.970301] (-) TimerEvent: {}
+[6.076725] (-) TimerEvent: {}
+[6.133008] (controll_center) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', 'setup.py', 'egg_info', '--egg-base', '../../build/controll_center', 'build', '--build-base', '/home/theomagnor/DuoArm/build/controll_center/build', 'install', '--record', '/home/theomagnor/DuoArm/build/controll_center/install.log', '--single-version-externally-managed', 'install_data'], 'cwd': '/home/theomagnor/DuoArm/src/controll_center', 'env': {'LESSOPEN': '| /usr/bin/lesspipe %s', 'USER': 'theomagnor', 'SSH_CLIENT': '192.168.1.30 59539 22', 'LC_TIME': 'nb_NO.UTF-8', 'XDG_SESSION_TYPE': 'tty', 'GIT_ASKPASS': '/home/theomagnor/.vscode-server/cli/servers/Stable-863d2581ecda6849923a2118d93a088b0745d9d6/server/extensions/git/dist/askpass.sh', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib', 'BROWSER': '/home/theomagnor/.vscode-server/cli/servers/Stable-863d2581ecda6849923a2118d93a088b0745d9d6/server/bin/helpers/browser.sh', 'MOTD_SHOWN': 'pam', 'HOME': '/home/theomagnor', 'TERM_PROGRAM_VERSION': '1.87.2', 'VSCODE_IPC_HOOK_CLI': '/run/user/1001/vscode-ipc-be7bb48e-dd29-4c53-93a0-6b2a53aa4078.sock', 'ROS_PYTHON_VERSION': '3', 'VSCODE_GIT_ASKPASS_MAIN': '/home/theomagnor/.vscode-server/cli/servers/Stable-863d2581ecda6849923a2118d93a088b0745d9d6/server/extensions/git/dist/askpass-main.js', 'LC_MONETARY': 'nb_NO.UTF-8', 'VSCODE_GIT_ASKPASS_NODE': '/home/theomagnor/.vscode-server/cli/servers/Stable-863d2581ecda6849923a2118d93a088b0745d9d6/server/node', 'SSL_CERT_FILE': '/usr/lib/ssl/certs/ca-certificates.crt', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1001/bus', 'COLORTERM': 'truecolor', 'COLCON_PREFIX_PATH': '/home/theomagnor/DuoArm/install', 'ROS_DISTRO': 'humble', 'LOGNAME': 'theomagnor', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'XDG_SESSION_CLASS': 'user', 'TERM': 'xterm-256color', 'XDG_SESSION_ID': '6', 'ROS_LOCALHOST_ONLY': '0', 'PATH': '/opt/ros/humble/bin:/home/theomagnor/.vscode-server/cli/servers/Stable-863d2581ecda6849923a2118d93a088b0745d9d6/server/bin/remote-cli:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin', 'LC_ADDRESS': 'nb_NO.UTF-8', 'XDG_RUNTIME_DIR': '/run/user/1001', 'SSL_CERT_DIR': '/usr/lib/ssl/certs', 'LANG': 'en_US.UTF-8', 'LC_TELEPHONE': 'nb_NO.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'VSCODE_GIT_IPC_HANDLE': '/run/user/1001/vscode-git-bc0467c230.sock', 'TERM_PROGRAM': 'vscode', 'AMENT_PREFIX_PATH': '/home/theomagnor/DuoArm/install/path_planning:/home/theomagnor/DuoArm/install/controll_center:/home/theomagnor/DuoArm/install/command_center:/home/theomagnor/DuoArm/install/arm:/opt/ros/humble', 'SHELL': '/bin/bash', 'LC_NAME': 'nb_NO.UTF-8', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'LC_MEASUREMENT': 'nb_NO.UTF-8', 'LC_IDENTIFICATION': 'nb_NO.UTF-8', 'VSCODE_GIT_ASKPASS_EXTRA_ARGS': '', 'PWD': '/home/theomagnor/DuoArm/build/controll_center', 'LC_ALL': 'en_US.UTF-8', 'SSH_CONNECTION': '192.168.1.30 59539 192.168.1.190 22', 'XDG_DATA_DIRS': '/usr/share/gnome:/usr/local/share:/usr/share:/var/lib/snapd/desktop', 'PYTHONPATH': '/home/theomagnor/DuoArm/build/controll_center/prefix_override:/home/theomagnor/DuoArm/install/controll_center/lib/python3.10/site-packages:/home/theomagnor/DuoArm/install/path_planning/lib/python3.10/site-packages:/home/theomagnor/DuoArm/install/controll_center/lib/python3.10/site-packages:/home/theomagnor/DuoArm/install/command_center/lib/python3.10/site-packages:/home/theomagnor/DuoArm/install/arm/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages', 'LC_NUMERIC': 'nb_NO.UTF-8', 'LC_PAPER': 'nb_NO.UTF-8', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/home/theomagnor/DuoArm/install/path_planning:/home/theomagnor/DuoArm/install/command_center:/home/theomagnor/DuoArm/install/arm'}, 'shell': False}
+[6.166128] (arm) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', 'setup.py', 'egg_info', '--egg-base', '../../build/arm', 'build', '--build-base', '/home/theomagnor/DuoArm/build/arm/build', 'install', '--record', '/home/theomagnor/DuoArm/build/arm/install.log', '--single-version-externally-managed', 'install_data'], 'cwd': '/home/theomagnor/DuoArm/src/arm', 'env': {'LESSOPEN': '| /usr/bin/lesspipe %s', 'USER': 'theomagnor', 'SSH_CLIENT': '192.168.1.30 59539 22', 'LC_TIME': 'nb_NO.UTF-8', 'XDG_SESSION_TYPE': 'tty', 'GIT_ASKPASS': '/home/theomagnor/.vscode-server/cli/servers/Stable-863d2581ecda6849923a2118d93a088b0745d9d6/server/extensions/git/dist/askpass.sh', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib', 'BROWSER': '/home/theomagnor/.vscode-server/cli/servers/Stable-863d2581ecda6849923a2118d93a088b0745d9d6/server/bin/helpers/browser.sh', 'MOTD_SHOWN': 'pam', 'HOME': '/home/theomagnor', 'TERM_PROGRAM_VERSION': '1.87.2', 'VSCODE_IPC_HOOK_CLI': '/run/user/1001/vscode-ipc-be7bb48e-dd29-4c53-93a0-6b2a53aa4078.sock', 'ROS_PYTHON_VERSION': '3', 'VSCODE_GIT_ASKPASS_MAIN': '/home/theomagnor/.vscode-server/cli/servers/Stable-863d2581ecda6849923a2118d93a088b0745d9d6/server/extensions/git/dist/askpass-main.js', 'LC_MONETARY': 'nb_NO.UTF-8', 'VSCODE_GIT_ASKPASS_NODE': '/home/theomagnor/.vscode-server/cli/servers/Stable-863d2581ecda6849923a2118d93a088b0745d9d6/server/node', 'SSL_CERT_FILE': '/usr/lib/ssl/certs/ca-certificates.crt', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1001/bus', 'COLORTERM': 'truecolor', 'COLCON_PREFIX_PATH': '/home/theomagnor/DuoArm/install', 'ROS_DISTRO': 'humble', 'LOGNAME': 'theomagnor', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'XDG_SESSION_CLASS': 'user', 'TERM': 'xterm-256color', 'XDG_SESSION_ID': '6', 'ROS_LOCALHOST_ONLY': '0', 'PATH': '/opt/ros/humble/bin:/home/theomagnor/.vscode-server/cli/servers/Stable-863d2581ecda6849923a2118d93a088b0745d9d6/server/bin/remote-cli:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin', 'LC_ADDRESS': 'nb_NO.UTF-8', 'XDG_RUNTIME_DIR': '/run/user/1001', 'SSL_CERT_DIR': '/usr/lib/ssl/certs', 'LANG': 'en_US.UTF-8', 'LC_TELEPHONE': 'nb_NO.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'VSCODE_GIT_IPC_HANDLE': '/run/user/1001/vscode-git-bc0467c230.sock', 'TERM_PROGRAM': 'vscode', 'AMENT_PREFIX_PATH': '/home/theomagnor/DuoArm/install/path_planning:/home/theomagnor/DuoArm/install/controll_center:/home/theomagnor/DuoArm/install/command_center:/home/theomagnor/DuoArm/install/arm:/opt/ros/humble', 'SHELL': '/bin/bash', 'LC_NAME': 'nb_NO.UTF-8', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'LC_MEASUREMENT': 'nb_NO.UTF-8', 'LC_IDENTIFICATION': 'nb_NO.UTF-8', 'VSCODE_GIT_ASKPASS_EXTRA_ARGS': '', 'PWD': '/home/theomagnor/DuoArm/build/arm', 'LC_ALL': 'en_US.UTF-8', 'SSH_CONNECTION': '192.168.1.30 59539 192.168.1.190 22', 'XDG_DATA_DIRS': '/usr/share/gnome:/usr/local/share:/usr/share:/var/lib/snapd/desktop', 'PYTHONPATH': '/home/theomagnor/DuoArm/build/arm/prefix_override:/home/theomagnor/DuoArm/install/arm/lib/python3.10/site-packages:/home/theomagnor/DuoArm/install/path_planning/lib/python3.10/site-packages:/home/theomagnor/DuoArm/install/controll_center/lib/python3.10/site-packages:/home/theomagnor/DuoArm/install/command_center/lib/python3.10/site-packages:/home/theomagnor/DuoArm/install/arm/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages', 'LC_NUMERIC': 'nb_NO.UTF-8', 'LC_PAPER': 'nb_NO.UTF-8', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/home/theomagnor/DuoArm/install/path_planning:/home/theomagnor/DuoArm/install/command_center:/home/theomagnor/DuoArm/install/arm'}, 'shell': False}
+[6.184694] (-) TimerEvent: {}
+[6.195640] (path_planning) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', 'setup.py', 'egg_info', '--egg-base', '../../build/path_planning', 'build', '--build-base', '/home/theomagnor/DuoArm/build/path_planning/build', 'install', '--record', '/home/theomagnor/DuoArm/build/path_planning/install.log', '--single-version-externally-managed', 'install_data'], 'cwd': '/home/theomagnor/DuoArm/src/path_planning', 'env': {'LESSOPEN': '| /usr/bin/lesspipe %s', 'USER': 'theomagnor', 'SSH_CLIENT': '192.168.1.30 59539 22', 'LC_TIME': 'nb_NO.UTF-8', 'XDG_SESSION_TYPE': 'tty', 'GIT_ASKPASS': '/home/theomagnor/.vscode-server/cli/servers/Stable-863d2581ecda6849923a2118d93a088b0745d9d6/server/extensions/git/dist/askpass.sh', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib', 'BROWSER': '/home/theomagnor/.vscode-server/cli/servers/Stable-863d2581ecda6849923a2118d93a088b0745d9d6/server/bin/helpers/browser.sh', 'MOTD_SHOWN': 'pam', 'HOME': '/home/theomagnor', 'TERM_PROGRAM_VERSION': '1.87.2', 'VSCODE_IPC_HOOK_CLI': '/run/user/1001/vscode-ipc-be7bb48e-dd29-4c53-93a0-6b2a53aa4078.sock', 'ROS_PYTHON_VERSION': '3', 'VSCODE_GIT_ASKPASS_MAIN': '/home/theomagnor/.vscode-server/cli/servers/Stable-863d2581ecda6849923a2118d93a088b0745d9d6/server/extensions/git/dist/askpass-main.js', 'LC_MONETARY': 'nb_NO.UTF-8', 'VSCODE_GIT_ASKPASS_NODE': '/home/theomagnor/.vscode-server/cli/servers/Stable-863d2581ecda6849923a2118d93a088b0745d9d6/server/node', 'SSL_CERT_FILE': '/usr/lib/ssl/certs/ca-certificates.crt', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1001/bus', 'COLORTERM': 'truecolor', 'COLCON_PREFIX_PATH': '/home/theomagnor/DuoArm/install', 'ROS_DISTRO': 'humble', 'LOGNAME': 'theomagnor', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'XDG_SESSION_CLASS': 'user', 'TERM': 'xterm-256color', 'XDG_SESSION_ID': '6', 'ROS_LOCALHOST_ONLY': '0', 'PATH': '/opt/ros/humble/bin:/home/theomagnor/.vscode-server/cli/servers/Stable-863d2581ecda6849923a2118d93a088b0745d9d6/server/bin/remote-cli:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin', 'LC_ADDRESS': 'nb_NO.UTF-8', 'XDG_RUNTIME_DIR': '/run/user/1001', 'SSL_CERT_DIR': '/usr/lib/ssl/certs', 'LANG': 'en_US.UTF-8', 'LC_TELEPHONE': 'nb_NO.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'VSCODE_GIT_IPC_HANDLE': '/run/user/1001/vscode-git-bc0467c230.sock', 'TERM_PROGRAM': 'vscode', 'AMENT_PREFIX_PATH': '/home/theomagnor/DuoArm/install/path_planning:/home/theomagnor/DuoArm/install/controll_center:/home/theomagnor/DuoArm/install/command_center:/home/theomagnor/DuoArm/install/arm:/opt/ros/humble', 'SHELL': '/bin/bash', 'LC_NAME': 'nb_NO.UTF-8', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'LC_MEASUREMENT': 'nb_NO.UTF-8', 'LC_IDENTIFICATION': 'nb_NO.UTF-8', 'VSCODE_GIT_ASKPASS_EXTRA_ARGS': '', 'PWD': '/home/theomagnor/DuoArm/build/path_planning', 'LC_ALL': 'en_US.UTF-8', 'SSH_CONNECTION': '192.168.1.30 59539 192.168.1.190 22', 'XDG_DATA_DIRS': '/usr/share/gnome:/usr/local/share:/usr/share:/var/lib/snapd/desktop', 'PYTHONPATH': '/home/theomagnor/DuoArm/build/path_planning/prefix_override:/home/theomagnor/DuoArm/install/path_planning/lib/python3.10/site-packages:/home/theomagnor/DuoArm/install/path_planning/lib/python3.10/site-packages:/home/theomagnor/DuoArm/install/controll_center/lib/python3.10/site-packages:/home/theomagnor/DuoArm/install/command_center/lib/python3.10/site-packages:/home/theomagnor/DuoArm/install/arm/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages', 'LC_NUMERIC': 'nb_NO.UTF-8', 'LC_PAPER': 'nb_NO.UTF-8', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/home/theomagnor/DuoArm/install/path_planning:/home/theomagnor/DuoArm/install/command_center:/home/theomagnor/DuoArm/install/arm'}, 'shell': False}
+[6.284877] (-) TimerEvent: {}
+[6.385787] (-) TimerEvent: {}
+[6.486861] (-) TimerEvent: {}
+[6.588018] (-) TimerEvent: {}
+[6.688918] (-) TimerEvent: {}
+[6.789843] (-) TimerEvent: {}
+[6.890687] (-) TimerEvent: {}
+[6.992082] (-) TimerEvent: {}
+[7.092866] (-) TimerEvent: {}
+[7.193623] (-) TimerEvent: {}
+[7.294376] (-) TimerEvent: {}
+[7.395350] (-) TimerEvent: {}
+[7.496175] (-) TimerEvent: {}
+[7.597278] (-) TimerEvent: {}
+[7.606374] (controll_center) StdoutLine: {'line': b'running egg_info\n'}
+[7.610005] (controll_center) StdoutLine: {'line': b'writing ../../build/controll_center/controll_center.egg-info/PKG-INFO\n'}
+[7.611407] (controll_center) StdoutLine: {'line': b'writing dependency_links to ../../build/controll_center/controll_center.egg-info/dependency_links.txt\n'}
+[7.617691] (controll_center) StdoutLine: {'line': b'writing entry points to ../../build/controll_center/controll_center.egg-info/entry_points.txt\n'}
+[7.618397] (controll_center) StdoutLine: {'line': b'writing requirements to ../../build/controll_center/controll_center.egg-info/requires.txt\n'}
+[7.618948] (controll_center) StdoutLine: {'line': b'writing top-level names to ../../build/controll_center/controll_center.egg-info/top_level.txt\n'}
+[7.626884] (arm) StdoutLine: {'line': b'running egg_info\n'}
+[7.630827] (arm) StdoutLine: {'line': b'writing ../../build/arm/arm.egg-info/PKG-INFO\n'}
+[7.638755] (arm) StdoutLine: {'line': b'writing dependency_links to ../../build/arm/arm.egg-info/dependency_links.txt\n'}
+[7.642105] (arm) StdoutLine: {'line': b'writing entry points to ../../build/arm/arm.egg-info/entry_points.txt\n'}
+[7.646104] (controll_center) StdoutLine: {'line': b"reading manifest file '../../build/controll_center/controll_center.egg-info/SOURCES.txt'\n"}
+[7.650095] (controll_center) StdoutLine: {'line': b"adding license file 'LICENSE'\n"}
+[7.653427] (arm) StdoutLine: {'line': b'writing requirements to ../../build/arm/arm.egg-info/requires.txt\n'}
+[7.656517] (arm) StdoutLine: {'line': b'writing top-level names to ../../build/arm/arm.egg-info/top_level.txt\n'}
+[7.659729] (controll_center) StdoutLine: {'line': b"writing manifest file '../../build/controll_center/controll_center.egg-info/SOURCES.txt'\n"}
+[7.663777] (controll_center) StdoutLine: {'line': b'running build\n'}
+[7.667373] (controll_center) StdoutLine: {'line': b'running build_py\n'}
+[7.670531] (controll_center) StdoutLine: {'line': b'running install\n'}
+[7.673661] (controll_center) StdoutLine: {'line': b'running install_lib\n'}
+[7.677817] (arm) StdoutLine: {'line': b"reading manifest file '../../build/arm/arm.egg-info/SOURCES.txt'\n"}
+[7.681178] (arm) StdoutLine: {'line': b"adding license file 'LICENSE'\n"}
+[7.685695] (controll_center) StdoutLine: {'line': b'running install_data\n'}
+[7.689782] (controll_center) StdoutLine: {'line': b'running install_egg_info\n'}
+[7.693434] (arm) StdoutLine: {'line': b"writing manifest file '../../build/arm/arm.egg-info/SOURCES.txt'\n"}
+[7.697549] (-) TimerEvent: {}
+[7.699472] (arm) StdoutLine: {'line': b'running build\n'}
+[7.703097] (arm) StdoutLine: {'line': b'running build_py\n'}
+[7.709297] (arm) StdoutLine: {'line': b'running install\n'}
+[7.714524] (arm) StdoutLine: {'line': b'running install_lib\n'}
+[7.720515] (controll_center) StdoutLine: {'line': b"removing '/home/theomagnor/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center-0.0.0-py3.10.egg-info' (and everything under it)\n"}
+[7.723871] (controll_center) StdoutLine: {'line': b'Copying ../../build/controll_center/controll_center.egg-info to /home/theomagnor/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center-0.0.0-py3.10.egg-info\n'}
+[7.727153] (arm) StdoutLine: {'line': b'running install_data\n'}
+[7.730389] (arm) StdoutLine: {'line': b'running install_egg_info\n'}
+[7.733462] (controll_center) StdoutLine: {'line': b'running install_scripts\n'}
+[7.737608] (arm) StdoutLine: {'line': b"removing '/home/theomagnor/DuoArm/install/arm/lib/python3.10/site-packages/arm-0.0.0-py3.10.egg-info' (and everything under it)\n"}
+[7.740475] (arm) StdoutLine: {'line': b'Copying ../../build/arm/arm.egg-info to /home/theomagnor/DuoArm/install/arm/lib/python3.10/site-packages/arm-0.0.0-py3.10.egg-info\n'}
+[7.743915] (arm) StdoutLine: {'line': b'running install_scripts\n'}
+[7.746380] (path_planning) StdoutLine: {'line': b'running egg_info\n'}
+[7.749232] (path_planning) StdoutLine: {'line': b'writing ../../build/path_planning/path_planning.egg-info/PKG-INFO\n'}
+[7.752133] (path_planning) StdoutLine: {'line': b'writing dependency_links to ../../build/path_planning/path_planning.egg-info/dependency_links.txt\n'}
+[7.755379] (path_planning) StdoutLine: {'line': b'writing entry points to ../../build/path_planning/path_planning.egg-info/entry_points.txt\n'}
+[7.758955] (path_planning) StdoutLine: {'line': b'writing requirements to ../../build/path_planning/path_planning.egg-info/requires.txt\n'}
+[7.761837] (path_planning) StdoutLine: {'line': b'writing top-level names to ../../build/path_planning/path_planning.egg-info/top_level.txt\n'}
+[7.764764] (path_planning) StdoutLine: {'line': b"reading manifest file '../../build/path_planning/path_planning.egg-info/SOURCES.txt'\n"}
+[7.767470] (path_planning) StdoutLine: {'line': b"adding license file 'LICENSE'\n"}
+[7.770237] (path_planning) StdoutLine: {'line': b"writing manifest file '../../build/path_planning/path_planning.egg-info/SOURCES.txt'\n"}
+[7.773247] (path_planning) StdoutLine: {'line': b'running build\n'}
+[7.776747] (path_planning) StdoutLine: {'line': b'running build_py\n'}
+[7.779732] (path_planning) StdoutLine: {'line': b'running install\n'}
+[7.782525] (path_planning) StdoutLine: {'line': b'running install_lib\n'}
+[7.794428] (path_planning) StdoutLine: {'line': b'running install_data\n'}
+[7.800438] (-) TimerEvent: {}
+[7.803369] (path_planning) StdoutLine: {'line': b'running install_egg_info\n'}
+[7.809849] (path_planning) StdoutLine: {'line': b"removing '/home/theomagnor/DuoArm/install/path_planning/lib/python3.10/site-packages/path_planning-0.0.0-py3.10.egg-info' (and everything under it)\n"}
+[7.814569] (path_planning) StdoutLine: {'line': b'Copying ../../build/path_planning/path_planning.egg-info to /home/theomagnor/DuoArm/install/path_planning/lib/python3.10/site-packages/path_planning-0.0.0-py3.10.egg-info\n'}
+[7.820530] (path_planning) StdoutLine: {'line': b'running install_scripts\n'}
+[7.825720] (controll_center) StdoutLine: {'line': b'Installing command_executor script to /home/theomagnor/DuoArm/install/controll_center/lib/controll_center\n'}
+[7.829963] (controll_center) StdoutLine: {'line': b'Installing command_window script to /home/theomagnor/DuoArm/install/controll_center/lib/controll_center\n'}
+[7.835703] (controll_center) StdoutLine: {'line': b"writing list of installed files to '/home/theomagnor/DuoArm/build/controll_center/install.log'\n"}
+[7.841737] (arm) StdoutLine: {'line': b"writing list of installed files to '/home/theomagnor/DuoArm/build/arm/install.log'\n"}
+[7.900846] (-) TimerEvent: {}
+[7.958444] (path_planning) StdoutLine: {'line': b'Installing auto_mapper script to /home/theomagnor/DuoArm/install/path_planning/lib/path_planning\n'}
+[7.966405] (path_planning) StdoutLine: {'line': b"writing list of installed files to '/home/theomagnor/DuoArm/build/path_planning/install.log'\n"}
+[8.011438] (-) TimerEvent: {}
+[8.039088] (controll_center) CommandEnded: {'returncode': 0}
+[8.112732] (-) TimerEvent: {}
+[8.116959] (controll_center) JobEnded: {'identifier': 'controll_center', 'rc': 0}
+[8.123545] (arm) CommandEnded: {'returncode': 0}
+[8.159454] (arm) JobEnded: {'identifier': 'arm', 'rc': 0}
+[8.164217] (path_planning) CommandEnded: {'returncode': 0}
+[8.202866] (path_planning) JobEnded: {'identifier': 'path_planning', 'rc': 0}
+[8.205918] (-) EventReactorShutdown: {}

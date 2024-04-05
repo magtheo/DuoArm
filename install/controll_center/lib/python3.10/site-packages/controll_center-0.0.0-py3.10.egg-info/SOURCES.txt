@@ -10,6 +10,7 @@ setup.py
 ../../build/controll_center/controll_center.egg-info/top_level.txt
 ../../build/controll_center/controll_center.egg-info/zip-safe
 controll_center/__init__.py
+controll_center/action_controller.py
 controll_center/command_executor.py
 controll_center/command_window.py
 launch/controll_center_launch.py

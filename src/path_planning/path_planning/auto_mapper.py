@@ -17,7 +17,7 @@ LR1, LR2 = 30, 30  # Right arm segment lengths in cm
 W = 20             # Distance between the base joints in cm
 D = 10             # Distance between the tool hub joints in cm
 
-grid_size = 10 # bruk 100
+grid_size = 100 # bruk 100
 
 class AutoMapper(Node):
     
@@ -73,7 +73,7 @@ class AutoMapper(Node):
         while flag == False:
             """Waits a given period for the robot to reach the position and stabilize."""
             self.get_logger().info('Waiting for the robot to stabilize...')
-            time.sleep(0.1)  # Waits for 0.5 seconds
+            #time.sleep(0.1)  # Waits for 0.5 seconds
             
             # commanded_angles is a list with the calculated angles, 
             # like [theta1_left, theta1_right], in radians.
@@ -108,8 +108,9 @@ class AutoMapper(Node):
         # Convert the (x, z) position to joint angles using IK
 
         # Initial guesses for theta1 and theta2 for both arms, in degrees
-        initial_guesses_degrees = (-210, 10, 30, -10) # TODO test whether these numbers are accurate
-        
+        initial_guesses_degrees = (30, 90, -30, 90) # TODO test whether these numbers are accurate
+        # theta1_left, theta2_left, theta1_right, theta2_right
+
         # Convert initial guesses from degrees to radians
         initial_guesses_radians = np.radians(initial_guesses_degrees)
         

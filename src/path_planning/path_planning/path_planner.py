@@ -29,32 +29,36 @@ class pathPlanner(Node):
     # These are defined manually, but can be extracted from the mapping
     def generate_point_path(self):
         waypoints = np.array([
-            [10, 10],
-            [20, 15],
-            [30, 10],
-            [40, 15],
-            [50, 10]
+            [1, 1],
+            [2, 1],
+            [2, 2],
+            [3, 2],
+            [3, 3]
         ])
         return waypoints
 
     def interpolate(self, waypoints):
+
+        t = np.linspace(0, 1, len(waypoints))
+
         # Separate the x and z coordinates of the waypoints
         x_points = waypoints[:, 0]
         z_points = waypoints[:, 1]
-        points = x_points, z_points
 
-        # Create a cubic spline interpolation of the path
-        cs = CubicSpline(x_points, z_points, bc_type='periodic')
+        # Interpolate x and z as functions of t
+        cs_x = CubicSpline(t, x_points)
+        cs_z = CubicSpline(t, z_points)
 
-        # Generate points along the spline curve for plotting or for use in path planning
-        x_interp = np.linspace(x_points.min(), x_points.max(), 500)
-        z_interp = cs(x_interp)
+    # Generate points along the spline curve for plotting or for use in path planning
+        t_interp = np.linspace(0, 1, 500)
+        x_interp = cs_x(t_interp)
+        z_interp = cs_z(t_interp)
         spine_points = x_interp, z_interp
-        return spine_points, points
+        return spine_points, (x_points, z_points)
     
     def solve_ik(self, x, z):
         # Assuming initial guesses for the angles
-        initial_guesses = np.radians([-210, 10, 30, -10])
+        initial_guesses = np.radians([30, 90, -30, 90])
         # Solve using fsolve
         solution = fsolve(equation, initial_guesses, args=(x, z, D))
         return solution
