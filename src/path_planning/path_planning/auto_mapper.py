@@ -45,17 +45,19 @@ class AutoMapper(Node):
                 print(f'x{x}, z{z}')
 
                 # Command robot to move to the position (x, z)
-                theta_left, theta_right = self.send_joint_angles(x, z)
-                print(f'tehtaleft: {theta_left}, theta_right: {theta_right}')
+                theta1_left, theta1_right = self.solve_IK(x, z)
+                print(f'tehtaleft: {theta1_left}, theta_right: {theta1_right}')
+                
+                self.send_calculated_joint_angles(theta1_left, theta1_right)
 
                 # Wait for robot to reach the position and stabilize
-                self.wait_until_stable(theta_left, theta_right)
+                self.wait_until_stable(theta1_left, theta1_right)
 
                 # Record the joint states
-                if theta_left is not None and theta_right is not None:
+                if theta1_left is not None and theta1_right is not None:
                 # Update the mapping with the new data
                     #self.mapping[(x, z)] = (theta_left, theta_right)
-                    self.mapping[f"{x},{z}"] = (theta_left, theta_right)
+                    self.mapping[f"{x},{z}"] = (theta1_left, theta1_right)
 
                 # if self.joint_state_msg:
                 #     theta_left, theta_right = self.read_joint_angles(self.joint_state_msg)
@@ -102,7 +104,7 @@ class AutoMapper(Node):
                 return False
             
 
-    def send_joint_angles(self, x, z):
+    def solve_IK(self, x, z):
         # Convert the (x, z) position to joint angles using IK
 
         # Initial guesses for theta1 and theta2 for both arms, in degrees
@@ -135,7 +137,11 @@ class AutoMapper(Node):
 
         theta2_right: This is the angle of the second joint of the right arm, the "elbow" angle. It measures how the second segment (LR2) of the right arm bends relative to the first segment.
         """
-
+        
+        return theta1_left, theta1_right
+    
+    def send_calculated_joint_angles(self, theta1_left, theta1_right):
+        
         # Create a message with the desired joint angles
         msg = Float64MultiArray()
         msg.data = [theta1_left, theta1_right]        
@@ -144,10 +150,8 @@ class AutoMapper(Node):
         # The topic and message type might be different for your setup
         self.joint_command_publisher.publish(msg)
         self.get_logger().info('Published joint angles to move robot to position')
-        
-        return msg.data
-    
 
+        return msg.data
 
     def read_joint_angles(self, joint_state_msg):
         # Extract joint angles from the joint_state_msg

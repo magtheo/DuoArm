@@ -12,7 +12,7 @@ from scipy.interpolate import CubicSpline
 import matplotlib.pyplot as plt
 from .equation import equation, D
 from scipy.optimize import fsolve
-
+from matplotlib.animation import FuncAnimation
 
 class pathPlanner(Node):
     def __init__(self):
