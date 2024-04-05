@@ -9,7 +9,7 @@ from std_msgs.msg import Float64MultiArray
 from scipy.optimize import fsolve
 import json
 import time
-from .equation import equation, D
+from .equation import equation, D, initial_guesses
 
 # Define the lengths of the robot arm segments
 LL1, LL2 = 20, 30  # Left arm segment lengths in cm
@@ -17,10 +17,17 @@ LR1, LR2 = 30, 30  # Right arm segment lengths in cm
 W = 20             # Distance between the base joints in cm
 D = 10             # Distance between the tool hub joints in cm
 
-grid_size = 100 # bruk 100
+initial_guesses = initial_guesses
+grid_size = 10 # bruk 100
 
 class AutoMapper(Node):
-    
+
+    # Define angle limits
+    MIN_THETA1_LEFT = np.radians(-90)  # Example limit
+    MAX_THETA1_LEFT = np.radians(90)   # Example limit
+    MIN_THETA1_RIGHT = np.radians(-90) # Example limit
+    MAX_THETA1_RIGHT = np.radians(90)  # Example limit
+
     def __init__(self):
         super().__init__('auto_mapper')
         self.joint_state_subscription = self.create_subscription(
@@ -38,29 +45,36 @@ class AutoMapper(Node):
             10
         )
 
-    def map_workspace(self):
+    def map_workspace(self, initial_guesses):
         for x in range(0, grid_size, 1):  # Grid size
             for z in range(0, grid_size, 1):
 
                 print(f'x{x}, z{z}')
 
-                # Command robot to move to the position (x, z)
-                theta_left, theta_right = self.send_joint_angles(x, z)
-                print(f'tehtaleft: {theta_left}, theta_right: {theta_right}')
+                # calculate joint angles with position (x, z)
+                theta1_left, theta1_right = self.solve_IK(x, z, initial_guesses)
+                print(f'tehtaleft: {theta1_left}, theta_right: {theta1_right}')
+                
+                self.send_calculated_joint_angles(theta1_left, theta1_right)
 
                 # Wait for robot to reach the position and stabilize
-                self.wait_until_stable(theta_left, theta_right)
+                self.wait_until_stable(theta1_left, theta1_right)
 
-                # Record the joint states
-                if theta_left is not None and theta_right is not None:
-                # Update the mapping with the new data
-                    #self.mapping[(x, z)] = (theta_left, theta_right)
-                    self.mapping[f"{x},{z}"] = (theta_left, theta_right)
+                if self.check_angles_within_limits(theta1_left, theta1_right):
+                    print(f"Coordinate ({x}, {z}) is inside the work area.")
+                    self.mapping[f"{x},{z}"] = (theta1_left, theta1_right, 'inside')
+                else:
+                    print(f"Coordinate ({x}, {z}) is outside the work area.")
+                    self.mapping[f"{x},{z}"] = (theta1_left, theta1_right, 'outside')
 
                 # if self.joint_state_msg:
                 #     theta_left, theta_right = self.read_joint_angles(self.joint_state_msg)
                 #     self.robot_arm.add_mapping(x, z, theta_left, theta_right)
 
+    def check_angles_within_limits(self, theta1_left, theta1_right):
+        # Check if the angles are within the specified limits
+        return (self.MIN_THETA1_LEFT <= theta1_left <= self.MAX_THETA1_LEFT and
+                self.MIN_THETA1_RIGHT <= theta1_right <= self.MAX_THETA1_RIGHT)
 
     def joint_state_callback(self, msg):
         self.joint_state_msg = msg
@@ -89,7 +103,7 @@ class AutoMapper(Node):
             # print(actual_angles)
 
             # TESTING
-            actual_angles = commanded_angles
+            actual_angles = commanded_angles # Testing
             # Testing
 
             # Check if the actual angles are close enough to the commanded angles
@@ -102,18 +116,11 @@ class AutoMapper(Node):
                 return False
             
 
-    def send_joint_angles(self, x, z):
+    def solve_IK(self, x, z, initial_guesses):
         # Convert the (x, z) position to joint angles using IK
 
-        # Initial guesses for theta1 and theta2 for both arms, in degrees
-        initial_guesses_degrees = (30, 90, -30, 90) # TODO test whether these numbers are accurate
-        # theta1_left, theta2_left, theta1_right, theta2_right
-
-        # Convert initial guesses from degrees to radians
-        initial_guesses_radians = np.radians(initial_guesses_degrees)
-        
         # Solve the equations using fsolve
-        solution = fsolve(equation, initial_guesses_radians, args=(x, z, D), full_output=True)
+        solution = fsolve(equation, initial_guesses, args=(x, z, D), full_output=True)
      
         # fsolve returns a tuple where the first element is the solution
         # and the fourth element is an integer flag indicating if a solution was found
@@ -136,7 +143,11 @@ class AutoMapper(Node):
 
         theta2_right: This is the angle of the second joint of the right arm, the "elbow" angle. It measures how the second segment (LR2) of the right arm bends relative to the first segment.
         """
-
+        
+        return theta1_left, theta1_right
+    
+    def send_calculated_joint_angles(self, theta1_left, theta1_right):
+        
         # Create a message with the desired joint angles
         msg = Float64MultiArray()
         msg.data = [theta1_left, theta1_right]        
@@ -145,10 +156,8 @@ class AutoMapper(Node):
         # The topic and message type might be different for your setup
         self.joint_command_publisher.publish(msg)
         self.get_logger().info('Published joint angles to move robot to position')
-        
-        return msg.data
-    
 
+        return msg.data
 
     def read_joint_angles(self, joint_state_msg):
         # Extract joint angles from the joint_state_msg
@@ -166,7 +175,7 @@ class AutoMapper(Node):
 
     def map_workspace_and_save(self, filename):
         """Maps the workspace and saves the mappings to a file."""
-        self.map_workspace()
+        self.map_workspace(initial_guesses)
         self.save_mappings_to_file(filename)
     
     

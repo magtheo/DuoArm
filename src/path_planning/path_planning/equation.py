@@ -9,6 +9,9 @@ LR1, LR2 = 30, 30  # Right arm segment lengths in cm
 W = 20             # Distance between the base joints in cm
 D = 10             # Distance between the tool hub joints in cm
 
+initial_guesses = np.radians([30, 90, -30, 90])
+
+
 def equation( p, x_target, z_target, D):
     theta1_left, theta2_left, theta1_right, theta2_right = p
 

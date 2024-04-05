@@ -10,7 +10,7 @@ import json
 import numpy as np
 from scipy.interpolate import CubicSpline
 import matplotlib.pyplot as plt
-from .equation import equation, D
+from .equation import equation, D, initial_guesses
 from scipy.optimize import fsolve
 from matplotlib.animation import FuncAnimation
 
@@ -56,15 +56,14 @@ class pathPlanner(Node):
         spine_points = x_interp, z_interp
         return spine_points, (x_points, z_points)
     
-    def solve_ik(self, x, z):
-        # Assuming initial guesses for the angles
-        initial_guesses = np.radians([30, 90, -30, 90])
+    def solve_ik(self, x, z, initial_guesses):
+
         # Solve using fsolve
         solution = fsolve(equation, initial_guesses, args=(x, z, D))
         return solution
 
     def map_path_to_angles(self, interpolated_points):
-        joint_angles = [self.solve_ik(x, z) for x, z in zip(*interpolated_points)]
+        joint_angles = [self.solve_ik(x, z, initial_guesses) for x, z in zip(*interpolated_points)]
         return np.array(joint_angles)
 
 
