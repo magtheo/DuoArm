@@ -30,10 +30,10 @@ class AutoMapper(Node):
 
     def __init__(self):
         super().__init__('auto_mapper')
-        self.joint_state_subscription = self.create_subscription(
-            JointState,
-            'actual_joint_states',
-            self.joint_state_callback,
+        self.joint_angles_subscription = self.create_subscription(
+            Float64MultiArray,
+            'actual_joint_angles',
+            self.joint_angles_callback,
             10)
         self.joint_state_msg = None
         self.mapping = {}  # To store the mapped coordinates with joint angles
@@ -76,9 +76,9 @@ class AutoMapper(Node):
         return (self.MIN_THETA1_LEFT <= theta1_left <= self.MAX_THETA1_LEFT and
                 self.MIN_THETA1_RIGHT <= theta1_right <= self.MAX_THETA1_RIGHT)
 
-    def joint_state_callback(self, msg):
-        self.joint_state_msg = msg
-        self.get_logger().info('Received a joint state message')
+    def joint_angles_callback(self, msg):
+        actual_joint_angles = msg
+        self.get_logger().info(f'Received a joint angles {actual_joint_angles}')
 
     def wait_until_stable(self, theta_left, theta_right):
         flag = False
