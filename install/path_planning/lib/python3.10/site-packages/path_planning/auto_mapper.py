@@ -45,7 +45,15 @@ class AutoMapper(Node):
             10
         )
 
-        self.map_service = self.create_service(StartMapping, 'start_mapping', self.start_mapping_callback)
+        # Subscriber for receiving start mapping command
+        self.start_mapping_sub = self.create_subscription(
+            String,
+            'start_mapping',
+            self.start_mapping_callback,
+            10)
+        
+        # Publishing mapping completion notification
+        self.mapping_done_pub = self.create_publisher(String, 'mapping_done', 10)
 
     def map_workspace(self, initial_guesses):
         for x in range(0, grid_size, 1): 
@@ -179,12 +187,13 @@ class AutoMapper(Node):
         """Maps the workspace and saves the mappings to a file."""
         self.map_workspace(initial_guesses)
         self.save_mappings_to_file(filename)
+        self.mapping_done_pub.publish(String(data="done")) # Notify that mapping is done
 
-    def start_mapping_callback(self, request, response):
-        self.get_logger().info('Starting workspace mapping')
-        self.map_workspace_and_save('robot_arm_mappings.json')
-        response.success = True
-        return response
+    def start_mapping_callback(self, msg):
+        if msg.data == "start":
+            self.get_logger().info('Starting workspace mapping')
+            self.map_workspace_and_save('robot_arm_mappings.json')
+
         
     
 def main(args=None):

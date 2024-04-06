@@ -26,6 +26,7 @@ setup(
             'command_executor = controll_center.command_executor:main',
             'display = controll_center.display:main',
             'action_controller = controll_center.action_controller:main',
+            'joystick_controller = controll_center.joystick_controller:main',
          
         ],
     },

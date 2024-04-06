@@ -8,25 +8,34 @@ from path_planneing import StartMapping
 class ActionController(Node):
     def __init__(self):
         super().__init__('action_controller')
-        self.state = 'joystick'
+        self.state = 'standby'
             
-        # Subscribe to the topic for pdp button press
+        ### comunication with mapping node
+        # Publisher for starting mapping
+        self.start_mapping_pub = self.create_publisher(String, 'start_mapping', 10)
+
+
+        ### Buttons    
+        # Subscribe to the topic for predefined_path button press
         self.action_subscription = self.create_subscription(
             String,
             'predefined_path_button',
             self.handle_predefined_path_button,
             10)
         
-                # Subscribe to the topic for action button press
+        # Subscribe to the topic for action button press
         self.action_subscription = self.create_subscription(
             String,
             'map_button',
             self.handle_map_button,
             10)
         
-        self.map_client = self.create_client(StartMapping, 'start_mapping')
-        while not self.map_client.wait_for_service(timeout_sec=1.0):
-            self.get_logger().info('Waiting for the mapping service...')
+        # Subscribe to the mapping_done topic
+        self.mapping_done_subscription = self.create_subscription(
+            String,
+            'mapping_done',
+            self.mapping_done_callback,
+            10)
 
 
     def handle_state(self, ):
@@ -49,7 +58,7 @@ class ActionController(Node):
         if msg.data == 'pressed':
             self.state = 'map'
             self.get_logger().info('Starting mapping')
-            # Start the predefined path
+            self.start_mapping_pub.publish(String(data="start"))
         else:
             self.get_logger().warning('Received invalid button command.')
 

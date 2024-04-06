@@ -14,8 +14,9 @@ controll_center/action_controller.py
 controll_center/command_executor.py
 controll_center/command_window.py
 controll_center/display.py
-controll_center/joystick_handler.py
+controll_center/joystick_controller.py
 launch/controll_center_launch.py
+launch/start_launch.py
 resource/controll_center
 test/test_copyright.py
 test/test_flake8.py
