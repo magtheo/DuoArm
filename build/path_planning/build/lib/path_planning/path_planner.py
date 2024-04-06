@@ -10,13 +10,16 @@ import json
 import numpy as np
 from scipy.interpolate import CubicSpline
 import matplotlib.pyplot as plt
-from .equation import equation, D, initial_guesses
+from .equation import equation, D, initial_guesses, grid_size
 from scipy.optimize import fsolve
 from matplotlib.animation import FuncAnimation
 
-class pathPlanner(Node):
+class PathPlanner(Node):
     def __init__(self):
         super().__init__('path_planner')
+
+        # Publisher for display data
+        self.display_publisher = self.create_publisher(String, 'display_data', 10)
  
 
     # Load the mapping from a JSON file
@@ -30,8 +33,8 @@ class pathPlanner(Node):
     def generate_point_path(self):
         waypoints = np.array([
             [1, 1],
-            [2, 1],
-            [2, 2],
+            [1, 2],
+            [3, 2],
             [3, 2],
             [3, 3]
         ])
@@ -67,34 +70,22 @@ class pathPlanner(Node):
         return np.array(joint_angles)
 
 
-    def visualize(self, mapping, spine_points, points):
-        # Convert the mapping keys (string) back to x and z coordinates
-        mapped_x, mapped_z = zip(*[map(int, key.split(',')) for key in mapping.keys()])
-        
-        # Extract interpolated points for plotting
-        x_interp, z_interp = spine_points
-        x_points, z_points = points
+    def publish_display_data(self, mapping, spine_points, points):
 
-        # Create the plot
-        plt.figure(figsize=(10, 6))
-        
-        # Plot the mapped points
-        plt.scatter(mapped_x, mapped_z, color='red', label='Mapped Points', alpha=0.6)
+        # Convert numpy arrays to lists
+        spine_points_list = [spine_points[0].tolist(), spine_points[1].tolist()]
+        points_list = [points[0].tolist(), points[1].tolist()]
 
-        # Plot the waypoints
-        plt.plot(x_points, z_points, 'o', label='Waypoints', color='yellow')
-        
-        # Plot the interpolated path
-        plt.plot(x_interp, z_interp, label='Interpolated Path', color='blue')
-        
-        # Adding labels and legend
-        plt.legend()
-        plt.xlabel('X')
-        plt.ylabel('Z')
-        plt.title('Path Planning with Mapped Points and Interpolated Path')
-        plt.grid(True)
-        plt.show()
-
+        # Serialize data to JSON string for simplicity
+        data = json.dumps({
+            "mapping": mapping,
+            "spine_points": spine_points_list,
+            "points": points_list
+        })
+        msg = String()
+        msg.data = data
+        self.display_publisher.publish(msg)
+        self.get_logger().info('Publishing display data')
 
 
 
@@ -103,15 +94,19 @@ class pathPlanner(Node):
 def main(args=None):
     rclpy.init(args=args)
 
-    path_planner =pathPlanner()
+    path_planner =PathPlanner()
     mapping = path_planner.load_mapping('robot_arm_mappings.json')
     
     waypoints = path_planner.generate_point_path()
     interpolated_points, points = path_planner.interpolate(waypoints)
 
     joint_angles = path_planner.map_path_to_angles(interpolated_points)
+    # TODO Send joint angles to motor controller
 
-    path_planner.visualize(mapping, interpolated_points, points)
+    path_planner.publish_display_data(mapping, interpolated_points, points)
+        
+    rclpy.spin(path_planner)
+    rclpy.shutdown()
 
 
 

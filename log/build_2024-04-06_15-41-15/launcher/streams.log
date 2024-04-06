@@ -1,0 +1,21 @@
+[0.735s] Invoking command in '/home/theo/DuoArm/src/launcher': PYTHONPATH=/home/theo/DuoArm/build/launcher/prefix_override:/home/theo/DuoArm/install/launcher/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/launcher build --build-base /home/theo/DuoArm/build/launcher/build install --record /home/theo/DuoArm/build/launcher/install.log --single-version-externally-managed install_data
+[0.851s] running egg_info
+[0.851s] writing ../../build/launcher/launcher.egg-info/PKG-INFO
+[0.851s] writing dependency_links to ../../build/launcher/launcher.egg-info/dependency_links.txt
+[0.851s] writing entry points to ../../build/launcher/launcher.egg-info/entry_points.txt
+[0.851s] writing requirements to ../../build/launcher/launcher.egg-info/requires.txt
+[0.851s] writing top-level names to ../../build/launcher/launcher.egg-info/top_level.txt
+[0.852s] reading manifest file '../../build/launcher/launcher.egg-info/SOURCES.txt'
+[0.852s] adding license file 'LICENSE'
+[0.852s] writing manifest file '../../build/launcher/launcher.egg-info/SOURCES.txt'
+[0.852s] running build
+[0.852s] running build_py
+[0.853s] running install
+[0.853s] running install_lib
+[0.853s] running install_data
+[0.853s] running install_egg_info
+[0.854s] removing '/home/theo/DuoArm/install/launcher/lib/python3.10/site-packages/launcher-0.0.0-py3.10.egg-info' (and everything under it)
+[0.855s] Copying ../../build/launcher/launcher.egg-info to /home/theo/DuoArm/install/launcher/lib/python3.10/site-packages/launcher-0.0.0-py3.10.egg-info
+[0.855s] running install_scripts
+[0.871s] writing list of installed files to '/home/theo/DuoArm/build/launcher/install.log'
+[0.899s] Invoked command in '/home/theo/DuoArm/src/launcher' returned '0': PYTHONPATH=/home/theo/DuoArm/build/launcher/prefix_override:/home/theo/DuoArm/install/launcher/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/launcher build --build-base /home/theo/DuoArm/build/launcher/build install --record /home/theo/DuoArm/build/launcher/install.log --single-version-externally-managed install_data

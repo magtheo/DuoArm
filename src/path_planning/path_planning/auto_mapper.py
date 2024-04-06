@@ -9,7 +9,8 @@ from std_msgs.msg import Float64MultiArray
 from scipy.optimize import fsolve
 import json
 import time
-from .equation import equation, D, initial_guesses
+from .equation import equation, D, initial_guesses, grid_size
+from path_planning import StartMapping
 
 # Define the lengths of the robot arm segments
 LL1, LL2 = 20, 30  # Left arm segment lengths in cm
@@ -17,8 +18,7 @@ LR1, LR2 = 30, 30  # Right arm segment lengths in cm
 W = 20             # Distance between the base joints in cm
 D = 10             # Distance between the tool hub joints in cm
 
-initial_guesses = initial_guesses
-grid_size = 10 # bruk 100
+
 
 class AutoMapper(Node):
 
@@ -45,8 +45,10 @@ class AutoMapper(Node):
             10
         )
 
+        self.map_service = self.create_service(StartMapping, 'start_mapping', self.start_mapping_callback)
+
     def map_workspace(self, initial_guesses):
-        for x in range(0, grid_size, 1):  # Grid size
+        for x in range(0, grid_size, 1): 
             for z in range(0, grid_size, 1):
 
                 print(f'x{x}, z{z}')
@@ -177,7 +179,13 @@ class AutoMapper(Node):
         """Maps the workspace and saves the mappings to a file."""
         self.map_workspace(initial_guesses)
         self.save_mappings_to_file(filename)
-    
+
+    def start_mapping_callback(self, request, response):
+        self.get_logger().info('Starting workspace mapping')
+        self.map_workspace_and_save('robot_arm_mappings.json')
+        response.success = True
+        return response
+        
     
 def main(args=None):
     rclpy.init(args=args)
@@ -186,7 +194,7 @@ def main(args=None):
     filename = 'robot_arm_mappings.json'  # Define your filename here
     
     # Initiate mapping
-    auto_mapper.map_workspace_and_save(filename)
+    #auto_mapper.map_workspace_and_save(filename)
     
     rclpy.spin(auto_mapper)
     rclpy.shutdown()

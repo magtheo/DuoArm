@@ -13,6 +13,16 @@ def generate_launch_description():
         
     )
 
+    path_planner = Node(
+        package='path_planning',
+        executable='path_planner',
+        name='path_planner_node'
+        
+    )
+
+    
+
     ld.add_action(auto_mapper)
+    ld.add_action(path_planner)
 
     return ld

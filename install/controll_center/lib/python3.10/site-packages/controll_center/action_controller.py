@@ -3,50 +3,59 @@
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
+from path_planneing import StartMapping
 
-
-class state_controller(Node):
+class ActionController(Node):
     def __init__(self):
         super().__init__('action_controller')
-        self.state = 'user'
-
-        # Subscribe to the topic for mode change
-        self.mode_subscription = self.create_subscription(
-            String,
-            'mode_change',
-            self.handle_mode_change,
-            10)
+        self.state = 'joystick'
             
-        # Subscribe to the topic for action button press
+        # Subscribe to the topic for pdp button press
         self.action_subscription = self.create_subscription(
             String,
-            'action_button',
-            self.handle_action_button,
+            'predefined_path_button',
+            self.handle_predefined_path_button,
             10)
+        
+                # Subscribe to the topic for action button press
+        self.action_subscription = self.create_subscription(
+            String,
+            'map_button',
+            self.handle_map_button,
+            10)
+        
+        self.map_client = self.create_client(StartMapping, 'start_mapping')
+        while not self.map_client.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('Waiting for the mapping service...')
 
-    def handle_mode_change(self, msg):
-            if msg.data in ['user', 'admin']: # TODO bytt til en user
-                self.get_logger().info(f'Switching to {msg.data} mode.')
-                self.state = msg.data
-            else:
-                self.get_logger().warning('Received invalid mode change command.')
 
-    def handle_action_button(self, msg):
+    def handle_state(self, ):
+        if self.state == 'joystick':
+            self.listen_to_joystick()
+
+        if self.state == 'predefined_path':
+            self.start_predefined_path()
+
+
+    def handle_predefined_path_button(self, msg):
         if msg.data == 'pressed':
-            if self.state == 'admin': # TODO enum class
-                self.get_logger().info('Admin mode: Running mapping function...')
-                # Run the mapping function
-                self.run_mapping()
-            elif self.state == 'user':
-                self.get_logger().info('User mode: Starting predefined path...')
-                # Start the predefined path
-                self.start_predefined_path()
+            self.state = 'predefined_path'
+            self.get_logger().info('Starting predefined path')
+            # Start the predefined path
         else:
-            self.get_logger().warning('Received invalid action button command.')
+            self.get_logger().warning('Received invalid button command.')
+
+    def handle_map_button(self, msg):
+        if msg.data == 'pressed':
+            self.state = 'map'
+            self.get_logger().info('Starting mapping')
+            # Start the predefined path
+        else:
+            self.get_logger().warning('Received invalid button command.')
 
     def run_mapping(self):
-        # TODO: initiate mapping
-        pass
+        req = StartMapping.Request()
+        self.future = self.map_client.call_async(req)
 
     def start_predefined_path(self):
         # TODO: initate predefined path

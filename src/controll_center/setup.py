@@ -24,6 +24,9 @@ setup(
         'console_scripts': [
             'command_window = controll_center.command_window:main',
             'command_executor = controll_center.command_executor:main',
+            'display = controll_center.display:main',
+            'action_controller = controll_center.action_controller:main',
+         
         ],
     },
 )

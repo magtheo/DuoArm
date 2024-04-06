@@ -1,4 +1,6 @@
 [console_scripts]
+action_controller = controll_center.action_controller:main
 command_executor = controll_center.command_executor:main
 command_window = controll_center.command_window:main
+display = controll_center.display:main
 
