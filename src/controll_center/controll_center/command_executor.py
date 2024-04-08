@@ -4,6 +4,8 @@ from rclpy.node import Node
 from std_msgs.msg import String
 import os
 import subprocess
+from path_planning import StartMapping
+
 
 class CommandExecutor(Node):
     def __init__(self):
@@ -37,6 +39,11 @@ class CommandExecutor(Node):
         
         elif command == 'stop_navigation':
             os.system("ros2 service call /navigation_node/some_service std_srvs/srv/Trigger '{}'")  # Example of stopping a node or action
+    
+    # maybe we dont need, look further into this
+    # def run_mapping(self):
+    #     req = StartMapping.Request()
+    #     self.future = self.map_client.call_async(req)
 
 def main(args=None):
     rclpy.init(args=args)
