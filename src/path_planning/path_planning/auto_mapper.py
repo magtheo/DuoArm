@@ -10,7 +10,6 @@ from scipy.optimize import fsolve
 import json
 import time
 from .equation import equation, D, initial_guesses, grid_size
-from path_planning import StartMapping
 
 # Define the lengths of the robot arm segments
 LL1, LL2 = 20, 30  # Left arm segment lengths in cm
