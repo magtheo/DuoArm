@@ -3,7 +3,6 @@
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
-from path_planning import StartMapping
 
 class ActionController(Node):
     def __init__(self):
@@ -62,9 +61,6 @@ class ActionController(Node):
         else:
             self.get_logger().warning('Received invalid button command.')
 
-    def run_mapping(self):
-        req = StartMapping.Request()
-        self.future = self.map_client.call_async(req)
 
     def start_predefined_path(self):
         # TODO: initate predefined path
