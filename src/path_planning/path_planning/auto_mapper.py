@@ -16,7 +16,6 @@ from path_planning import StartMapping
 LL1, LL2 = 20, 30  # Left arm segment lengths in cm
 LR1, LR2 = 30, 30  # Right arm segment lengths in cm
 W = 20             # Distance between the base joints in cm
-D = 10             # Distance between the tool hub joints in cm
 
 
 
@@ -77,6 +76,7 @@ class AutoMapper(Node):
                     print(f"Coordinate ({x}, {z}) is outside the work area.")
                     self.mapping[f"{x},{z}"] = (theta1_left, theta1_right, 'outside')
 
+                # redundant
                 # if self.joint_state_msg:
                 #     theta_left, theta_right = self.read_joint_angles(self.joint_state_msg)
                 #     self.robot_arm.add_mapping(x, z, theta_left, theta_right)
@@ -103,17 +103,17 @@ class AutoMapper(Node):
             print(commanded_angles)
 
             # Ensure that joint_state_msg is not None and has enough positions
-            # if self.joint_state_msg is None or len(self.joint_state_msg.position) < 2:
-            #     self.get_logger().error('Insufficient joint state data.')
-            #     return False
+            if self.joint_state_msg is None or len(self.joint_state_msg.position) < 2:
+                self.get_logger().error('Insufficient joint state data.')
+                return False
             
             # actual_angles will be read from the robot's joint_state message.
             # Assuming that positions 0 and 1 correspond to theta1_left and theta1_right.
-            # actual_angles = [self.joint_state_msg.position[0], self.joint_state_msg.position[2]]
-            # print(actual_angles)
+            actual_angles = [self.joint_state_msg.position[0], self.joint_state_msg.position[2]]
+            print(actual_angles)
 
             # TESTING
-            actual_angles = commanded_angles # Testing
+            # actual_angles = commanded_angles # Testing
             # Testing
 
             # Check if the actual angles are close enough to the commanded angles
