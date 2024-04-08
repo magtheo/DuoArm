@@ -3,7 +3,7 @@
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
-from path_planneing import StartMapping
+from path_planning import StartMapping
 
 class ActionController(Node):
     def __init__(self):
