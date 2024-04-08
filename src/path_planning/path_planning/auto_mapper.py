@@ -22,9 +22,9 @@ W = 20             # Distance between the base joints in cm
 class AutoMapper(Node):
 
     # Define angle limits
-    MIN_THETA1_LEFT = np.radians(90)
-    MAX_THETA1_LEFT = np.radians(-13)
-    MIN_THETA1_RIGHT = np.radians(-13)
+    MIN_THETA1_LEFT = np.radians(-13)
+    MAX_THETA1_LEFT = np.radians(90)
+    MIN_THETA1_RIGHT = np.radians(90)
     MAX_THETA1_RIGHT = np.radians(13)
 
     def __init__(self):
