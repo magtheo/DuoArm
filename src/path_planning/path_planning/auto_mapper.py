@@ -95,7 +95,7 @@ class AutoMapper(Node):
         while flag == False:
             """Waits a given period for the robot to reach the position and stabilize."""
             self.get_logger().info('Waiting for the robot to stabilize...')
-            #time.sleep(0.1)  # Waits for 0.5 seconds
+            time.sleep(0.5)  # Waits for 0.5 seconds
             
             # commanded_angles is a list with the calculated angles, 
             # like [theta1_left, theta1_right], in radians.
