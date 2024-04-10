@@ -1,4 +1,0 @@
-[console_scripts]
-command_executor = command_center.command_executor:main
-command_window = command_center.command_window:main
-
