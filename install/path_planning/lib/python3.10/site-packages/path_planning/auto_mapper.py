@@ -5,31 +5,31 @@ import numpy as np
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import JointState
-from std_msgs.msg import Float64MultiArray
+from std_msgs.msg import String, Float64MultiArray
 from scipy.optimize import fsolve
 import json
 import time
-from .equation import equation, D, initial_guesses, grid_size
-from path_planning import StartMapping
+from .equation import equation, D, initial_guesses, grid_size_x, grid_size_z
+
 
 # Define the lengths of the robot arm segments
 LL1, LL2 = 20, 30  # Left arm segment lengths in cm
-LR1, LR2 = 30, 30  # Right arm segment lengths in cm
+LR1, LR2 = 20, 30  # Right arm segment lengths in cm
 W = 20             # Distance between the base joints in cm
-D = 10             # Distance between the tool hub joints in cm
 
 
 
 class AutoMapper(Node):
 
-    # Define angle limits
-    MIN_THETA1_LEFT = np.radians(90)
-    MAX_THETA1_LEFT = np.radians(-13)
-    MIN_THETA1_RIGHT = np.radians(-13)
-    MAX_THETA1_RIGHT = np.radians(13)
-
     def __init__(self):
         super().__init__('auto_mapper')
+
+        # Define angle limits
+        MIN_THETA1_LEFT = np.radians(-13)
+        MAX_THETA1_LEFT = np.radians(90)
+        MIN_THETA1_RIGHT = np.radians(-90)
+        MAX_THETA1_RIGHT = np.radians(13)
+
         self.joint_angles_subscription = self.create_subscription(
             Float64MultiArray,
             'actual_joint_angles',
@@ -55,16 +55,33 @@ class AutoMapper(Node):
         # Publishing mapping completion notification
         self.mapping_done_pub = self.create_publisher(String, 'mapping_done', 10)
 
-    def map_workspace(self, initial_guesses):
-        for x in range(0, grid_size, 1): 
-            for z in range(0, grid_size, 1):
+        # Manually determined reference angles for the top and bottom center points
+        self.ref_angles_top = [MIN_THETA1_LEFT, np.radians(45), MAX_THETA1_RIGHT, np.radians(-45)]  # Replace with your actual angles
+        self.ref_angles_bottom = [MAX_THETA1_LEFT, np.radians(45), MIN_THETA1_RIGHT, np.radians(-45)]
+
+    def map_workspace(self, initial_guesses):   
+#        Assume grid origin (0,0) is at the bottom left
+        ref_x = grid_size_x / 2
+        ref_y = grid_size_z  # Top of the grid
+
+        # Set initial guesses to the reference angles for the bottom center
+        current_guesses = self.ref_angles_bottom.copy()
+
+        for x in range(0, grid_size_x + 1): 
+            for z in range(0, grid_size_z + 1):
 
                 print(f'x{x}, z{z}')
 
+                if z == ref_y and x == ref_x:
+                    current_guesses = self.ref_angles_top.copy()
+
                 # calculate joint angles with position (x, z)
-                theta1_left, theta1_right = self.solve_IK(x, z, initial_guesses)
+                theta1_left, theta2_left, theta1_right, theta2_right = self.solve_IK(x, z, current_guesses)
                 print(f'tehtaleft: {theta1_left}, theta_right: {theta1_right}')
                 
+                # Store the current solution to use as initial guesses for the next point
+                current_guesses = [theta1_left, theta2_left, theta1_right, theta2_right]
+
                 self.send_calculated_joint_angles(theta1_left, theta1_right)
 
                 # Wait for robot to reach the position and stabilize
@@ -77,6 +94,7 @@ class AutoMapper(Node):
                     print(f"Coordinate ({x}, {z}) is outside the work area.")
                     self.mapping[f"{x},{z}"] = (theta1_left, theta1_right, 'outside')
 
+                # redundant
                 # if self.joint_state_msg:
                 #     theta_left, theta_right = self.read_joint_angles(self.joint_state_msg)
                 #     self.robot_arm.add_mapping(x, z, theta_left, theta_right)
@@ -95,7 +113,7 @@ class AutoMapper(Node):
         while flag == False:
             """Waits a given period for the robot to reach the position and stabilize."""
             self.get_logger().info('Waiting for the robot to stabilize...')
-            #time.sleep(0.1)  # Waits for 0.5 seconds
+            time.sleep(0.5)  # Waits for 0.5 seconds
             
             # commanded_angles is a list with the calculated angles, 
             # like [theta1_left, theta1_right], in radians.
@@ -103,17 +121,17 @@ class AutoMapper(Node):
             print(commanded_angles)
 
             # Ensure that joint_state_msg is not None and has enough positions
-            # if self.joint_state_msg is None or len(self.joint_state_msg.position) < 2:
-            #     self.get_logger().error('Insufficient joint state data.')
-            #     return False
+            if self.joint_state_msg is None or len(self.joint_state_msg.position) < 2:
+                self.get_logger().error('Insufficient joint state data.')
+                return False
             
             # actual_angles will be read from the robot's joint_state message.
             # Assuming that positions 0 and 1 correspond to theta1_left and theta1_right.
-            # actual_angles = [self.joint_state_msg.position[0], self.joint_state_msg.position[2]]
-            # print(actual_angles)
+            actual_angles = [self.joint_state_msg.position[0], self.joint_state_msg.position[2]]
+            print(actual_angles)
 
             # TESTING
-            actual_angles = commanded_angles # Testing
+            # actual_angles = commanded_angles # Testing
             # Testing
 
             # Check if the actual angles are close enough to the commanded angles
@@ -211,6 +229,7 @@ def main(args=None):
 
 # Ensure the main function is called when the script is executed
 if __name__ == '__main__':
+
     main()
 
 

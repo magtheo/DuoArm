@@ -10,7 +10,7 @@ import json
 import numpy as np
 from scipy.interpolate import CubicSpline
 import matplotlib.pyplot as plt
-from .equation import equation, D, initial_guesses, grid_size
+from .equation import equation, D, initial_guesses, grid_size_x, grid_size_z
 from scipy.optimize import fsolve
 from matplotlib.animation import FuncAnimation
 

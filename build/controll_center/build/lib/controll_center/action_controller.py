@@ -3,7 +3,6 @@
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
-from path_planneing import StartMapping
 
 class ActionController(Node):
     def __init__(self):
@@ -12,7 +11,10 @@ class ActionController(Node):
             
         ### comunication with mapping node
         # Publisher for starting mapping
-        self.start_mapping_pub = self.create_publisher(String, 'start_mapping', 10)
+        self.start_mapping_publisher = self.create_publisher(
+            String,
+            'start_mapping',
+            10)
 
 
         ### Buttons    
@@ -42,8 +44,14 @@ class ActionController(Node):
         if self.state == 'joystick':
             self.listen_to_joystick()
 
-        if self.state == 'predefined_path':
+        elif self.state == 'predefined_path':
             self.start_predefined_path()
+
+        elif self.state == 'map':
+            self.get_logger().info('Starting mapping')
+            self.start_mapping_publisher.publish(String(data="start"))
+        else:
+            self.state = 'standby'
 
 
     def handle_predefined_path_button(self, msg):
@@ -62,13 +70,13 @@ class ActionController(Node):
         else:
             self.get_logger().warning('Received invalid button command.')
 
-    def run_mapping(self):
-        req = StartMapping.Request()
-        self.future = self.map_client.call_async(req)
 
     def start_predefined_path(self):
         # TODO: initate predefined path
         pass
+    def mapping_done_callback(self, msg):
+        if msg.data == 'mapping_done':
+            self.state = 'standby'
 
 def main(args=None):
     rclpy.init(args=args)

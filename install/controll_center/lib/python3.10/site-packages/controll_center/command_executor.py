@@ -5,6 +5,7 @@ from std_msgs.msg import String
 import os
 import subprocess
 
+
 class CommandExecutor(Node):
     def __init__(self):
         super().__init__('command_executor')
@@ -14,6 +15,9 @@ class CommandExecutor(Node):
             self.command_callback,
             10)
         self.subscription  # prevent unused variable warning
+
+        # Publisher for starting mapping
+        self.start_mapping_pub = self.create_publisher(String, 'start_mapping', 10)
 
     def command_callback(self, msg):
         command = msg.data
@@ -27,8 +31,15 @@ class CommandExecutor(Node):
                 capture_output=True, text=True, shell=True)
             print("Launching path_planner:", result.stdout, result.stderr)
         
+        if command == 'start_map':
+            self.start_mapping_pub.publish(String(data="start"))
+            print("mapping:", result.stdout, result.stderr)
+        
+        
         elif command == 'stop_navigation':
             os.system("ros2 service call /navigation_node/some_service std_srvs/srv/Trigger '{}'")  # Example of stopping a node or action
+    
+
 
 def main(args=None):
     rclpy.init(args=args)

@@ -5,13 +5,14 @@ import numpy as np
 
 # Define the lengths of the robot arm segments
 LL1, LL2 = 20, 30  # Left arm segment lengths in cm
-LR1, LR2 = 30, 30  # Right arm segment lengths in cm
+LR1, LR2 = 20, 30  # Right arm segment lengths in cm
 W = 20             # Distance between the base joints in cm
 D = 10             # Distance between the tool hub joints in cm
 
 initial_guesses = np.radians([30, 90, -30, 90])
 
-grid_size = 10;
+grid_size_x = 10;
+grid_size_z = 10;
 
 
 def equation( p, x_target, z_target, D):
