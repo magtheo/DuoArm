@@ -5,7 +5,7 @@ import numpy as np
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import JointState
-from std_msgs.msg import Float64MultiArray
+from std_msgs.msg import String, Float64MultiArray
 from scipy.optimize import fsolve
 import json
 import time
@@ -21,14 +21,24 @@ W = 20             # Distance between the base joints in cm
 
 class AutoMapper(Node):
 
+<<<<<<< HEAD
     # Define angle limits
     MIN_THETA1_LEFT = np.radians(-13)
     MAX_THETA1_LEFT = np.radians(90)
     MIN_THETA1_RIGHT = np.radians(-90)
     MAX_THETA1_RIGHT = np.radians(13)
 
+=======
+>>>>>>> development
     def __init__(self):
         super().__init__('auto_mapper')
+
+        # Define angle limits
+        MIN_THETA1_LEFT = np.radians(-13)
+        MAX_THETA1_LEFT = np.radians(90)
+        MIN_THETA1_RIGHT = np.radians(-90)
+        MAX_THETA1_RIGHT = np.radians(13)
+
         self.joint_angles_subscription = self.create_subscription(
             Float64MultiArray,
             'actual_joint_angles',
@@ -55,7 +65,11 @@ class AutoMapper(Node):
         self.mapping_done_pub = self.create_publisher(String, 'mapping_done', 10)
 
         # Manually determined reference angles for the top and bottom center points
+<<<<<<< HEAD
         self.ref_angles_top = [MIN_THETA1_LEFT, np.radians(45), MAX_THETA1_RIGHT, np.radians(-45)] 
+=======
+        self.ref_angles_top = [MIN_THETA1_LEFT, np.radians(45), MAX_THETA1_RIGHT, np.radians(-45)]  # Replace with your actual angles
+>>>>>>> development
         self.ref_angles_bottom = [MAX_THETA1_LEFT, np.radians(45), MIN_THETA1_RIGHT, np.radians(-45)]
 
     def map_workspace(self, initial_guesses):   

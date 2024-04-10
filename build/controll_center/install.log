@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /home/theomagnor/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center/display.py
 /home/theomagnor/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center/command_executor.py
 /home/theomagnor/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center/command_window.py
@@ -26,3 +27,33 @@
 /home/theomagnor/DuoArm/install/controll_center/lib/controll_center/command_window
 /home/theomagnor/DuoArm/install/controll_center/lib/controll_center/display
 /home/theomagnor/DuoArm/install/controll_center/lib/controll_center/joystick_controller
+=======
+/home/asklindbraten/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center/display.py
+/home/asklindbraten/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center/command_executor.py
+/home/asklindbraten/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center/command_window.py
+/home/asklindbraten/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center/action_controller.py
+/home/asklindbraten/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center/joystick_controller.py
+/home/asklindbraten/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center/__init__.py
+/home/asklindbraten/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center/__pycache__/display.cpython-310.pyc
+/home/asklindbraten/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center/__pycache__/command_executor.cpython-310.pyc
+/home/asklindbraten/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center/__pycache__/command_window.cpython-310.pyc
+/home/asklindbraten/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center/__pycache__/action_controller.cpython-310.pyc
+/home/asklindbraten/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center/__pycache__/joystick_controller.cpython-310.pyc
+/home/asklindbraten/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center/__pycache__/__init__.cpython-310.pyc
+/home/asklindbraten/DuoArm/install/controll_center/share/ament_index/resource_index/packages/controll_center
+/home/asklindbraten/DuoArm/install/controll_center/share/controll_center/package.xml
+/home/asklindbraten/DuoArm/install/controll_center/share/controll_center/launch/controll_center_launch.py
+/home/asklindbraten/DuoArm/install/controll_center/share/controll_center/launch/start_launch.py
+/home/asklindbraten/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center-0.0.0-py3.10.egg-info/dependency_links.txt
+/home/asklindbraten/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center-0.0.0-py3.10.egg-info/top_level.txt
+/home/asklindbraten/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center-0.0.0-py3.10.egg-info/requires.txt
+/home/asklindbraten/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center-0.0.0-py3.10.egg-info/entry_points.txt
+/home/asklindbraten/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center-0.0.0-py3.10.egg-info/SOURCES.txt
+/home/asklindbraten/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center-0.0.0-py3.10.egg-info/zip-safe
+/home/asklindbraten/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center-0.0.0-py3.10.egg-info/PKG-INFO
+/home/asklindbraten/DuoArm/install/controll_center/lib/controll_center/action_controller
+/home/asklindbraten/DuoArm/install/controll_center/lib/controll_center/command_executor
+/home/asklindbraten/DuoArm/install/controll_center/lib/controll_center/command_window
+/home/asklindbraten/DuoArm/install/controll_center/lib/controll_center/display
+/home/asklindbraten/DuoArm/install/controll_center/lib/controll_center/joystick_controller
+>>>>>>> development

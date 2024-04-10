@@ -4,7 +4,6 @@ from rclpy.node import Node
 from std_msgs.msg import String
 import os
 import subprocess
-from path_planning import StartMapping
 
 
 class CommandExecutor(Node):

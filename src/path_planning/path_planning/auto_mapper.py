@@ -5,7 +5,7 @@ import numpy as np
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import JointState
-from std_msgs.msg import Float64MultiArray
+from std_msgs.msg import String, Float64MultiArray
 from scipy.optimize import fsolve
 import json
 import time
@@ -21,14 +21,15 @@ W = 20             # Distance between the base joints in cm
 
 class AutoMapper(Node):
 
-    # Define angle limits
-    MIN_THETA1_LEFT = np.radians(-13)
-    MAX_THETA1_LEFT = np.radians(90)
-    MIN_THETA1_RIGHT = np.radians(-90)
-    MAX_THETA1_RIGHT = np.radians(13)
-
     def __init__(self):
         super().__init__('auto_mapper')
+
+        # Define angle limits
+        MIN_THETA1_LEFT = np.radians(-13)
+        MAX_THETA1_LEFT = np.radians(90)
+        MIN_THETA1_RIGHT = np.radians(-90)
+        MAX_THETA1_RIGHT = np.radians(13)
+
         self.joint_angles_subscription = self.create_subscription(
             Float64MultiArray,
             'actual_joint_angles',
@@ -171,7 +172,7 @@ class AutoMapper(Node):
         theta2_right: This is the angle of the second joint of the right arm, the "elbow" angle. It measures how the second segment (LR2) of the right arm bends relative to the first segment.
         """
         
-        return theta1_left, theta1_right
+        return theta1_left, theta2_left, theta1_right, theta2_left
     
     def send_calculated_joint_angles(self, theta1_left, theta1_right):
         
