@@ -55,7 +55,7 @@ class AutoMapper(Node):
         self.mapping_done_pub = self.create_publisher(String, 'mapping_done', 10)
 
         # Manually determined reference angles for the top and bottom center points
-        self.ref_angles_top = [MIN_THETA1_LEFT, np.radians(45), MAX_THETA1_RIGHT, np.radians(-45)]  # Replace with your actual angles
+        self.ref_angles_top = [MIN_THETA1_LEFT, np.radians(45), MAX_THETA1_RIGHT, np.radians(-45)] 
         self.ref_angles_bottom = [MAX_THETA1_LEFT, np.radians(45), MIN_THETA1_RIGHT, np.radians(-45)]
 
     def map_workspace(self, initial_guesses):   
