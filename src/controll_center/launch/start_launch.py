@@ -56,12 +56,20 @@ def generate_launch_description():
         name='joy_node'
     )    
 
+    # motor controller
+    motor_controller = Node(
+        package='motor_controller',
+        executable='motor_control',
+        name='motor_controller'
+    )
 
     
 
     ld.add_action(auto_mapper)
     #ld.add_action(path_planner)
     ld.add_action(action_controller)
+    ld.add_action(motor_controller)
+    
 
     ld.add_action(command_window_node)
     ld.add_action(command_executor_node)

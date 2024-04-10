@@ -1,1 +1,0 @@
-Invoking command in '/home/theo/DuoArm/build/arm': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/theo/DuoArm/build/arm -- -j20 -l20

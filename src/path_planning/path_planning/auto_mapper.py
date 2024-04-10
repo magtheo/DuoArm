@@ -18,9 +18,7 @@ LR1, LR2 = 20, 30  # Right arm segment lengths in cm
 W = 20             # Distance between the base joints in cm
 
 
-
 class AutoMapper(Node):
-
     def __init__(self):
         super().__init__('auto_mapper')
 
@@ -35,6 +33,7 @@ class AutoMapper(Node):
             'actual_joint_angles',
             self.joint_angles_callback,
             10)
+        
         self.joint_state_msg = None
         self.mapping = {}  # To store the mapped coordinates with joint angles
         
@@ -60,7 +59,7 @@ class AutoMapper(Node):
         self.ref_angles_bottom = [MAX_THETA1_LEFT, np.radians(45), MIN_THETA1_RIGHT, np.radians(-45)]
 
     def map_workspace(self, initial_guesses):   
-#        Assume grid origin (0,0) is at the bottom left
+        # Assume grid origin (0,0) is at the bottom left
         ref_x = grid_size_x / 2
         ref_y = grid_size_z  # Top of the grid
 

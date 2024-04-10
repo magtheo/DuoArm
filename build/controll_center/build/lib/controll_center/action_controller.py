@@ -61,7 +61,7 @@ class ActionController(Node):
             # Start the predefined path
         else:
             self.get_logger().warning('Received invalid button command.')
-
+            
     def handle_map_button(self, msg):
         if msg.data == 'pressed':
             self.state = 'map'

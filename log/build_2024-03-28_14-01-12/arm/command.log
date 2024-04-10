@@ -1,4 +1,0 @@
-Invoking command in '/home/theomagnor/DuoArm/build/arm': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/theomagnor/DuoArm/build/arm -- -j4 -l4
-Invoked command in '/home/theomagnor/DuoArm/build/arm' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/theomagnor/DuoArm/build/arm -- -j4 -l4
-Invoking command in '/home/theomagnor/DuoArm/build/arm': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/theomagnor/DuoArm/build/arm
-Invoked command in '/home/theomagnor/DuoArm/build/arm' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/theomagnor/DuoArm/build/arm

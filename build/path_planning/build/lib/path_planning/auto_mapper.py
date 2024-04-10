@@ -18,18 +18,7 @@ LR1, LR2 = 20, 30  # Right arm segment lengths in cm
 W = 20             # Distance between the base joints in cm
 
 
-
 class AutoMapper(Node):
-
-<<<<<<< HEAD
-    # Define angle limits
-    MIN_THETA1_LEFT = np.radians(-13)
-    MAX_THETA1_LEFT = np.radians(90)
-    MIN_THETA1_RIGHT = np.radians(-90)
-    MAX_THETA1_RIGHT = np.radians(13)
-
-=======
->>>>>>> development
     def __init__(self):
         super().__init__('auto_mapper')
 
@@ -44,6 +33,7 @@ class AutoMapper(Node):
             'actual_joint_angles',
             self.joint_angles_callback,
             10)
+        
         self.joint_state_msg = None
         self.mapping = {}  # To store the mapped coordinates with joint angles
         
@@ -65,15 +55,11 @@ class AutoMapper(Node):
         self.mapping_done_pub = self.create_publisher(String, 'mapping_done', 10)
 
         # Manually determined reference angles for the top and bottom center points
-<<<<<<< HEAD
         self.ref_angles_top = [MIN_THETA1_LEFT, np.radians(45), MAX_THETA1_RIGHT, np.radians(-45)] 
-=======
-        self.ref_angles_top = [MIN_THETA1_LEFT, np.radians(45), MAX_THETA1_RIGHT, np.radians(-45)]  # Replace with your actual angles
->>>>>>> development
         self.ref_angles_bottom = [MAX_THETA1_LEFT, np.radians(45), MIN_THETA1_RIGHT, np.radians(-45)]
 
     def map_workspace(self, initial_guesses):   
-#        Assume grid origin (0,0) is at the bottom left
+        # Assume grid origin (0,0) is at the bottom left
         ref_x = grid_size_x / 2
         ref_y = grid_size_z  # Top of the grid
 
@@ -185,7 +171,7 @@ class AutoMapper(Node):
         theta2_right: This is the angle of the second joint of the right arm, the "elbow" angle. It measures how the second segment (LR2) of the right arm bends relative to the first segment.
         """
         
-        return theta1_left, theta1_right
+        return theta1_left, theta2_left, theta1_right, theta2_left
     
     def send_calculated_joint_angles(self, theta1_left, theta1_right):
         

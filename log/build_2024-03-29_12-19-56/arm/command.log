@@ -1,6 +1,0 @@
-Invoking command in '/home/theo/DuoArm/build/arm': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /home/theo/DuoArm/src/arm -DCMAKE_INSTALL_PREFIX=/home/theo/DuoArm/install/arm
-Invoked command in '/home/theo/DuoArm/build/arm' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /home/theo/DuoArm/src/arm -DCMAKE_INSTALL_PREFIX=/home/theo/DuoArm/install/arm
-Invoking command in '/home/theo/DuoArm/build/arm': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/theo/DuoArm/build/arm -- -j20 -l20
-Invoked command in '/home/theo/DuoArm/build/arm' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/theo/DuoArm/build/arm -- -j20 -l20
-Invoking command in '/home/theo/DuoArm/build/arm': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/theo/DuoArm/build/arm
-Invoked command in '/home/theo/DuoArm/build/arm' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/theo/DuoArm/build/arm
