@@ -5,8 +5,14 @@ from std_msgs.msg import Float64MultiArray
 import numpy as np
 
 
+from .lss import *
 
-from .lss import LSS
+CST_LSS_Port = "/dev/ttyUSB0"		# For Linux/Unix platforms
+#CST_LSS_Port = "COM230"				# For windows platforms
+CST_LSS_Baud = LSS_DefaultBaud
+
+# Create and open a serial port
+initBus(CST_LSS_Port, CST_LSS_Baud)
 
 lss0 = LSS(0)
 lss1 = LSS(1)
