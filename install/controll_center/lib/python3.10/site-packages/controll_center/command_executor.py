@@ -19,6 +19,10 @@ class CommandExecutor(Node):
         # Publisher for starting mapping
         self.start_mapping_pub = self.create_publisher(String, 'start_mapping', 10)
 
+        # start test
+        self.start_test_pub = self.create_publisher(String, 'start_test', 10)
+
+
     def command_callback(self, msg):
         command = msg.data
         self.get_logger().info('Received command: "%s"' % command)
@@ -33,7 +37,11 @@ class CommandExecutor(Node):
         
         if command == 'start_map':
             self.start_mapping_pub.publish(String(data="start"))
-            print("mapping:", result.stdout, result.stderr)
+            print("mapping command executed")
+
+        if command == 'test':
+            self.start_test_pub.publish(String(data='start'))
+
         
         
         elif command == 'stop_navigation':

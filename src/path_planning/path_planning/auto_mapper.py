@@ -23,10 +23,10 @@ class AutoMapper(Node):
         super().__init__('auto_mapper')
 
         # Define angle limits
-        MIN_THETA1_LEFT = np.radians(-13)
-        MAX_THETA1_LEFT = np.radians(90)
-        MIN_THETA1_RIGHT = np.radians(-90)
-        MAX_THETA1_RIGHT = np.radians(13)
+        self.MIN_THETA1_LEFT = np.radians(-13)
+        self.MAX_THETA1_LEFT = np.radians(90)
+        self.MIN_THETA1_RIGHT = np.radians(-90)
+        self.MAX_THETA1_RIGHT = np.radians(13)
 
         self.joint_angles_subscription = self.create_subscription(
             Float64MultiArray,
@@ -34,7 +34,9 @@ class AutoMapper(Node):
             self.joint_angles_callback,
             10)
         
-        self.joint_state_msg = None
+        self.actual_joint_angles = None
+        self.actual_joint_angle_flag = False
+
         self.mapping = {}  # To store the mapped coordinates with joint angles
         
         # Initialize the publisher for sending joint angles
@@ -55,8 +57,8 @@ class AutoMapper(Node):
         self.mapping_done_pub = self.create_publisher(String, 'mapping_done', 10)
 
         # Manually determined reference angles for the top and bottom center points
-        self.ref_angles_top = [MIN_THETA1_LEFT, np.radians(45), MAX_THETA1_RIGHT, np.radians(-45)] 
-        self.ref_angles_bottom = [MAX_THETA1_LEFT, np.radians(45), MIN_THETA1_RIGHT, np.radians(-45)]
+        self.ref_angles_top = [self.MIN_THETA1_LEFT, np.radians(45), self.MAX_THETA1_RIGHT, np.radians(-45)] 
+        self.ref_angles_bottom = [self.MAX_THETA1_LEFT, np.radians(175), self.MIN_THETA1_RIGHT, np.radians(-175)]
 
     def map_workspace(self, initial_guesses):   
         # Assume grid origin (0,0) is at the bottom left
@@ -83,7 +85,13 @@ class AutoMapper(Node):
 
                 self.send_calculated_joint_angles(theta1_left, theta1_right)
 
+                # Reset the flag before waiting for new data
+                self.actual_joint_angle_flag = False
+
                 # Wait for robot to reach the position and stabilize
+                while not self.actual_joint_angle_flag:
+                    time.sleep(0.1)
+                
                 self.wait_until_stable(theta1_left, theta1_right)
 
                 if self.check_angles_within_limits(theta1_left, theta1_right):
@@ -104,38 +112,37 @@ class AutoMapper(Node):
                 self.MIN_THETA1_RIGHT <= theta1_right <= self.MAX_THETA1_RIGHT)
 
     def joint_angles_callback(self, msg):
-        actual_joint_angles = msg
-        self.get_logger().info(f'Received a joint angles {actual_joint_angles}')
+        self.actual_joint_angles = msg
+        self.get_logger().info(f'Received actual joint angles: {self.actual_joint_angles}')
+        self.actual_joint_angle_flag = True
 
     def wait_until_stable(self, theta_left, theta_right):
         flag = False
         while flag == False:
             """Waits a given period for the robot to reach the position and stabilize."""
             self.get_logger().info('Waiting for the robot to stabilize...')
-            time.sleep(0.5)  # Waits for 0.5 seconds
+            time.sleep(1)  # Waits for 1 seconds
             
-            # commanded_angles is a list with the calculated angles, 
+            # calculated_angles is a list with the calculated angles, 
             # like [theta1_left, theta1_right], in radians.
-            commanded_angles = [theta_left, theta_right]
-            print(commanded_angles)
+            calculated_angles = [theta_left, theta_right]
+            self.get_logger().info(f'calculated angles. DATA: {calculated_angles}')
 
             # Ensure that joint_state_msg is not None and has enough positions
-            if self.joint_state_msg is None or len(self.joint_state_msg.position) < 2:
-                self.get_logger().error('Insufficient joint state data.')
-                return False
+            if self.actual_joint_angles is None:
+                self.get_logger().error(f'Insufficient joint state data. DATA: {self.actual_joint_angles}')
             
             # actual_angles will be read from the robot's joint_state message.
             # Assuming that positions 0 and 1 correspond to theta1_left and theta1_right.
-            actual_angles = [self.joint_state_msg.position[0], self.joint_state_msg.position[2]]
-            print(actual_angles)
-
+            actual_angles = [self.actual_joint_angles.position[0], self.actual_joint_angles.position[2]]
+            
             # TESTING
-            # actual_angles = commanded_angles # Testing
+            # actual_angles = calculated_angles # Testing
             # Testing
 
             # Check if the actual angles are close enough to the commanded angles
             tolerance = np.radians(5)  # 5 degree tolerance in radians. TODO play with this number
-            if all(np.isclose(commanded_angles, actual_angles, atol=tolerance)):
+            if all(np.isclose(calculated_angles, actual_angles, atol=tolerance)):
                 self.get_logger().info('Robot has stabilized at the target position.')
                 flag = True
             else:
@@ -182,7 +189,7 @@ class AutoMapper(Node):
         # Publish the message to the controller topic
         # The topic and message type might be different for your setup
         self.joint_command_publisher.publish(msg)
-        self.get_logger().info('Published joint angles to move robot to position')
+        self.get_logger().info('Published calculated joint angles during mapping')
 
         return msg.data
 
