@@ -21,6 +21,9 @@ class CommandExecutor(Node):
 
         # start test
         self.start_test_pub = self.create_publisher(String, 'start_test', 10)
+        
+        # start read_angles
+        self.start_read_pub = self.create_publisher(String, 'start_read', 10)
 
 
     def command_callback(self, msg):
@@ -41,6 +44,9 @@ class CommandExecutor(Node):
 
         if command == 'test':
             self.start_test_pub.publish(String(data='start'))
+
+        if command == 'read':
+            self.start_read_pub.publish(String(data='start'))
 
         
         

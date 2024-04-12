@@ -9,7 +9,7 @@ from std_msgs.msg import String, Float64MultiArray
 from scipy.optimize import fsolve
 import json
 import time
-from .equation import equation, D, initial_guesses, grid_size_x, grid_size_z
+from .equation import equation, D, grid_size_x, grid_size_z
 
 
 # Define the lengths of the robot arm segments
@@ -22,11 +22,7 @@ class AutoMapper(Node):
     def __init__(self):
         super().__init__('auto_mapper')
 
-        # Define angle limits
-        self.MIN_THETA1_LEFT = np.radians(-13)
-        self.MAX_THETA1_LEFT = np.radians(90)
-        self.MIN_THETA1_RIGHT = np.radians(-90)
-        self.MAX_THETA1_RIGHT = np.radians(13)
+
 
         self.joint_angles_subscription = self.create_subscription(
             Float64MultiArray,
@@ -37,28 +33,119 @@ class AutoMapper(Node):
         self.actual_joint_angles = None
         self.actual_joint_angle_flag = False
 
+        self.current_point_index = 0  # Tracks the index of the current grid point being processed
+        self.is_point_processed = True  # Flag to indicate when the robot has finished processing a point
+
         self.mapping = {}  # To store the mapped coordinates with joint angles
+        self.calculated_angles = []
+        self.actual_joint_angles = []
+
+       
         
         # Initialize the publisher for sending joint angles
         self.joint_command_publisher = self.create_publisher(
             Float64MultiArray,
             'calculated_joint_angles',
             10
-        )
+            )
 
         # Subscriber for receiving start mapping command
         self.start_mapping_sub = self.create_subscription(
             String,
             'start_mapping',
             self.start_mapping_callback,
-            10)
+            10
+            )
         
         # Publishing mapping completion notification
-        self.mapping_done_pub = self.create_publisher(String, 'mapping_done', 10)
+        self.mapping_done_pub = self.create_publisher(
+            String,
+            'mapping_done',
+            10
+            )
+
+        # Define angle limits
+        self.MIN_THETA1_LEFT = np.radians(-13)
+        self.MAX_THETA1_LEFT = np.radians(90)
+        self.MIN_THETA1_RIGHT = np.radians(-90)
+        self.MAX_THETA1_RIGHT = np.radians(13)
 
         # Manually determined reference angles for the top and bottom center points
         self.ref_angles_top = [self.MIN_THETA1_LEFT, np.radians(45), self.MAX_THETA1_RIGHT, np.radians(-45)] 
         self.ref_angles_bottom = [self.MAX_THETA1_LEFT, np.radians(175), self.MIN_THETA1_RIGHT, np.radians(-175)]
+        self.ref_angles_left = []
+
+
+    def prepare_grid_points(self):
+        # Initialize an empty list to hold the grid points and initial guesses
+        self.grid_points = []
+
+        # Assume grid origin (0,0) is at the bottom left
+        ref_x = grid_size_x / 2
+        ref_z = grid_size_z  # Top of the grid
+
+        # Iterate over the grid in x and z dimensions
+        for self.x in range(0, grid_size_x): # +1
+            for self.z in range(0, grid_size_z): #+1
+                # Assign initial guesses based on the position
+                # Here, you might customize your initial guesses based on the position in the grid
+                if self.z == ref_z and self.x == ref_x:
+                    current_guesses = self.ref_angles_top.copy()
+                else:
+                    current_guesses = self.ref_angles_bottom.copy()
+
+                # Append the tuple (x, z, current_guesses) to the list
+                self.grid_points.append((self.x, self.z, current_guesses))
+
+        self.get_logger().info(f'Prepared {len(self.grid_points)} grid points for mapping.')
+
+    def process_grid_point(self):
+        if self.current_point_index >= len(self.grid_points):
+            self.save_mappings_to_file()
+            self.get_logger().info('All points have been processed.')
+            self.mapping_done_pub.publish(String(data="done"))  # Notify that mapping is done
+            return
+
+        # Get the current grid point
+        self.x, self.z, _ = self.grid_points[self.current_point_index]
+
+        # Dynamically determine initial guesses based on the target point's coordinates
+        initial_guesses = self.dynamic_initial_guesses(self.x, self.z)
+
+        # Solve the IK for this grid point using the dynamically determined initial guesses
+        theta1_left, theta2_left, theta1_right, theta2_right = self.solve_IK(self.x, self.z, initial_guesses)
+
+        # Sending calculated angels to motorController, this initates the motors to move to these angles
+        self.send_calculated_joint_angles(theta1_left, theta1_right)
+
+
+
+    def dynamic_initial_guesses(self, x, z):
+        # Example heuristic: closer to top or bottom
+        if z > grid_size_z / 2:
+            return self.ref_angles_top.copy()
+        else:
+            # Adjust based on previous point's solution or any other logic
+            if self.current_point_index > 0:
+                # Use the solution of the previous point as the initial guess
+                _, _, prev_initial_guesses = self.grid_points[self.current_point_index - 1]
+                return prev_initial_guesses
+            else:
+                return self.ref_angles_bottom.copy()
+
+
+    def map_point(self, actual_joint_angles):
+        actual_theta_left, actual_theta_right = actual_joint_angles
+        # Store the mapping
+        if self.check_angles_within_limits(actual_theta_left, actual_theta_right):
+            self.mapping[f"{self.x},{self.z}"] = (actual_theta_left, actual_theta_right, 'inside')
+        else:
+            self.mapping[f"{self.x},{self.z}"] = (actual_theta_left, actual_theta_right, 'outside')
+
+        self.current_point_index += 1  # Prepare for the next point
+
+        self.process_grid_point()
+
 
     def map_workspace(self, initial_guesses):   
         # Assume grid origin (0,0) is at the bottom left
@@ -112,9 +199,11 @@ class AutoMapper(Node):
                 self.MIN_THETA1_RIGHT <= theta1_right <= self.MAX_THETA1_RIGHT)
 
     def joint_angles_callback(self, msg):
-        self.actual_joint_angles = msg
+        self.actual_joint_angles = msg.data
         self.get_logger().info(f'Received actual joint angles: {self.actual_joint_angles}')
-        self.actual_joint_angle_flag = True
+        self.map_point(self.actual_joint_angles)
+
+
 
     def wait_until_stable(self, theta_left, theta_right):
         flag = False
@@ -200,7 +289,8 @@ class AutoMapper(Node):
         theta_right = joint_state_msg.position[1]
         return theta_left, theta_right
     
-    def save_mappings_to_file(self, filename):
+    def save_mappings_to_file(self):
+        filename = 'robot_arm_mappings.json'
         """Saves the mapping to a JSON file."""
         with open(filename, 'w') as file:
             json.dump(self.mapping, file, indent=4)
@@ -216,7 +306,8 @@ class AutoMapper(Node):
     def start_mapping_callback(self, msg):
         if msg.data == "start":
             self.get_logger().info('Starting workspace mapping')
-            self.map_workspace_and_save('robot_arm_mappings.json')
+            self.prepare_grid_points()  # This would pre-compute the grid points and initial guesses
+            self.process_grid_point()
 
         
     

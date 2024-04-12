@@ -53,6 +53,13 @@ class motorControl(Node):
             self.start_test_callback,
             10)
         
+        # Subscriber for receiving start test command
+        self.start_read_sub = self.create_subscription(
+            String,
+            'start_read',
+            self.start_read_callback,
+            10)
+        
         # Define angle limits
         self.MIN_THETA1_LEFT = np.radians(-13)
         self.MAX_THETA1_LEFT = np.radians(90)
@@ -62,10 +69,10 @@ class motorControl(Node):
     def calc_joint_angles_callback(self, msg):
         received_joint_angles = msg.data
         self.get_logger().info(f'Received calculated joint angles: {received_joint_angles}')
-        self.move_servos(received_joint_angles)
+        self.move_servos_mapping(received_joint_angles)
         # Optionally, introduce a delay or use a more sophisticated mechanism
         # to ensure servos have reached their positions before reading
-        time.sleep(1)  # Example delay, adjust based on your system's characteristics
+        time.sleep(2)  # TODO Example delay, adjust based on your system's characteristics
         self.read_and_publish_servo_positions()
 
     
@@ -76,7 +83,7 @@ class motorControl(Node):
     def calc_angle(self, position):
         return position/10
 
-    def move_servos(self, received_joint_angles):
+    def move_servos_mapping(self, received_joint_angles):
         # Convert received angles from degrees to radians for comparison
         received_angle_left_rad = np.radians(received_joint_angles[0])
         received_angle_right_rad = np.radians(received_joint_angles[1])
@@ -114,29 +121,53 @@ class motorControl(Node):
     
     def test_motors(self):
         self.get_logger().info( 'test ')
-        lss0.setMaxSpeed()
 
+        lss1.move(-900)
+        time.sleep(2)
+        self.get_logger().info(lss0.getPosition())
+        self.get_logger().info(lss1.getPosition())
+
+        # lss0.move(0)
+        lss1.move(0)
+        time.sleep(2)
+        self.get_logger().info(lss0.getPosition())
+        self.get_logger().info(lss1.getPosition())  
+        
         for i in range(4):
             self.get_logger().info(f'current loop: {i}')
 
-            lss0.move(0)
+            # lss0.move(0)
+            lss1.move(500)
+            time.sleep(2)
+            self.get_logger().info(lss0.getPosition())
+            self.get_logger().info(lss1.getPosition())
+
             lss1.move(0)
             time.sleep(2)
-
             self.get_logger().info(lss0.getPosition())
             self.get_logger().info(lss1.getPosition())
 
-            lss0.move(900)
-            lss1.move(-900)
-            time.sleep(2)
-
-            self.get_logger().info(lss0.getPosition())
-            self.get_logger().info(lss1.getPosition())
 
     def start_test_callback(self, msg):
         if msg.data == "start":
             self.get_logger().info('Starting test of motor movement')
             self.test_motors()
+
+    def manualy_read_angles(self):
+        self.get_logger().info( 'test ')
+
+        for i in range(4):
+            self.get_logger().info(f'current loop: {i}')
+
+            time.sleep(2)
+
+            self.get_logger().info(lss0.getPosition())
+            self.get_logger().info(lss1.getPosition())
+
+    def start_read_callback(self, msg):
+        if msg.data == "start":
+            self.get_logger().info('Starting to read motor angles')
+            self.manualy_read_angles()    
 
 
 def main(args=None):
