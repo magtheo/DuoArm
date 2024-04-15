@@ -66,7 +66,7 @@ class ActionController(Node):
         if msg.data == 'pressed':
             self.state = 'map'
             self.get_logger().info('Starting mapping')
-            self.start_mapping_pub.publish(String(data="start"))
+            self.start_mapping_publisher.publish(String(data="start"))
         else:
             self.get_logger().warning('Received invalid button command.')
 

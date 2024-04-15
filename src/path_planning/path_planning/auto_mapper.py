@@ -22,14 +22,6 @@ class AutoMapper(Node):
     def __init__(self):
         super().__init__('auto_mapper')
 
-
-
-        self.joint_angles_subscription = self.create_subscription(
-            Float64MultiArray,
-            'actual_joint_angles',
-            self.joint_angles_callback,
-            10)
-        
         self.actual_joint_angles = None
         self.actual_joint_angle_flag = False
 
@@ -41,6 +33,11 @@ class AutoMapper(Node):
         self.actual_joint_angles = []
 
        
+        self.joint_angles_subscription = self.create_subscription(
+            Float64MultiArray,
+            'actual_joint_angles',
+            self.joint_angles_callback,
+            10)
         
         # Initialize the publisher for sending joint angles
         self.joint_command_publisher = self.create_publisher(
@@ -75,27 +72,38 @@ class AutoMapper(Node):
         self.ref_angles_bottom = [self.MAX_THETA1_LEFT, np.radians(175), self.MIN_THETA1_RIGHT, np.radians(-175)]
         self.ref_angles_left = []
 
+        # Define new reference angles for max/min X at center Z
+        self.ref_angles_max_x = [theta1_left_max_x, theta2_left_max_x, theta1_right_max_x, theta2_right_max_x]  # Replace with your actual angles
+        self.ref_angles_min_x = [theta1_left_min_x, theta2_left_min_x, theta1_right_min_x, theta2_right_min_x]  # Replace with your actual angles
+
 
     def prepare_grid_points(self):
         # Initialize an empty list to hold the grid points and initial guesses
         self.grid_points = []
 
         # Assume grid origin (0,0) is at the bottom left
-        ref_x = grid_size_x / 2
-        ref_z = grid_size_z  # Top of the grid
+        ref_x_center = grid_size_x / 2
+        ref_z_center = grid_size_z / 2  # Center of the grid in Z
+        ref_z_top = grid_size_z  # Top of the grid in Z
 
         # Iterate over the grid in x and z dimensions
-        for self.x in range(0, grid_size_x): # +1
-            for self.z in range(0, grid_size_z): #+1
-                # Assign initial guesses based on the position
-                # Here, you might customize your initial guesses based on the position in the grid
-                if self.z == ref_z and self.x == ref_x:
+        for x in range(grid_size_x): 
+            for z in range(grid_size_z):
+                if x == ref_x_center and z == ref_z_top:
                     current_guesses = self.ref_angles_top.copy()
-                else:
+                elif x == ref_x_center and z == 0:
                     current_guesses = self.ref_angles_bottom.copy()
+                elif x == 0 and z == ref_z_center:
+                    current_guesses = self.ref_angles_min_x.copy()
+                elif x == grid_size_x - 1 and z == ref_z_center:
+                    current_guesses = self.ref_angles_max_x.copy()
+                else:
+                    # As a default, perhaps take an average of the reference angles
+                    current_guesses = np.mean([self.ref_angles_top, self.ref_angles_bottom, 
+                                            self.ref_angles_min_x, self.ref_angles_max_x], axis=0).tolist()
 
                 # Append the tuple (x, z, current_guesses) to the list
-                self.grid_points.append((self.x, self.z, current_guesses))
+                self.grid_points.append((x, z, current_guesses))
 
         self.get_logger().info(f'Prepared {len(self.grid_points)} grid points for mapping.')
 
@@ -121,17 +129,30 @@ class AutoMapper(Node):
 
 
     def dynamic_initial_guesses(self, x, z):
-        # Example heuristic: closer to top or bottom
-        if z > grid_size_z / 2:
+        # Calculate distances to each reference point
+        distance_to_top = abs(z - grid_size_z)  # Distance to the top reference point
+        distance_to_bottom = abs(z)  # Distance to the bottom reference point
+        distance_to_max_x = abs(x - grid_size_x)  # Distance to the max X reference point
+        distance_to_min_x = abs(x)  # Distance to the min X reference point
+        
+        # Determine the closest reference point based on the minimum distance
+        min_distance = min(distance_to_top, distance_to_bottom, distance_to_max_x, distance_to_min_x)
+        
+        # Choose the initial guesses based on the closest reference point
+        if min_distance == distance_to_top:
             return self.ref_angles_top.copy()
+        elif min_distance == distance_to_bottom:
+            return self.ref_angles_bottom.copy()
+        elif min_distance == distance_to_max_x:
+            return self.ref_angles_max_x.copy()
+        elif min_distance == distance_to_min_x:
+            return self.ref_angles_min_x.copy()
         else:
-            # Adjust based on previous point's solution or any other logic
-            if self.current_point_index > 0:
-                # Use the solution of the previous point as the initial guess
-                _, _, prev_initial_guesses = self.grid_points[self.current_point_index - 1]
-                return prev_initial_guesses
-            else:
-                return self.ref_angles_bottom.copy()
+            # As a default, use a weighted average of the reference angles
+            # You could also use more sophisticated methods like a weighted sum based on distances to each reference point
+            return np.mean([self.ref_angles_top, self.ref_angles_bottom, 
+                            self.ref_angles_min_x, self.ref_angles_max_x], axis=0).tolist()
+
 
 
     def map_point(self, actual_joint_angles):
@@ -306,7 +327,7 @@ class AutoMapper(Node):
     def start_mapping_callback(self, msg):
         if msg.data == "start":
             self.get_logger().info('Starting workspace mapping')
-            self.prepare_grid_points()  # This would pre-compute the grid points and initial guesses
+            self.prepare_grid_points()  # This pre-computes the grid points and initial guesses
             self.process_grid_point()
 
         
