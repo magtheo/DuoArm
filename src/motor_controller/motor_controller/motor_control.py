@@ -161,8 +161,8 @@ class motorControl(Node):
 
             time.sleep(2)
 
-            self.get_logger().info(lss0.getPosition())
-            self.get_logger().info(lss1.getPosition())
+            self.get_logger().info(f'lss0, left: {lss0.getPosition()}')
+            self.get_logger().info(f'lss1, right: {lss1.getPosition()}')
 
     def start_read_callback(self, msg):
         if msg.data == "start":
