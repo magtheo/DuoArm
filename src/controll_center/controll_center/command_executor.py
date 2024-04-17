@@ -17,7 +17,7 @@ class CommandExecutor(Node):
         self.subscription  # prevent unused variable warning
 
         # Publisher for starting mapping
-        self.start_mapping_pub = self.create_publisher(String, 'start_mapping', 10)
+        self.start_mapping_pub = self.create_publisher(String, 'command_start_mapping', 10)
 
         # start test
         self.start_test_pub = self.create_publisher(String, 'start_test', 10)

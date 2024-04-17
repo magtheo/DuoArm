@@ -60,6 +60,7 @@ class motorControl(Node):
             self.start_read_callback,
             10)
         
+        
         # Define angle limits
         self.MIN_THETA1_LEFT = np.radians(-13)
         self.MAX_THETA1_LEFT = np.radians(90)
@@ -72,8 +73,10 @@ class motorControl(Node):
         self.move_servos_mapping(received_joint_angles)
         # Optionally, introduce a delay or use a more sophisticated mechanism
         # to ensure servos have reached their positions before reading
-        time.sleep(2)  # TODO Example delay, adjust based on your system's characteristics
+        time.sleep(1)  # TODO adjust delay
         self.read_and_publish_servo_positions()
+
+
 
     
     #def send_actual_joint_angles(self):
@@ -85,23 +88,23 @@ class motorControl(Node):
 
     def move_servos_mapping(self, received_joint_angles):
         # Convert received angles from degrees to radians for comparison
-        received_angle_left_rad = np.radians(received_joint_angles[0])
-        received_angle_right_rad = np.radians(received_joint_angles[1])
+        received_angle_left_rad = received_joint_angles[0]
+        received_angle_right_rad = received_joint_angles[1]
 
         # Check and move left servo if within limits
-        if self.MIN_THETA1_LEFT <= received_angle_left_rad <= self.MAX_THETA1_LEFT:
+        if self.MIN_THETA1_LEFT <= received_angle_left_rad <= self.MAX_THETA1_LEFT and self.MIN_THETA1_RIGHT <= received_angle_right_rad <= self.MAX_THETA1_RIGHT:
             lss0_position = self.calc_position(received_joint_angles[0])
-            lss0.move(lss0_position)
-        else:
-            self.get_logger().warn(f"Left motor angle {received_joint_angles[0]} out of bounds.")
-
-        # Check and move right servo if within limits
-        if self.MIN_THETA1_RIGHT <= received_angle_right_rad <= self.MAX_THETA1_RIGHT:
             lss1_position = self.calc_position(received_joint_angles[1])
             lss1.move(lss1_position)
-        else:
-            self.get_logger().warn(f"Right motor angle {received_joint_angles[1]} out of bounds.")
+            lss0.move(lss0_position)
 
+
+        else:
+            self.get_logger().warn(f"Left or Right motor angles {received_joint_angles[0], received_joint_angles[1]} out of bounds.")
+            # TODO ensure correct running of map_point() 16/04/24
+
+
+       
     def read_and_publish_servo_positions(self):
         # Fetch current positions from servos
         lss0_act_position = float(lss0.getPosition())
