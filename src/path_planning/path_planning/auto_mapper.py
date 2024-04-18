@@ -37,7 +37,8 @@ class AutoMapper(Node):
             Float64MultiArray,
             'actual_joint_angles',
             self.joint_angles_callback,
-            10)
+            10
+            )
         
         # Initialize the publisher for sending joint angles
         self.joint_command_publisher = self.create_publisher(
@@ -61,26 +62,35 @@ class AutoMapper(Node):
             10
             )
         
+        self.out_of_bounds_subscription = self.create_subscription(
+            String,
+            'out_of_bounds',
+            self.out_of_bounds_callback,
+            10
+        )
+
+        
         # Define angle limits
-        self.MIN_THETA1_LEFT = np.radians(-13)
-        self.MAX_THETA1_LEFT = np.radians(90)
-        self.MIN_THETA1_RIGHT = np.radians(-90)
-        self.MAX_THETA1_RIGHT = np.radians(13)
+        self.MIN_THETA1_LEFT = np.radians(-140)
+        self.MAX_THETA1_LEFT = np.radians(15)
+        self.MIN_THETA1_RIGHT = np.radians(-50)
+        self.MAX_THETA1_RIGHT = np.radians(140)
 
         # Manually determined reference angles for the top and bottom center points
         self.ref_angles_top = [self.MIN_THETA1_LEFT, np.radians(45), self.MAX_THETA1_RIGHT, np.radians(-45)] 
         self.ref_angles_bottom = [self.MAX_THETA1_LEFT, np.radians(175), self.MIN_THETA1_RIGHT, np.radians(-175)]
 
-        self.theta1_left_max_x = np.radians(928/10)
-        self.theta2_left_max_x = np.radians(125/10)
-        self.theta1_right_max_x = np.radians(33/10)
-        self.theta2_right_max_x = np.radians(110/10)
-
-        self.theta1_left_min_x = np.radians(-84/10)
-        self.theta2_left_min_x = np.radians(75/10)
-        self.theta1_right_min_x = np.radians(-428/10)
-        self.theta2_right_min_x = np.radians(85/10)
-
+        # angels for ref point in max x
+        self.theta1_left_max_x = np.radians(-185)
+        self.theta2_left_max_x = np.radians(110)
+        self.theta1_right_max_x = np.radians(-50)
+        self.theta2_right_max_x = np.radians(90)
+        
+        # angels for ref point in min x
+        self.theta1_left_min_x = np.radians(19)
+        self.theta2_left_min_x = np.radians(90)
+        self.theta1_right_min_x = np.radians(170)
+        self.theta2_right_min_x = np.radians(120)
 
         # Define new reference angles for max/min X at center Z
         self.ref_angles_max_x = [self.theta1_left_max_x, self.theta2_left_max_x, self.theta1_right_max_x, self.theta2_right_max_x]  # Replace with your actual angles
@@ -125,6 +135,9 @@ class AutoMapper(Node):
             self.get_logger().info('All points have been processed.')
             self.mapping_done_pub.publish(String(data="done"))  # Notify that mapping is done
             return
+        
+        self.get_logger().info(f'-----------------------------------')
+        self.get_logger().info(f'Processing point: {self.current_point_index}')
 
         # Get the current grid point
         self.x, self.z, _ = self.grid_points[self.current_point_index]
@@ -181,7 +194,7 @@ class AutoMapper(Node):
         # Store the mapping
 
         self.mapping[f"{self.x},{self.z}"] = (actual_theta_left, actual_theta_right, 'inside')       
-        self.get_logger().info(f'mapped x:{self.x} z:{self.z} as inside workspace with angles:{self.actual_joint_angles}')
+        self.get_logger().info(f'mapped x:{self.x} z:{self.z} as inside workspace with angles:{np.rad2deg(self.actual_joint_angles)}')
 
 
         self.get_logger().info(f'mapped point {self.current_point_index}/{len(self.grid_points)}')
@@ -190,11 +203,20 @@ class AutoMapper(Node):
 
         self.process_grid_point()
 
+    def out_of_bounds_callback(self, msg):
+        if msg.data == "outside_bounds":
+            # Mark the current point as outside without processing it further
+            self.mapping[f"{self.x},{self.z}"] = "outside"
+            self.get_logger().info(f'Marked point ({self.x}, {self.z}) as outside. Skipping to next.')
+            self.current_point_index += 1  # Move to the next point
+            self.process_grid_point()  # Continue processing
+
+
     def is_point_within_workspace(self, x, z):
         # Define the center of the workspace
         center_x, center_z = grid_size_x / 2, grid_size_z / 2
         # Calculate the radius of the workspace circle
-        workspace_radius = (LL1 + LL2)  # Sum of arm segment lengths TODO change radius values
+        workspace_radius = 30  # cm TODO change radius values
         # Calculate the distance of (x, z) from the center
         distance_squared = (x - center_x)**2 + (z - center_z)**2
         # Check if the point is within the circular workspace
@@ -207,16 +229,9 @@ class AutoMapper(Node):
             self.process_grid_point()
 
 
-    def check_angles_within_limits(self, theta1_left, theta1_right):
-        # Check if the angles are within the specified limits
-        if self.MIN_THETA1_LEFT <= theta1_left <= self.MAX_THETA1_LEFT and self.MIN_THETA1_RIGHT <= theta1_right <= self.MAX_THETA1_RIGHT:
-            return True
-        else: 
-            return False
-
     def joint_angles_callback(self, msg):
         self.actual_joint_angles = msg.data
-        self.get_logger().info(f'Received actual joint angles: {self.actual_joint_angles}')
+        self.get_logger().info(f'Received actual joint angles: {np.rad2deg(self.actual_joint_angles)}')
         self.map_point(self.actual_joint_angles)
 
   

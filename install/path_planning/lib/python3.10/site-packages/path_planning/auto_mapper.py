@@ -61,26 +61,35 @@ class AutoMapper(Node):
             10
             )
         
+        self.motor_status_subscription = self.create_subscription(
+            String,
+            'motor_status',
+            self.motor_status_callback,
+            10
+        )
+
+        
         # Define angle limits
-        self.MIN_THETA1_LEFT = np.radians(-13)
-        self.MAX_THETA1_LEFT = np.radians(90)
-        self.MIN_THETA1_RIGHT = np.radians(-90)
-        self.MAX_THETA1_RIGHT = np.radians(13)
+        self.MIN_THETA1_LEFT = np.radians(-140)
+        self.MAX_THETA1_LEFT = np.radians(15)
+        self.MIN_THETA1_RIGHT = np.radians(-50)
+        self.MAX_THETA1_RIGHT = np.radians(140)
 
         # Manually determined reference angles for the top and bottom center points
         self.ref_angles_top = [self.MIN_THETA1_LEFT, np.radians(45), self.MAX_THETA1_RIGHT, np.radians(-45)] 
         self.ref_angles_bottom = [self.MAX_THETA1_LEFT, np.radians(175), self.MIN_THETA1_RIGHT, np.radians(-175)]
 
-        self.theta1_left_max_x = np.radians(928/10)
-        self.theta2_left_max_x = np.radians(125/10)
-        self.theta1_right_max_x = np.radians(33/10)
-        self.theta2_right_max_x = np.radians(110/10)
-
-        self.theta1_left_min_x = np.radians(-84/10)
-        self.theta2_left_min_x = np.radians(75/10)
-        self.theta1_right_min_x = np.radians(-428/10)
-        self.theta2_right_min_x = np.radians(85/10)
-
+        # angels for ref point in max x
+        self.theta1_left_max_x = np.radians(-185)
+        self.theta2_left_max_x = np.radians(110)
+        self.theta1_right_max_x = np.radians(-50)
+        self.theta2_right_max_x = np.radians(90)
+        
+        # angels for ref point in min x
+        self.theta1_left_min_x = np.radians(19)
+        self.theta2_left_min_x = np.radians(90)
+        self.theta1_right_min_x = np.radians(170)
+        self.theta2_right_min_x = np.radians(120)
 
         # Define new reference angles for max/min X at center Z
         self.ref_angles_max_x = [self.theta1_left_max_x, self.theta2_left_max_x, self.theta1_right_max_x, self.theta2_right_max_x]  # Replace with your actual angles
@@ -118,11 +127,16 @@ class AutoMapper(Node):
         self.get_logger().info(f'Prepared {len(self.grid_points)} grid points for mapping.')
 
     def process_grid_point(self):
+        
+        # Is the mapping done?
         if self.current_point_index >= len(self.grid_points):
             self.save_mappings_to_file()
             self.get_logger().info('All points have been processed.')
             self.mapping_done_pub.publish(String(data="done"))  # Notify that mapping is done
             return
+        
+        self.get_logger().info(f'-----------------------------------')
+        self.get_logger().info(f'Processing point: {self.current_point_index}')
 
         # Get the current grid point
         self.x, self.z, _ = self.grid_points[self.current_point_index]
@@ -177,9 +191,9 @@ class AutoMapper(Node):
     def map_point(self, actual_joint_angles):
         actual_theta_left, actual_theta_right = actual_joint_angles
         # Store the mapping
-        if self.check_angles_within_limits(actual_theta_left, actual_theta_right):
-            self.mapping[f"{self.x},{self.z}"] = (actual_theta_left, actual_theta_right, 'inside')       
-            self.get_logger().info(f'mapped x:{self.x} z:{self.z} as inside workspace with angles:{self.actual_joint_angles}')
+
+        self.mapping[f"{self.x},{self.z}"] = (actual_theta_left, actual_theta_right, 'inside')       
+        self.get_logger().info(f'mapped x:{self.x} z:{self.z} as inside workspace with angles:{np.rad2deg(self.actual_joint_angles)}')
 
 
         self.get_logger().info(f'mapped point {self.current_point_index}/{len(self.grid_points)}')
@@ -187,6 +201,15 @@ class AutoMapper(Node):
         self.current_point_index += 1  # Prepare for the next point
 
         self.process_grid_point()
+
+    def motor_status_callback(self, msg):
+        if msg.data == "outside_bounds":
+            # Mark the current point as outside without processing it further
+            self.mapping[f"{self.x},{self.z}"] = "outside"
+            self.get_logger().info(f'Marked point ({self.x}, {self.z}) as outside. Skipping to next.')
+            self.current_point_index += 1  # Move to the next point
+            self.process_grid_point()  # Continue processing
+
 
     def is_point_within_workspace(self, x, z):
         # Define the center of the workspace
@@ -198,51 +221,12 @@ class AutoMapper(Node):
         # Check if the point is within the circular workspace
         return distance_squared <= workspace_radius**2
 
-    def map_workspace(self, initial_guesses):   
-        # Assume grid origin (0,0) is at the bottom left
-        ref_x = grid_size_x / 2
-        ref_y = grid_size_z  # Top of the grid
+    def start_mapping_callback(self, msg):
+        if msg.data == "start":
+            self.get_logger().info('Starting workspace mapping')
+            self.prepare_grid_points()  # This pre-computes the grid points and initial guesses
+            self.process_grid_point()
 
-        # Set initial guesses to the reference angles for the bottom center
-        current_guesses = self.ref_angles_bottom.copy()
-
-        for x in range(0, grid_size_x + 1): 
-            for z in range(0, grid_size_z + 1):
-
-                print(f'x{x}, z{z}')
-
-                if z == ref_y and x == ref_x:
-                    current_guesses = self.ref_angles_top.copy()
-
-                # calculate joint angles with position (x, z)
-                theta1_left, theta2_left, theta1_right, theta2_right = self.solve_IK(x, z, current_guesses)
-                print(f'tehtaleft: {theta1_left}, theta_right: {theta1_right}')
-                
-                # Store the current solution to use as initial guesses for the next point
-                current_guesses = [theta1_left, theta2_left, theta1_right, theta2_right]
-
-                self.send_calculated_joint_angles(theta1_left, theta1_right)
-
-                # Reset the flag before waiting for new data
-                self.actual_joint_angle_flag = False
-
-                # Wait for robot to reach the position and stabilize
-                while not self.actual_joint_angle_flag:
-                    time.sleep(0.1)
-                
-                self.wait_until_stable(theta1_left, theta1_right)
-
-                if self.check_angles_within_limits(theta1_left, theta1_right):
-                    print(f"Coordinate ({x}, {z}) is inside the work area.")
-                    self.mapping[f"{x},{z}"] = (theta1_left, theta1_right, 'inside')
-                else:
-                    print(f"Coordinate ({x}, {z}) is outside the work area.")
-                    self.mapping[f"{x},{z}"] = (theta1_left, theta1_right, 'outside')
-
-                # redundant
-                # if self.joint_state_msg:
-                #     theta_left, theta_right = self.read_joint_angles(self.joint_state_msg)
-                #     self.robot_arm.add_mapping(x, z, theta_left, theta_right)
 
     def check_angles_within_limits(self, theta1_left, theta1_right):
         # Check if the angles are within the specified limits
@@ -253,44 +237,10 @@ class AutoMapper(Node):
 
     def joint_angles_callback(self, msg):
         self.actual_joint_angles = msg.data
-        self.get_logger().info(f'Received actual joint angles: {self.actual_joint_angles}')
+        self.get_logger().info(f'Received actual joint angles: {np.rad2deg(self.actual_joint_angles)}')
         self.map_point(self.actual_joint_angles)
 
-
-
-    def wait_until_stable(self, theta_left, theta_right):
-        flag = False
-        while flag == False:
-            """Waits a given period for the robot to reach the position and stabilize."""
-            self.get_logger().info('Waiting for the robot to stabilize...')
-            time.sleep(1)  # Waits for 1 seconds
-            
-            # calculated_angles is a list with the calculated angles, 
-            # like [theta1_left, theta1_right], in radians.
-            calculated_angles = [theta_left, theta_right]
-            self.get_logger().info(f'calculated angles. DATA: {calculated_angles}')
-
-            # Ensure that joint_state_msg is not None and has enough positions
-            if self.actual_joint_angles is None:
-                self.get_logger().error(f'Insufficient joint state data. DATA: {self.actual_joint_angles}')
-            
-            # actual_angles will be read from the robot's joint_state message.
-            # Assuming that positions 0 and 1 correspond to theta1_left and theta1_right.
-            actual_angles = [self.actual_joint_angles[0], self.actual_joint_angles[2]]
-            
-            # TESTING
-            # actual_angles = calculated_angles # Testing
-            # Testing
-
-            # Check if the actual angles are close enough to the commanded angles
-            tolerance = np.radians(5)  # 5 degree tolerance in radians. TODO play with this number
-            if all(np.isclose(calculated_angles, actual_angles, atol=tolerance)):
-                self.get_logger().info('Robot has stabilized at the target position.')
-                flag = True
-            else:
-                self.get_logger().warn('Robot has not stabilized at the target position.')
-                return False
-            
+  
 
     def solve_IK(self, x, z, initial_guesses):
         # Convert the (x, z) position to joint angles using IK
@@ -320,7 +270,7 @@ class AutoMapper(Node):
         theta2_right: This is the angle of the second joint of the right arm, the "elbow" angle. It measures how the second segment (LR2) of the right arm bends relative to the first segment.
         """
         
-        return theta1_left, theta2_left, theta1_right, theta2_left
+        return theta1_left, theta2_left, theta1_right, theta2_right
     
     def send_calculated_joint_angles(self, theta1_left, theta1_right):
         
@@ -343,29 +293,12 @@ class AutoMapper(Node):
         self.get_logger().info(f'Saved mappings to {filename}')
         print( "mapping saved to: "+ filename)
 
-    def map_workspace_and_save(self, filename):
-        """Maps the workspace and saves the mappings to a file."""
-        self.map_workspace(initial_guesses)
-        self.save_mappings_to_file(filename)
-        self.mapping_done_pub.publish(String(data="done")) # Notify that mapping is done
-
-    def start_mapping_callback(self, msg):
-        if msg.data == "start":
-            self.get_logger().info('Starting workspace mapping')
-            self.prepare_grid_points()  # This pre-computes the grid points and initial guesses
-            self.process_grid_point()
-
         
     
 def main(args=None):
     rclpy.init(args=args)
     auto_mapper = AutoMapper()
-    
-    filename = 'robot_arm_mappings.json'  # Define your filename here
-    
-    # Initiate mapping
-    #auto_mapper.map_workspace_and_save(filename)
-    
+
     rclpy.spin(auto_mapper)
     rclpy.shutdown()
 

@@ -63,9 +63,10 @@ class ActionController(Node):
             self.get_logger().warning('Received invalid button command.')
             
     def sett_map_state_with_command(self, msg):
-        if msg.data == 'pressed' and self.state == 'standby':
+        if msg.data == 'start' and self.state == 'standby':
             self.state = 'map'
             self.get_logger().info('Starting mapping')
+            self.handle_state()
             # self.start_mapping_publisher.publish(String(data="start"))
 
 
