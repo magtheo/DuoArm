@@ -7,6 +7,7 @@ from std_msgs.msg import String
 from std_msgs.msg import Float64MultiArray
 import numpy as np
 import time
+
 # from auto_mapper import MIN_THETA1_LEFT, MAX_THETA1_LEFT, MIN_THETA1_RIGHT, MAX_THETA1_RIGHT
 # fix import
 
@@ -69,6 +70,28 @@ class motorControl(Node):
             10
         )
 
+
+        # Subscriber for receiving start test command
+        self.set_origin_sub = self.create_subscription(
+            String,
+            'set_origin',
+            self.set_origin_callback,
+            10
+        )
+
+        self.manual_readings_pub = self.create_publisher(
+            Float64MultiArray, 
+            'manual_angle_readings',
+            10
+        )
+        # Subscriber for receiving start test command
+        self.start_read_sub = self.create_subscription(
+            String,
+            'start_read',
+            self.read_ref_point_callback,
+            10
+        )
+
         
         
 
@@ -88,7 +111,6 @@ class motorControl(Node):
         self.read_and_pub_servo_angels()
 
 
-
     
     #def send_actual_joint_angles(self):
     def calc_position(self, angle):
@@ -98,35 +120,30 @@ class motorControl(Node):
         return position/10
 
     def move_servos_mapping(self, received_joint_angles):
-        # Convert received angles from degrees to radians for comparison
-        received_angle_left_rad = received_joint_angles[0]
-        received_angle_right_rad = received_joint_angles[1]
-        self.get_logger().info(f'Received calculated joint angles: {np.rad2deg(received_angle_left_rad), np.rad2deg(received_angle_right_rad)}')
-
+        # self.get_logger().info(f'Received calculated joint angles: {np.rad2deg(received_angle_left_rad), np.rad2deg(received_angle_right_rad)}')
+        deg0 = np.rad2deg(received_joint_angles[0])
+        deg1 = np.rad2deg(received_joint_angles[1])
 
         # move servo if within limits
-        if received_angle_left_rad >= self.MIN_THETA1_LEFT and received_angle_left_rad <= self.MAX_THETA1_LEFT and received_angle_right_rad >= self.MIN_THETA1_RIGHT and received_angle_right_rad <= self.MAX_THETA1_RIGHT:
-            lss0_position = self.calc_position(received_joint_angles[0])
-            lss1_position = self.calc_position(received_joint_angles[1])
-            lss1.move(lss1_position)
-            lss0.move(lss0_position)
-
-
-        else:
-            self.get_logger().warn(f"Left or Right motor angles {np.rad2deg(received_joint_angles[0]), np.rad2deg(received_joint_angles[1])} out of bounds.")
-            self.out_of_bounds_publisher.publish(String(data="outside_bounds"))
-
+        lss0_position = self.calc_position(deg0)
+        lss1_position = self.calc_position(deg1)
+        lss0.move(lss0_position)
+        lss1.move(lss1_position)
+        self.get_logger().info(f"lss0 tried to moved to angle{deg0}")
+        self.get_logger().info(f"lss1 tried to moved to angle{deg1}")
+        self.get_logger().info(f"lss0 tried to moved to pos{lss0_position}")
+        self.get_logger().info(f"lss1 tried to moved to pos{lss1_position}")
 
 
        
-    def read_and_pub_servo_angels(self):
+    def read_and_pub_servo_angles(self):
         # Fetch current positions from servos
         lss0_act_position = float(lss0.getPosition())
         lss1_act_position = float(lss1.getPosition())
 
         # Convert positions back to angles
-        lss0_act_angle = self.calc_angle(lss0_act_position)
-        lss1_act_angle = self.calc_angle(lss1_act_position)
+        lss0_act_angle = np.deg2rad(self.calc_angle(lss0_act_position))
+        lss1_act_angle = np.deg2rad(self.calc_angle(lss1_act_position))
 
         # Prepare and publish the actual angles
         actual_joint_angles = [lss0_act_angle, lss1_act_angle]
@@ -135,7 +152,21 @@ class motorControl(Node):
         self.active_joint_angles_publisher.publish(transmission_msg)
         self.get_logger().info(f'Published actual joint angles: {np.rad2deg(actual_joint_angles)}')
 
-    
+
+    def manualy_read_and_pub_servo_angles(self):
+        # Fetch current positions from servos, convert to angles, and publish
+        lss0_act_position = float(lss0.getPosition())
+        lss1_act_position = float(lss1.getPosition())
+        lss0_act_angle = np.deg2rad(self.calc_angle(lss0_act_position))
+        lss1_act_angle = np.deg2rad(self.calc_angle(lss1_act_position))
+        actual_joint_angles = [lss0_act_angle, lss1_act_angle]
+        
+        transmission_msg = Float64MultiArray()
+        transmission_msg.data = actual_joint_angles
+        self.manual_readings_pub.publish(transmission_msg)
+        self.get_logger().info(f"Published manual angle readings: {actual_joint_angles}")
+
+
     def test_motors(self):
         self.get_logger().info( 'test ')
 
@@ -185,6 +216,10 @@ class motorControl(Node):
         if msg.data == "start":
             self.get_logger().info('Starting to read motor angles')
             self.manualy_read_angles()    
+
+    def read_ref_point_callback(self, msg):
+        if msg.data == "start":
+            self.manualy_read_and_pub_servo_angles()
 
 
 def main(args=None):

@@ -32,12 +32,14 @@ class AutoMapper(Node):
         self.calculated_angles = []
         self.actual_joint_angles = []
 
+        self.mapping_done = False
        
         self.joint_angles_subscription = self.create_subscription(
             Float64MultiArray,
             'actual_joint_angles',
             self.joint_angles_callback,
-            10)
+            10
+            )
         
         # Initialize the publisher for sending joint angles
         self.joint_command_publisher = self.create_publisher(
@@ -45,6 +47,13 @@ class AutoMapper(Node):
             'calculated_joint_angles',
             10
             )
+        
+        self.out_of_bounds_subscription = self.create_subscription(
+            String,
+            'out_of_bounds',
+            self.out_of_bounds_callback,
+            10
+        )
 
         # Subscriber for receiving start mapping command
         self.start_mapping_sub = self.create_subscription(
@@ -61,19 +70,14 @@ class AutoMapper(Node):
             10
             )
         
-        self.motor_status_subscription = self.create_subscription(
-            String,
-            'motor_status',
-            self.motor_status_callback,
-            10
-        )
+
 
         
         # Define angle limits
         self.MIN_THETA1_LEFT = np.radians(-140)
-        self.MAX_THETA1_LEFT = np.radians(15)
-        self.MIN_THETA1_RIGHT = np.radians(-50)
-        self.MAX_THETA1_RIGHT = np.radians(140)
+        self.MAX_THETA1_LEFT = np.radians(0)
+        self.MIN_THETA1_RIGHT = np.radians(-30)#-50
+        self.MAX_THETA1_RIGHT = np.radians(140)#140
 
         # Manually determined reference angles for the top and bottom center points
         self.ref_angles_top = [self.MIN_THETA1_LEFT, np.radians(45), self.MAX_THETA1_RIGHT, np.radians(-45)] 
@@ -126,13 +130,14 @@ class AutoMapper(Node):
 
         self.get_logger().info(f'Prepared {len(self.grid_points)} grid points for mapping.')
 
-    def process_grid_point(self):
+    def process_grid_point2(self):
         
         # Is the mapping done?
         if self.current_point_index >= len(self.grid_points):
             self.save_mappings_to_file()
             self.get_logger().info('All points have been processed.')
             self.mapping_done_pub.publish(String(data="done"))  # Notify that mapping is done
+            self.mapping_done = True
             return
         
         self.get_logger().info(f'-----------------------------------')
@@ -150,15 +155,55 @@ class AutoMapper(Node):
             self.current_point_index += 1
             self.process_grid_point()  # Proceed to the next point
         else:
+            
             # Dynamically determine initial guesses based on the target point's coordinates
             initial_guesses = self.dynamic_initial_guesses(self.x, self.z)
 
             # Solve the IK for this grid point using the dynamically determined initial guesses
             theta1_left, theta2_left, theta1_right, theta2_right = self.solve_IK(self.x, self.z, initial_guesses)
+            self.get_logger().info(f'calculated angles: {np.rad2deg(theta1_left)}  { np.rad2deg(theta1_right)}')
 
+
+            if not self.is_within_max_min_angles(theta1_left, theta1_right):
+                self.mapping[f"{self.x},{self.z}"] = "outside"
+                self.get_logger().info(f'Marked point ({self.x}, {self.z}) as outside. OUTOF BOUNDS Skipping to next.')
+                self.current_point_index += 1  # Move to the next point
+                self.process_grid_point()  # Continue processing
+            else:
+                # Sending calculated angels to motorController, this initates the motors to move to these angles
+                self.send_calculated_joint_angles(theta1_left, theta1_right)
+
+    def process_grid_point(self):
+        # Is the mapping done?
+        if self.current_point_index >= len(self.grid_points):
+            self.save_mappings_to_file()
+            self.get_logger().info('All points have been processed.')
+            self.mapping_done_pub.publish(String(data="done"))  # Notify that mapping is done
+            self.mapping_done = True
+            return
+        
+        self.get_logger().info(f'-----------------------------------')
+        self.get_logger().info(f'Processing point: {self.current_point_index}')
+
+        # Get the current grid point
+        self.x, self.z, _ = self.grid_points[self.current_point_index]
+            
+            # Dynamically determine initial guesses based on the target point's coordinates
+        initial_guesses = self.dynamic_initial_guesses(self.x, self.z)
+
+        # Solve the IK for this grid point using the dynamically determined initial guesses
+        theta1_left, theta2_left, theta1_right, theta2_right = self.solve_IK(self.x, self.z, initial_guesses)
+        self.get_logger().info(f'calculated angles: {np.rad2deg(theta1_left)}  { np.rad2deg(theta1_right)}')
+
+
+        if not self.is_within_max_min_angles(theta1_left, theta1_right):
+            self.mapping[f"{self.x},{self.z}"] = "outside"
+            self.get_logger().info(f'Marked point ({self.x}, {self.z}) as outside. OUTOF BOUNDS Skipping to next.')
+            self.current_point_index += 1  # Move to the next point
+            self.process_grid_point()  # Continue processing
+        else:
             # Sending calculated angels to motorController, this initates the motors to move to these angles
             self.send_calculated_joint_angles(theta1_left, theta1_right)
-
 
 
     def dynamic_initial_guesses(self, x, z):
@@ -202,7 +247,7 @@ class AutoMapper(Node):
 
         self.process_grid_point()
 
-    def motor_status_callback(self, msg):
+    def out_of_bounds_callback(self, msg):
         if msg.data == "outside_bounds":
             # Mark the current point as outside without processing it further
             self.mapping[f"{self.x},{self.z}"] = "outside"
@@ -215,11 +260,17 @@ class AutoMapper(Node):
         # Define the center of the workspace
         center_x, center_z = grid_size_x / 2, grid_size_z / 2
         # Calculate the radius of the workspace circle
-        workspace_radius = (LL1 + LL2)  # Sum of arm segment lengths TODO change radius values
+        workspace_radius = 15  # cm TODO change radius values
         # Calculate the distance of (x, z) from the center
         distance_squared = (x - center_x)**2 + (z - center_z)**2
         # Check if the point is within the circular workspace
         return distance_squared <= workspace_radius**2
+    
+    def is_within_max_min_angles(self, theta1_left, theta1_right):
+        # Checks if the given angles are within the max and min limits
+        self.get_logger().info(f'angels in rad ({self.MIN_THETA1_LEFT, theta1_left, self.MAX_THETA1_LEFT}, {self.MIN_THETA1_RIGHT, theta1_right, self.MAX_THETA1_RIGHT}) .')
+        return (self.MIN_THETA1_LEFT <= theta1_left <= self.MAX_THETA1_LEFT) and \
+               (self.MIN_THETA1_RIGHT <= theta1_right <= self.MAX_THETA1_RIGHT)
 
     def start_mapping_callback(self, msg):
         if msg.data == "start":
@@ -228,17 +279,14 @@ class AutoMapper(Node):
             self.process_grid_point()
 
 
-    def check_angles_within_limits(self, theta1_left, theta1_right):
-        # Check if the angles are within the specified limits
-        if self.MIN_THETA1_LEFT <= theta1_left <= self.MAX_THETA1_LEFT and self.MIN_THETA1_RIGHT <= theta1_right <= self.MAX_THETA1_RIGHT:
-            return True
-        else: 
-            return False
-
     def joint_angles_callback(self, msg):
-        self.actual_joint_angles = msg.data
-        self.get_logger().info(f'Received actual joint angles: {np.rad2deg(self.actual_joint_angles)}')
-        self.map_point(self.actual_joint_angles)
+        if self.mapping_done == False:
+            self.actual_joint_angles = msg.data
+            self.get_logger().info(f'Received actual joint angles: {np.rad2deg(self.actual_joint_angles)}')
+            self.map_point(self.actual_joint_angles)
+        else:
+            self.get_logger().info(f'---Mapping done---')
+
 
   
 
@@ -273,17 +321,19 @@ class AutoMapper(Node):
         return theta1_left, theta2_left, theta1_right, theta2_right
     
     def send_calculated_joint_angles(self, theta1_left, theta1_right):
-        
-        # Create a message with the desired joint angles
-        msg = Float64MultiArray()
-        msg.data = [theta1_left, theta1_right]        
-        
-        # Publish the message to the controller topic
-        # The topic and message type might be different for your setup
-        self.joint_command_publisher.publish(msg)
-        self.get_logger().info('Published calculated joint angles during mapping')
+        if self.mapping_done == False:
+            # Create a message with the desired joint angles
+            msg = Float64MultiArray()
+            msg.data = [theta1_left, theta1_right]        
+            
+            # Publish the message to the controller topic
+            # The topic and message type might be different for your setup
+            self.joint_command_publisher.publish(msg)
+            self.get_logger().info('Published calculated joint angles during mapping')
 
-        return msg.data
+            return msg.data
+        else:
+            self.get_logger().info(f'---Mapping done---')
     
     def save_mappings_to_file(self):
         filename = 'robot_arm_mappings.json'
