@@ -25,6 +25,9 @@ class CommandExecutor(Node):
         # start read_angles
         self.start_read_pub = self.create_publisher(String, 'start_read', 10)
 
+        #set new nullpoint
+        self.limp_and_reset_origin_pub = self.create_publisher(String, 'limp_and_reset_origin', 10)
+
 
     def command_callback(self, msg):
         command = msg.data
@@ -47,6 +50,12 @@ class CommandExecutor(Node):
 
         if command == 'read':
             self.start_read_pub.publish(String(data='start'))
+
+        if command == 'set_null':
+            new_origin_offset = '0'  # Example offset, change as needed
+            self.limp_and_reset_origin_pub.publish(String(data=new_origin_offset))
+            print("Limp and reset origin command executed with offset:", new_origin_offset)
+
 
         
         

@@ -10,6 +10,9 @@ from scipy.optimize import fsolve
 import json
 import time
 from .equation import equation, D, grid_size_x, grid_size_z
+import threading
+import tkinter as tk
+from queue import Queue
 
 
 # Define the lengths of the robot arm segments
@@ -33,6 +36,16 @@ class AutoMapper(Node):
         self.actual_joint_angles = []
 
         self.mapping_done = False
+
+        self.ref_points = ['top', 'bottom', 'max_x', 'min_x']
+        self.current_ref_point_index = 0  # Start with the first reference point
+
+        # Initialize the communication queue
+        self.gui_queue = Queue()
+
+        # GUI related initialization method
+        self.init_gui()
+
        
         self.joint_angles_subscription = self.create_subscription(
             Float64MultiArray,
@@ -48,30 +61,41 @@ class AutoMapper(Node):
             10
             )
         
-        self.out_of_bounds_subscription = self.create_subscription(
+        self.state_subscription = self.create_subscription(
             String,
-            'out_of_bounds',
-            self.out_of_bounds_callback,
-            10
-        )
+            'action_controller_state',
+            self.state_callback,
+            10)
+        
+        self.arm_state = 'standby'  # Initialize with the default state
 
-        # Subscriber for receiving start mapping command
-        self.start_mapping_sub = self.create_subscription(
-            String,
-            'start_mapping',
-            self.start_mapping_callback,
-            10
-            )
         
         # Publishing mapping completion notification
         self.mapping_done_pub = self.create_publisher(
             String,
             'mapping_done',
             10
-            )
+        )
         
+        self.start_read_publisher = self.create_publisher(
+            String,
+            'start_ref_read',
+            10
+        )
+        self.manual_readings_sub = self.create_subscription(
+            Float64MultiArray,
+            'manual_angle_readings',
+            self.manual_readings_callback,
+            10
+        )
+        
+        self.arm_position_pub = self.create_publisher(
+            String,
+            'arm_position',
+            10
+        )
 
-
+        self.grid_data_publisher = self.create_publisher(String, 'grid_data', 10)
         
         # Define angle limits
         self.MIN_THETA1_LEFT = np.radians(-140)
@@ -100,37 +124,51 @@ class AutoMapper(Node):
         self.ref_angles_min_x = [self.theta1_left_min_x, self.theta2_left_min_x, self.theta1_right_min_x, self.theta2_right_min_x]  # Replace with your actual angles
 
 
+        #new ref point method
+        self.ref_point_top = (grid_size_x // 2, grid_size_z - 1)  # Top center
+        self.ref_point_bottom = (grid_size_x // 2, 0)  # Bottom center
+        self.ref_point_max_x = (grid_size_x - 1, grid_size_z // 2)  # Max X, center Z
+        self.ref_point_min_x = (0, grid_size_z // 2)  # Min X, center Z
+
+        self.ref_points_coordinates = {
+            'top': self.ref_point_top,
+            'bottom': self.ref_point_bottom,
+            'max_x': self.ref_point_max_x,
+            'min_x': self.ref_point_min_x
+        }
+
+        self.ref_points_angles = {}
+
+
+
     def prepare_grid_points(self):
-        # Initialize an empty list to hold the grid points and initial guesses
         self.grid_points = []
-
-        # Assume grid origin (0,0) is at the bottom left
-        ref_x_center = grid_size_x / 2
-        ref_z_center = grid_size_z / 2  # Center of the grid in Z
-        ref_z_top = grid_size_z  # Top of the grid in Z
-
-        # Iterate over the grid in x and z dimensions
-        for x in range(grid_size_x): 
+        for x in range(grid_size_x):
             for z in range(grid_size_z):
-                if x == ref_x_center and z == ref_z_top:
-                    current_guesses = self.ref_angles_top.copy()
-                elif x == ref_x_center and z == 0:
-                    current_guesses = self.ref_angles_bottom.copy()
-                elif x == 0 and z == ref_z_center:
-                    current_guesses = self.ref_angles_min_x.copy()
-                elif x == grid_size_x - 1 and z == ref_z_center:
-                    current_guesses = self.ref_angles_max_x.copy()
-                else:
-                    # As a default, perhaps take an average of the reference angles
-                    current_guesses = np.mean([self.ref_angles_top, self.ref_angles_bottom, 
-                                            self.ref_angles_min_x, self.ref_angles_max_x], axis=0).tolist()
-
-                # Append the tuple (x, z, current_guesses) to the list
-                self.grid_points.append((x, z, current_guesses))
+                point_type = 'normal'
+                if (x, z) == self.ref_point_top:
+                    point_type = 'ref_top'
+                elif (x, z) == self.ref_point_bottom:
+                    point_type = 'ref_bottom'
+                elif (x, z) == self.ref_point_max_x:
+                    point_type = 'ref_max_x'
+                elif (x, z) == self.ref_point_min_x:
+                    point_type = 'ref_min_x'
+                
+                self.grid_points.append({"coords": (x, z), "type": point_type, "initial_guesses": []})
 
         self.get_logger().info(f'Prepared {len(self.grid_points)} grid points for mapping.')
 
-    def process_grid_point2(self):
+        # Publish generated grid to display node
+        grid_data = [{'x': point['coords'][0], 'z': point['coords'][1], 'type': point['type']} for point in self.grid_points]
+        self.grid_data_publisher.publish(String(data=json.dumps(grid_data)))
+        self.get_logger().info('Published grid data.')
+
+        # Print ref point to map
+        self.get_logger().info(f'first ref point to map: {list(self.ref_points_coordinates.keys())[0]}')
+
+
+    def process_grid_point_OLD(self):
         
         # Is the mapping done?
         if self.current_point_index >= len(self.grid_points):
@@ -185,16 +223,24 @@ class AutoMapper(Node):
         self.get_logger().info(f'-----------------------------------')
         self.get_logger().info(f'Processing point: {self.current_point_index}')
 
-        # Get the current grid point
-        self.x, self.z, _ = self.grid_points[self.current_point_index]
-            
-            # Dynamically determine initial guesses based on the target point's coordinates
+        grid_point = self.grid_points[self.current_point_index]
+        self.x = grid_point['coords'][0]
+        self.z = grid_point['coords'][1]
+  
+        # Dynamically determine initial guesses based on the target point's coordinates
         initial_guesses = self.dynamic_initial_guesses(self.x, self.z)
 
         # Solve the IK for this grid point using the dynamically determined initial guesses
         theta1_left, theta2_left, theta1_right, theta2_right = self.solve_IK(self.x, self.z, initial_guesses)
-        self.get_logger().info(f'calculated angles: {np.rad2deg(theta1_left)}  { np.rad2deg(theta1_right)}')
+        if not None in [theta1_left, theta2_left, theta1_right, theta2_right]:
+            self.get_logger().info(f'calculated angles: {np.rad2deg(theta1_left)}  { np.rad2deg(theta1_right)}')
 
+        # Check if a valid solution was returned before proceeding
+        if None in [theta1_left, theta2_left, theta1_right, theta2_right]:
+            self.get_logger().info('No valid IK solution, skipping point.')
+            self.current_point_index += 1  # Skip this point
+            self.process_grid_point()
+            return
 
         if not self.is_within_max_min_angles(theta1_left, theta1_right):
             self.mapping[f"{self.x},{self.z}"] = "outside"
@@ -205,31 +251,56 @@ class AutoMapper(Node):
             # Sending calculated angels to motorController, this initates the motors to move to these angles
             self.send_calculated_joint_angles(theta1_left, theta1_right)
 
+            arm_position = {"x": self.x, "z": self.z, "theta1_left": theta1_left, "theta1_right": theta1_right}  # sends arm position to display
+            self.arm_position_pub.publish(String(data=json.dumps(arm_position)))
+
+    def manual_readings_callback(self, msg):
+        manual_angles = msg.data
+
+        # Determine the current reference point being set based on index
+        ref_point_name = list(self.ref_points_coordinates.keys())[self.current_ref_point_index]
+
+        # Assign received angles to the current reference point
+        self.ref_points_angles[ref_point_name] = manual_angles
+        
+        self.get_logger().info(f"Reference point {ref_point_name} set with angles: {np.rad2deg(manual_angles)}")
+        self.current_ref_point_index += 1
+        
+        if self.current_ref_point_index >= len(self.ref_points):
+            self.get_logger().info("All reference points set. Starting automatic mapping...")
+            self.process_grid_point()
+        else:
+            self.get_logger().info(f"Move to the next reference point: {self.ref_points[self.current_ref_point_index]} and press a key.")
+    
+
+    def start_read_pub(self):
+        """
+        Publishes a message to trigger the motor_control node to read and publish current angles.
+        """
+        msg = String()
+        msg.data = "start"
+        self.start_read_publisher.publish(msg)
+        self.get_logger().info('Published start read message to motor_control.')
 
     def dynamic_initial_guesses(self, x, z):
-        # Calculate distances to each reference point
-        distance_to_top = abs(z - grid_size_z)  # Distance to the top reference point
-        distance_to_bottom = abs(z)  # Distance to the bottom reference point
-        distance_to_max_x = abs(x - grid_size_x)  # Distance to the max X reference point
-        distance_to_min_x = abs(x)  # Distance to the min X reference point
+        # Define default initial guesses for theta2_left and theta2_right
+        default_theta2 = np.radians(45)
         
-        # Determine the closest reference point based on the minimum distance
-        min_distance = min(distance_to_top, distance_to_bottom, distance_to_max_x, distance_to_min_x)
+        # Check if the current grid point matches any reference point's coordinates
+        if any((x, z) == coords for coords in self.ref_points_coordinates.values()):
+            # Use the manually set angles for this reference point as initial guesses
+            # But ensure theta2_left and theta2_right are set to 45 degrees
+            # Assumes self.ref_points_angles[ref_point_name] gives [theta1_left, theta1_right]
+            ref_point_name = next(name for name, coords in self.ref_points_coordinates.items() if (x, z) == coords)
+            initial_theta1_left, initial_theta1_right = self.ref_points_angles.get(ref_point_name, [0, 0])  # Provide a default value to avoid KeyError
+            return [initial_theta1_left, default_theta2, initial_theta1_right, default_theta2]
         
-        # Choose the initial guesses based on the closest reference point
-        if min_distance == distance_to_top:
-            return self.ref_angles_top.copy()
-        elif min_distance == distance_to_bottom:
-            return self.ref_angles_bottom.copy()
-        elif min_distance == distance_to_max_x:
-            return self.ref_angles_max_x.copy()
-        elif min_distance == distance_to_min_x:
-            return self.ref_angles_min_x.copy()
-        else:
-            # As a default, use a weighted average of the reference angles
-            # You could also use more sophisticated methods like a weighted sum based on distances to each reference point
-            return np.mean([self.ref_angles_top, self.ref_angles_bottom, 
-                            self.ref_angles_min_x, self.ref_angles_max_x], axis=0).tolist()
+        # Fallback for non-reference points
+        # Calculate averages or use another method for initial_theta1_left and initial_theta1_right
+        initial_theta1_left = np.mean([self.MIN_THETA1_LEFT, self.MAX_THETA1_LEFT])
+        initial_theta1_right = np.mean([self.MIN_THETA1_RIGHT, self.MAX_THETA1_RIGHT])
+        return [initial_theta1_left, default_theta2, initial_theta1_right, default_theta2]
+
 
 
 
@@ -246,14 +317,6 @@ class AutoMapper(Node):
         self.current_point_index += 1  # Prepare for the next point
 
         self.process_grid_point()
-
-    def out_of_bounds_callback(self, msg):
-        if msg.data == "outside_bounds":
-            # Mark the current point as outside without processing it further
-            self.mapping[f"{self.x},{self.z}"] = "outside"
-            self.get_logger().info(f'Marked point ({self.x}, {self.z}) as outside. Skipping to next.')
-            self.current_point_index += 1  # Move to the next point
-            self.process_grid_point()  # Continue processing
 
 
     def is_point_within_workspace(self, x, z):
@@ -272,12 +335,6 @@ class AutoMapper(Node):
         return (self.MIN_THETA1_LEFT <= theta1_left <= self.MAX_THETA1_LEFT) and \
                (self.MIN_THETA1_RIGHT <= theta1_right <= self.MAX_THETA1_RIGHT)
 
-    def start_mapping_callback(self, msg):
-        if msg.data == "start":
-            self.get_logger().info('Starting workspace mapping')
-            self.prepare_grid_points()  # This pre-computes the grid points and initial guesses
-            self.process_grid_point()
-
 
     def joint_angles_callback(self, msg):
         if self.mapping_done == False:
@@ -287,8 +344,65 @@ class AutoMapper(Node):
         else:
             self.get_logger().info(f'---Mapping done---')
 
+    def ref_button_press(self, msg='init'):            
+        self.get_logger().info('button pressed')
+        self.start_read_publisher.publish(String(data="start"))
 
-  
+        
+        # Check if we have processed all reference points
+        if self.current_ref_point_index >= len(self.ref_points):
+            self.get_logger().info("All reference points set. Starting automatic mapping...")
+            self.process_grid_point()
+            return
+        
+        # Inform the user which reference point to move to next
+        ref_point_name = list(self.ref_points_coordinates.keys())[self.current_ref_point_index]
+        self.get_logger().info(f"Move to the reference point: {ref_point_name} and press the button after positioning.")
+
+    def state_callback(self, msg):
+        self.current_state = msg.data
+        self.get_logger().info(f'AutoMapper current state: {self.current_state}')
+        if self.current_state == 'map':
+            self.get_logger().info('Starting mapping process...')
+            self.prepare_grid_points()
+            # self.process_grid_point()
+
+
+    def publish_start_ref_read(self):
+        self.start_read_publisher.publish(String(data="start"))
+        self.get_logger().info("Published start for reference point reading.")
+
+    def init_gui(self):
+        # This method initializes the GUI in a way that doesn't block the ROS node
+        self.gui_thread = threading.Thread(target=self.run_gui, daemon=True)
+        self.gui_thread.start()
+
+    def run_gui(self):
+        # Create the main window
+        self.root = tk.Tk()
+        self.root.title("AutoMapper Control")
+
+        # Create a button for starting manual reference points setting
+        tk.Button(self.root, text="Start Manual Ref Points Setting", command=lambda: self.gui_queue.put('start_ref')).pack(pady=20)
+
+        # Start the periodic check of the queue
+        self.check_queue()
+
+        # Start the Tkinter event loop
+        self.root.mainloop()
+
+    def check_queue(self):
+        try:
+            while not self.gui_queue.empty():
+                message = self.gui_queue.get_nowait()
+                # Here you would handle messages, e.g., by updating GUI elements or triggering ROS actions
+                if message == 'start_ref':
+                    self.ref_button_press()# TODO Change function call to refernce point mapping
+
+        finally:
+            # Schedule the next check of the queue
+            self.root.after(100, self.check_queue)
+
 
     def solve_IK(self, x, z, initial_guesses):
         # Convert the (x, z) position to joint angles using IK
@@ -301,9 +415,9 @@ class AutoMapper(Node):
         solution_values, infodict, ier, mesg = solution
 
         # Check the solution
-        if not ier:
+        if ier != 1:
             self.get_logger().error(f'IK solution not found: {mesg}')
-            return
+            return None, None, None, None
 
         # Extract the joint angles in radians from the solution
         theta1_left, theta2_left, theta1_right, theta2_right = solution_values
@@ -357,9 +471,3 @@ def main(args=None):
 if __name__ == '__main__':
 
     main()
-
-
-
-
-
-

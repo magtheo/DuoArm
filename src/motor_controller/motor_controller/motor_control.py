@@ -70,15 +70,6 @@ class motorControl(Node):
             10
         )
 
-
-        # Subscriber for receiving start test command
-        self.set_origin_sub = self.create_subscription(
-            String,
-            'set_origin',
-            self.set_origin_callback,
-            10
-        )
-
         self.manual_readings_pub = self.create_publisher(
             Float64MultiArray, 
             'manual_angle_readings',
@@ -87,12 +78,16 @@ class motorControl(Node):
         # Subscriber for receiving start test command
         self.start_read_sub = self.create_subscription(
             String,
-            'start_read',
+            'start_ref_read',
             self.read_ref_point_callback,
             10
         )
 
-        
+        self.limp_and_reset_origin_sub = self.create_subscription(
+            String,
+            'limp_and_reset_origin',
+            self.limp_and_reset_origin_callback,
+            10)
         
 
         # Define angle limits
@@ -164,7 +159,7 @@ class motorControl(Node):
         transmission_msg = Float64MultiArray()
         transmission_msg.data = actual_joint_angles
         self.manual_readings_pub.publish(transmission_msg)
-        self.get_logger().info(f"Published manual angle readings: {actual_joint_angles}")
+        self.get_logger().info(f"Published manual angle readings: {np.rad2deg(actual_joint_angles)}")
 
 
     def test_motors(self):
@@ -195,6 +190,32 @@ class motorControl(Node):
             self.get_logger().info(lss0.getPosition())
             self.get_logger().info(lss1.getPosition())
 
+    
+    def limp_and_reset_origin_callback(self, msg):
+        new_origin_offset = float(msg.data)  # Assuming the new origin offset is passed as a float in string format
+        self.set_limp_and_reset_origin(new_origin_offset)
+
+    def set_limp_and_reset_origin(self, new_origin_offset):
+        """
+        Makes the servos go limp, waits for 3 seconds, and then sets a new origin offset.
+
+        :param new_origin_offset: The new origin offset to be set for the servos.
+        """
+        self.get_logger().info('Making arm limp...')
+        # Make the arm limp
+        lss0.limp()
+        lss1.limp()
+
+        # Wait for 3 seconds
+        self.get_logger().info('Waiting for 3 seconds...')
+        time.sleep(3)
+
+        # Set new origin offset
+        self.get_logger().info('Setting new origin offset...')
+        lss0.setOriginOffset(new_origin_offset, LSS_SetConfig)  # Assuming you want to set this in configuration memory.
+        lss1.setOriginOffset(new_origin_offset, LSS_SetConfig)
+
+        self.get_logger().info(f'New origin offset set to {new_origin_offset}.')
 
     def start_test_callback(self, msg):
         if msg.data == "start":
@@ -219,6 +240,8 @@ class motorControl(Node):
 
     def read_ref_point_callback(self, msg):
         if msg.data == "start":
+            lss0.limp()
+            lss1.limp()
             self.manualy_read_and_pub_servo_angles()
 
 

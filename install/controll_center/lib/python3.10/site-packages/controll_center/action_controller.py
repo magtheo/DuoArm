@@ -8,86 +8,52 @@ class ActionController(Node):
     def __init__(self):
         super().__init__('action_controller')
         self.state = 'standby'
-            
-        ### comunication with mapping node
-        # Publisher for starting mapping
-        self.start_mapping_publisher = self.create_publisher(
-            String,
-            'start_mapping',
-            10)
-
-
-        ### Buttons    
-        # Subscribe to the topic for predefined_path button press
-        self.action_subscription = self.create_subscription(
-            String,
-            'predefined_path_button',
-            self.sett_predefined_path_state,
-            10)
         
-        # Subscribe to the topic for action button press
-        self.action_subscription = self.create_subscription(
-            String,
-            'command_start_mapping',
-            self.sett_map_state_with_command,
-            10)
-        
-        # Subscribe to the mapping_done topic
-        self.mapping_done_subscription = self.create_subscription(
-            String,
-            'mapping_done',
-            self.mapping_done_callback,
-            10)
+
+        # Publisher for the current state
+        self.state_publisher = self.create_publisher(String, 'action_controller_state', 10)
+
+        # Subscriptions
+        self.create_subscription(String, 'predefined_path_button', self.set_predefined_path_state, 10)
+        self.create_subscription(String, 'command_start_mapping', self.set_map_state_with_command, 10)
+        self.create_subscription(String, 'mapping_done', self.mapping_done_callback, 10)
 
 
-    def handle_state(self, ):
-        if self.state == 'joystick':
-            self.listen_to_joystick()
 
-        elif self.state == 'predefined_path':
-            self.start_predefined_path()
+    def publish_state(self):
+        # This method publishes the state when it changes
+        msg = String()
+        msg.data = self.state
+        self.state_publisher.publish(msg)
+        self.get_logger().info(f'Published state: {msg.data}')
 
-        elif self.state == 'map':
-            self.get_logger().info('Starting mapping')
-            self.start_mapping_publisher.publish(String(data="start"))
-        else:
-            self.state = 'standby'
-
-
-    def sett_predefined_path_state(self, msg):
+    def set_predefined_path_state(self, msg): # TODO needs rework
         if msg.data == 'pressed':
             self.state = 'predefined_path'
-            self.get_logger().info('Starting predefined path')
-            # Start the predefined path
-        else:
-            self.get_logger().warning('Received invalid button command.')
-            
-    def sett_map_state_with_command(self, msg):
+            self.publish_state()
+            self.get_logger().info('Setting state: Starting predefined path')
+
+    def set_map_state_with_command(self, msg):
         if msg.data == 'start' and self.state == 'standby':
             self.state = 'map'
-            self.get_logger().info('Starting mapping')
-            self.handle_state()
-            # self.start_mapping_publisher.publish(String(data="start"))
+            self.publish_state()
+            self.get_logger().info('state set: map')
 
-
-    def start_predefined_path(self):
-        # TODO: initate predefined path
-        pass
-    
     def mapping_done_callback(self, msg):
-        if msg.data == 'mapping_done':
+        if msg.data == 'done':
             self.state = 'standby'
+            self.publish_state()
+            self.get_logger().info('Setting state: Mapping completed. Returning to standby state.')
 
 def main(args=None):
     rclpy.init(args=args)
     action_controller = ActionController()
-    
+
     try:
         rclpy.spin(action_controller)
     except KeyboardInterrupt:
         pass
     finally:
-        # Shutdown the ROS client library for Python
         rclpy.shutdown()
 
 if __name__ == '__main__':

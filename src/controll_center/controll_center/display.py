@@ -14,11 +14,13 @@ class DisplayNode(Node):
         # Load the initial work area mapping from the JSON file
         self.mapping = self.read_mapping('robot_arm_mappings.json')
 
+        # used to display predefined path
         self.subscription = self.create_subscription(
             String,
             'display_data',
             self.display_callback,
             10)
+        
         self.subscription  # prevent unused variable warning
         self.target_point_subscription = self.create_subscription(
             String,
@@ -31,6 +33,31 @@ class DisplayNode(Node):
         self.inside_scatter = None
         self.outside_scatter = None
         self.target_scatter = None
+
+        # Initialize variable to store the arm position
+        self.arm_position = None
+
+        # Add subscription to arm_position topic
+        self.arm_position_subscription = self.create_subscription(
+            String,
+            'arm_position',
+            self.arm_position_callback,
+            10
+        )
+
+        self.grid_data_subscription = self.create_subscription(
+            String,
+            'grid_data',
+            self.grid_data_callback,
+            10)
+
+        self.state_subscription = self.create_subscription(
+            String,
+            'action_controller_state',
+            self.state_callback,
+            10)
+        
+        self.arm_state = 'standby'  # Default state
 
 
     def read_mapping(self, filename):
@@ -46,24 +73,51 @@ class DisplayNode(Node):
         data = json.loads(msg.data)
         self.visualize(data["mapping"], data["spine_points"], data["points"])
 
-    def animate(self, i):
-        # Redraw the plot with the updated target point
-        # This assumes you've stored the axes objects as self.ax
-        if self.target_point:
-            self.ax.clear()
-            # Replot the inside and outside points
-            # Plot the target point
-            self.ax.scatter(self.target_point['x'], self.target_point['z'], color='blue', label='Target Point', alpha=0.6)
-            # Add other plot customizations here
+    def arm_position_callback(self, msg):
+        self.arm_position = json.loads(msg.data) 
+
+    def grid_data_callback(self, msg):
+        grid_data = json.loads(msg.data)
+        # Store the grid data for use in the animate() or another visualization method
+        self.grid_data = grid_data
+        # You might want to trigger a redraw of the visualization here
+
+
+    def state_callback(self, msg):
+        self.arm_state = msg.data
+        self.get_logger().info(f'Received new state: {self.arm_state}')
+
 
     def animate(self, i):
-        # Clear previous scatter to avoid overplotting
-        if self.inside_scatter is not None:
-            self.inside_scatter.remove()
-        if self.outside_scatter is not None:
-            self.outside_scatter.remove()
-        if self.target_scatter is not None:
-            self.target_scatter.remove()
+
+        # Clear the plot to draw a new frame
+        self.ax.clear() 
+
+        if self.arm_state == 'map':
+            # Visualize received grid data with distinct styles for different point types
+            if hasattr(self, 'grid_data'):
+                for point in self.grid_data:
+                    x, z, point_type = point['x'], point['z'], point['type']
+                    if point_type == 'ref_top' or point_type == 'ref_bottom' or point_type == 'ref_max_x' or point_type == 'ref_min_x':
+                        self.ax.scatter(x, z, color='yellow', s=100, edgecolor='black', label='Reference Point', alpha=0.8, zorder=5)
+        
+        # # Visualize robot arm position
+        # if self.arm_position:
+        #     # Example visualization, adjust according to actual arm position data
+        #     self.ax.plot([0, self.arm_position['x']], [0, self.arm_position['z']], 'k-', lw=2) 
+        
+        # Visualize robot arm position
+        if self.arm_position:
+            x_base = self.arm_position["x_base"]
+            y_base = self.arm_position["y_base"]
+            for segment in self.arm_position["segments"]:
+                self.ax.plot([x_base, segment["x_end"]], [y_base, segment["y_end"]], 'k-', lw=2)
+                x_base, y_base = segment["x_end"], segment["y_end"]  # Update base for next segment
+
+        # Clear previous scatters to avoid overplotting
+        scatters = [self.inside_scatter, self.outside_scatter, self.target_scatter]
+        for scatter in filter(None, scatters):  # Removes None from the list
+            scatter.remove()
 
         inside_coords = {'x': [], 'z': []}
         outside_coords = {'x': [], 'z': []}
@@ -84,8 +138,10 @@ class DisplayNode(Node):
         self.outside_scatter = self.ax.scatter(outside_coords['x'], outside_coords['z'], color='red', label='Outside Workspace', alpha=0.6)
 
         # Plot the target point
-        if self.target_point is not None:
-            self.target_scatter = self.ax.scatter(self.target_point['x'], self.target_point['z'], color='blue', label='Target Point', alpha=0.6)
+        # if self.target_point is not None:
+        #     self.target_scatter = self.ax.scatter(self.target_point['x'], self.target_point['z'], color='blue', label='Target Point', alpha=0.6)
+
+
 
         # Re-draw the legend every time, so it updates the labels correctly
         self.ax.legend()
