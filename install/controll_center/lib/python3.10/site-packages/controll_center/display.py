@@ -58,12 +58,18 @@ class DisplayNode(Node):
             10)
         
         self.arm_state = 'standby'  # Default state
+        
 
 
     def read_mapping(self, filename):
+        try:
             with open(filename, 'r') as file:
                 mapping = json.load(file)
-            return mapping
+        except FileNotFoundError:
+            self.get_logger().warn(f"File {filename} not found. Starting with empty mapping.")
+            mapping = {}  # Initialize with an empty dictionary if the file is not found
+        return mapping
+
 
     def target_point_callback(self, msg):
         self.target_point = json.loads(msg.data)
@@ -107,7 +113,7 @@ class DisplayNode(Node):
         #     self.ax.plot([0, self.arm_position['x']], [0, self.arm_position['z']], 'k-', lw=2) 
         
         # Visualize robot arm position
-        if self.arm_position:
+        if self.arm_position and 'segments' in self.arm_position:
             x_base = self.arm_position["x_base"]
             y_base = self.arm_position["y_base"]
             for segment in self.arm_position["segments"]:

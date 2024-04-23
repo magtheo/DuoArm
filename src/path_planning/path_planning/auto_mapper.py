@@ -9,16 +9,17 @@ from std_msgs.msg import String, Float64MultiArray
 from scipy.optimize import fsolve
 import json
 import time
-from .equation import equation, D, grid_size_x, grid_size_z
+from .equation import equation, D, W, grid_size_x, grid_size_z
 import threading
 import tkinter as tk
 from queue import Queue
 
+# from controll_center.srv import MoveServos
+
 
 # Define the lengths of the robot arm segments
-LL1, LL2 = 20, 30  # Left arm segment lengths in cm
-LR1, LR2 = 20, 30  # Right arm segment lengths in cm
-W = 20             # Distance between the base joints in cm
+LL1, LL2 = 12, 27  # Left arm segment lengths in cm
+LR1, LR2 = 12, 27  # Right arm segment lengths in cm
 
 
 class AutoMapper(Node):
@@ -61,6 +62,7 @@ class AutoMapper(Node):
             10
             )
         
+        # Topic for reading arm state from action controller
         self.state_subscription = self.create_subscription(
             String,
             'action_controller_state',
@@ -95,13 +97,19 @@ class AutoMapper(Node):
             10
         )
 
+
+
         self.grid_data_publisher = self.create_publisher(String, 'grid_data', 10)
         
+        # self.servo_client = self.create_client(MoveServos, 'move_servos')
+        # while not self.servo_client.wait_for_service(timeout_sec=1.0):
+        #     self.get_logger().info('Service move_servos not available, waiting again...')
+
         # Define angle limits
-        self.MIN_THETA1_LEFT = np.radians(-140)
-        self.MAX_THETA1_LEFT = np.radians(0)
-        self.MIN_THETA1_RIGHT = np.radians(-30)#-50
-        self.MAX_THETA1_RIGHT = np.radians(140)#140
+        self.MIN_THETA1_LEFT = np.radians(-160)
+        self.MAX_THETA1_LEFT = np.radians(10)
+        self.MIN_THETA1_RIGHT = np.radians(-30)
+        self.MAX_THETA1_RIGHT = np.radians(150)
 
         # Manually determined reference angles for the top and bottom center points
         self.ref_angles_top = [self.MIN_THETA1_LEFT, np.radians(45), self.MAX_THETA1_RIGHT, np.radians(-45)] 
@@ -139,7 +147,21 @@ class AutoMapper(Node):
 
         self.ref_points_angles = {}
 
-
+    # def request_target_movement(self, target_angles):
+    #     req = MoveServos.Request()
+    #     req.target_angles = target_angles
+    #     future = self.cli.call_async(req)
+    #     rclpy.spin_until_future_complete(self, future)
+    #     if future.result() is not None:
+    #         actual_angles = future.result().actual_angles
+    #         success = future.result().success
+    #         message = future.result().message
+    #         # Process the response
+    #         self.map_point(actual_angles)
+    #         return actual_angles, success, message
+    #     else:
+    #         self.get_logger().error('Service call failed')
+    #         return None, False, 'Failed'
 
     def prepare_grid_points(self):
         self.grid_points = []
@@ -231,7 +253,7 @@ class AutoMapper(Node):
         initial_guesses = self.dynamic_initial_guesses(self.x, self.z)
 
         # Solve the IK for this grid point using the dynamically determined initial guesses
-        theta1_left, theta2_left, theta1_right, theta2_right = self.solve_IK(self.x, self.z, initial_guesses)
+        theta1_left, theta2_left, theta1_right, theta2_right = self.solve_IK(self.x, self.z, initial_guesses, D, W, grid_size_x, grid_size_z)
         if not None in [theta1_left, theta2_left, theta1_right, theta2_right]:
             self.get_logger().info(f'calculated angles: {np.rad2deg(theta1_left)}  { np.rad2deg(theta1_right)}')
 
@@ -248,7 +270,10 @@ class AutoMapper(Node):
             self.current_point_index += 1  # Move to the next point
             self.process_grid_point()  # Continue processing
         else:
-            # Sending calculated angels to motorController, this initates the motors to move to these angles
+            # SERVICE METHOD
+            # self.request_target_movement((theta1_left, theta1_right))
+            
+            # TOPIC METHOD Sending calculated angels to motorController, this initates the motors to move to these angles
             self.send_calculated_joint_angles(theta1_left, theta1_right)
 
             arm_position = {"x": self.x, "z": self.z, "theta1_left": theta1_left, "theta1_right": theta1_right}  # sends arm position to display
@@ -263,7 +288,7 @@ class AutoMapper(Node):
         # Assign received angles to the current reference point
         self.ref_points_angles[ref_point_name] = manual_angles
         
-        self.get_logger().info(f"Reference point {ref_point_name} set with angles: {np.rad2deg(manual_angles)}")
+        self.get_logger().info(f"Reference point {ref_point_name} set with angles: {(manual_angles)}")
         self.current_ref_point_index += 1
         
         if self.current_ref_point_index >= len(self.ref_points):
@@ -284,7 +309,7 @@ class AutoMapper(Node):
 
     def dynamic_initial_guesses(self, x, z):
         # Define default initial guesses for theta2_left and theta2_right
-        default_theta2 = np.radians(45)
+        default_theta2 = np.deg2rad(45)
         
         # Check if the current grid point matches any reference point's coordinates
         if any((x, z) == coords for coords in self.ref_points_coordinates.values()):
@@ -404,11 +429,16 @@ class AutoMapper(Node):
             self.root.after(100, self.check_queue)
 
 
-    def solve_IK(self, x, z, initial_guesses):
+    def solve_IK(self, x, z, initial_guesses, W, D, grid_size_x, grid_size_z):
         # Convert the (x, z) position to joint angles using IK
 
+        solver_options = {
+            'xtol': 1e-6,  # Adjust tolerance
+            'maxfev': 10000  # Increase max function evaluations
+        }
+
         # Solve the equations using fsolve
-        solution = fsolve(equation, initial_guesses, args=(x, z, D), full_output=True)
+        solution = fsolve(equation, initial_guesses, args=(x, z, D, W, grid_size_x, grid_size_z), full_output=True, **solver_options)
      
         # fsolve returns a tuple where the first element is the solution
         # and the fourth element is an integer flag indicating if a solution was found

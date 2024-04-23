@@ -14,6 +14,7 @@
 /home/theomagnor/DuoArm/install/controll_center/share/controll_center/package.xml
 /home/theomagnor/DuoArm/install/controll_center/share/controll_center/launch/controll_center_launch.py
 /home/theomagnor/DuoArm/install/controll_center/share/controll_center/launch/start_launch.py
+/home/theomagnor/DuoArm/install/controll_center/share/controll_center/srv/MoveServos.srv
 /home/theomagnor/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center-0.0.0-py3.10.egg-info/dependency_links.txt
 /home/theomagnor/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center-0.0.0-py3.10.egg-info/top_level.txt
 /home/theomagnor/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center-0.0.0-py3.10.egg-info/requires.txt

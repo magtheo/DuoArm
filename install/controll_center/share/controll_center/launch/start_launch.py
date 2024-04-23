@@ -75,8 +75,8 @@ def generate_launch_description():
     ld.add_action(command_executor_node)
     ld.add_action(display_node)
 
-    ld.add_action(joystick_controller)
-    ld.add_action(joy_node)
+    # ld.add_action(joystick_controller)
+    # ld.add_action(joy_node)
 
 
     return ld
