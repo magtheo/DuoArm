@@ -113,7 +113,7 @@ class DisplayNode(Node):
         #     self.ax.plot([0, self.arm_position['x']], [0, self.arm_position['z']], 'k-', lw=2) 
         
         # Visualize robot arm position
-        if self.arm_position and 'segments' in self.arm_position:
+        if self.arm_position:
             x_base = self.arm_position["x_base"]
             y_base = self.arm_position["y_base"]
             for segment in self.arm_position["segments"]:

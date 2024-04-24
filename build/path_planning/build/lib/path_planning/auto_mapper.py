@@ -97,9 +97,10 @@ class AutoMapper(Node):
             10
         )
 
-
-
-        self.grid_data_publisher = self.create_publisher(String, 'grid_data', 10)
+        self.grid_data_publisher = self.create_publisher(
+            String,
+            'grid_data',
+            10)
         
         # self.servo_client = self.create_client(MoveServos, 'move_servos')
         # while not self.servo_client.wait_for_service(timeout_sec=1.0):
@@ -254,6 +255,34 @@ class AutoMapper(Node):
 
         # Solve the IK for this grid point using the dynamically determined initial guesses
         theta1_left, theta2_left, theta1_right, theta2_right = self.solve_IK(self.x, self.z, initial_guesses, D, W, grid_size_x, grid_size_z)
+
+        # Calculate the base positions
+        x_center = grid_size_x / 2
+        z_base = grid_size_z
+        x_base_left = x_center - W / 2
+        x_base_right = x_center + W / 2
+
+        # Calculate the end effector positions
+        x_left = x_base_left + LL1 * np.cos(theta1_left) + LL2 * np.cos(theta1_left + theta2_left)
+        z_left = z_base + LL1 * np.sin(theta1_left) + LL2 * np.sin(theta1_left + theta2_left)
+
+        x_right = x_base_right + LR1 * np.cos(theta1_right) + LR2 * np.cos(theta1_right + theta2_right)
+        z_right = z_base + LR1 * np.sin(theta1_right) + LR2 * np.sin(theta1_right + theta2_right)
+
+        # Package the arm positions into a dictionary
+        arm_position_data = {
+            "x_base_left": x_base_left,
+            "z_base": z_base,
+            "x_base_right": x_base_right,
+            "x_left_end": x_left,
+            "z_left_end": z_left,
+            "x_right_end": x_right,
+            "z_right_end": z_right
+        }
+
+        # Publish the arm positions
+        self.arm_position_pub.publish(String(data=json.dumps(arm_position_data)))
+
         if not None in [theta1_left, theta2_left, theta1_right, theta2_right]:
             self.get_logger().info(f'calculated angles: {np.rad2deg(theta1_left)}  { np.rad2deg(theta1_right)}')
 
