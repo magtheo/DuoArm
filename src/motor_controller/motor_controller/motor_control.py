@@ -185,7 +185,7 @@ class motorControl(Node):
         transmission_msg = Float64MultiArray()
         transmission_msg.data = actual_joint_angles
         self.active_joint_angles_publisher.publish(transmission_msg)
-        self.get_logger().info(f'Published actual joint angles: {np.rad2deg(actual_joint_angles)}')
+        self.get_logger().info(f'Published actual joint angles: {(actual_joint_angles)}')
 
 
     def manualy_read_and_pub_servo_angles(self):

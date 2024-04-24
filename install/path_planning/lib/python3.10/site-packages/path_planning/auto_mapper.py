@@ -272,8 +272,8 @@ class AutoMapper(Node):
         # Package the arm positions into a dictionary
         arm_position_data = {
             "x_base_left": x_base_left,
-            "z_base": z_base,
             "x_base_right": x_base_right,
+            "z_base": z_base,
             "x_left_end": x_left,
             "z_left_end": z_left,
             "x_right_end": x_right,
