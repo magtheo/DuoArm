@@ -1,13 +1,12 @@
 import serial
 from lss import *
-import numpy as np
+import RPi.GPIO as GPIO
+import time
+
 
 CST_LSS_Port = "/dev/ttyUSB0"		# For Linux/Unix platforms
-#CST_LSS_Port = "COM230"				# For windows platforms
 CST_LSS_Baud = LSS_DefaultBaud
-
-# Create and open a serial port
-initBus(CST_LSS_Port, CST_LSS_Baud)
+initBus(CST_LSS_Port, CST_LSS_Baud) # Create and open a serial port
 
 x_analog_value = 0
 z_analog_value = 0
@@ -62,6 +61,7 @@ def read_analog_values(ser_obj):
     else:
         return None, None
 
+
 if __name__ == '__main__':
 
     ser_obj = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
@@ -71,8 +71,8 @@ if __name__ == '__main__':
         x_analog_value, z_analog_value = read_analog_values(ser_obj)
 
         if (x_analog_value is not None and z_analog_value is not None):
-            print(x_analog_value)
-            print(z_analog_value)
+            print(f'x_analog_value: {x_analog_value}')
+            print(f'z_analog_value: {z_analog_value}')
             print(f'LSS1 -> position: {lss1.getPosition()}')
             print(f'LSS0 -> position: {lss0.getPosition()}')
             print('---------------------------------')

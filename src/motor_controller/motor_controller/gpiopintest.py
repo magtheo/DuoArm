@@ -1,36 +1,47 @@
 import RPi.GPIO as GPIO
 import time
 
-# Setup GPIO mode and pins
+
+joystick_button_pin = 18
+button_pressed = False
 GPIO.setmode(GPIO.BCM)
-button_pin = 18  # Example GPIO pin for the button
-GPIO.setup(button_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # Use internal pull-up resistor
+GPIO.setup(joystick_button_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.input(joystick_button_pin)
+prev_button_state = GPIO.HIGH
+count = 0
+debounce_duration = 0.5
+last_button_press_time = 0
 
-# Initialize variables
-button_state = GPIO.input(button_pin)
-last_button_state = button_state
-last_button_time = time.time()
-
-# Main loop
 try:
     while True:
-        # Read button state
-        button_state = GPIO.input(button_pin)
+        time.sleep(0.1)
+        current_button_state = GPIO.input(joystick_button_pin)
+        print(button_pressed)
+        
+        # Check for rising edge (HIGH to LOW transition)
+        if current_button_state == GPIO.LOW and prev_button_state == GPIO.HIGH:
 
-        # Check for button press
-        if button_state != last_button_state:
-            if button_state == GPIO.LOW:  # Button pressed
-                current_time = time.time()
-                if current_time - last_button_time > 0.2:  # Debounce time (adjust as needed)
-                    print("Button pressed")
-                    last_button_time = current_time
+            if (time.time() - last_button_press_time >= debounce_duration):
+                button_pressed = True
 
-        # Update last button state
-        last_button_state = button_state
+                last_button_press_time = time.time()
+        else:
+            button_pressed = False
+        
+        prev_button_state = current_button_state
 
-        # Add a small delay to reduce CPU usage
-        time.sleep(0.01)
 
-finally:
-    # Cleanup GPIO
+except KeyboardInterrupt:
     GPIO.cleanup()
+# try:
+#     while True:
+#         time.sleep(0.1)
+#         if (GPIO.input(joystick_button_pin) == GPIO.LOW):
+#             button_pressed = True
+#             print(button_pressed)
+#         else:
+#             button_pressed = False
+#             print(button_pressed)
+
+# except KeyboardInterrupt:
+#     GPIO.cleanup()
