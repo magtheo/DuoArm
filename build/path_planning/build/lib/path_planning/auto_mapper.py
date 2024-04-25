@@ -107,10 +107,10 @@ class AutoMapper(Node):
         #     self.get_logger().info('Service move_servos not available, waiting again...')
 
         # Define angle limits
-        self.MIN_THETA1_LEFT = np.radians(-160)
-        self.MAX_THETA1_LEFT = np.radians(10)
-        self.MIN_THETA1_RIGHT = np.radians(-30)
-        self.MAX_THETA1_RIGHT = np.radians(150)
+        self.MIN_THETA1_LEFT = np.radians(160)
+        self.MAX_THETA1_LEFT = np.radians(270)
+        self.MIN_THETA1_RIGHT = np.radians(-90)
+        self.MAX_THETA1_RIGHT = np.radians(40)
 
         # Manually determined reference angles for the top and bottom center points
         self.ref_angles_top = [self.MIN_THETA1_LEFT, np.radians(45), self.MAX_THETA1_RIGHT, np.radians(-45)] 
@@ -256,35 +256,36 @@ class AutoMapper(Node):
         # Solve the IK for this grid point using the dynamically determined initial guesses
         theta1_left, theta2_left, theta1_right, theta2_right = self.solve_IK(self.x, self.z, initial_guesses, D, W, grid_size_x, grid_size_z)
 
-        # Calculate the base positions
-        x_center = grid_size_x / 2
-        z_base = grid_size_z
-        x_base_left = x_center - W / 2
-        x_base_right = x_center + W / 2
 
-        # Calculate the end effector positions
-        x_left = x_base_left + LL1 * np.cos(theta1_left) + LL2 * np.cos(theta1_left + theta2_left)
-        z_left = z_base + LL1 * np.sin(theta1_left) + LL2 * np.sin(theta1_left + theta2_left)
-
-        x_right = x_base_right + LR1 * np.cos(theta1_right) + LR2 * np.cos(theta1_right + theta2_right)
-        z_right = z_base + LR1 * np.sin(theta1_right) + LR2 * np.sin(theta1_right + theta2_right)
-
-        # Package the arm positions into a dictionary
-        arm_position_data = {
-            "x_base_left": x_base_left,
-            "x_base_right": x_base_right,
-            "z_base": z_base,
-            "x_left_end": x_left,
-            "z_left_end": z_left,
-            "x_right_end": x_right,
-            "z_right_end": z_right
-        }
-
-        # Publish the arm positions
-        self.arm_position_pub.publish(String(data=json.dumps(arm_position_data)))
 
         if not None in [theta1_left, theta2_left, theta1_right, theta2_right]:
             self.get_logger().info(f'calculated angles: {np.rad2deg(theta1_left)}  { np.rad2deg(theta1_right)}')
+            # Calculate the base positions
+            x_center = grid_size_x / 2
+            z_base = grid_size_z
+            x_base_left = x_center - W / 2
+            x_base_right = x_center + W / 2
+
+            # Calculate the end effector positions
+            x_left = x_base_left + LL1 * np.cos(theta1_left) + LL2 * np.cos(theta1_left + theta2_left)
+            z_left = z_base + LL1 * np.sin(theta1_left) + LL2 * np.sin(theta1_left + theta2_left)
+
+            x_right = x_base_right + LR1 * np.cos(theta1_right) + LR2 * np.cos(theta1_right + theta2_right)
+            z_right = z_base + LR1 * np.sin(theta1_right) + LR2 * np.sin(theta1_right + theta2_right)
+
+            # Package the arm positions into a dictionary
+            arm_position_data = {
+                "x_base_left": x_base_left,
+                "x_base_right": x_base_right,
+                "z_base": z_base,
+                "x_left_end": x_left,
+                "z_left_end": z_left,
+                "x_right_end": x_right,
+                "z_right_end": z_right
+            }
+
+            # Publish the arm positions
+            self.arm_position_pub.publish(String(data=json.dumps(arm_position_data)))
 
         # Check if a valid solution was returned before proceeding
         if None in [theta1_left, theta2_left, theta1_right, theta2_right]:
@@ -338,8 +339,9 @@ class AutoMapper(Node):
 
     def dynamic_initial_guesses(self, x, z):
         # Define default initial guesses for theta2_left and theta2_right
-        default_theta2 = np.deg2rad(45)
-        
+        default_theta2_L = np.deg2rad(90)
+        default_theta2_R = np.deg2rad(270)
+
         # Check if the current grid point matches any reference point's coordinates
         if any((x, z) == coords for coords in self.ref_points_coordinates.values()):
             # Use the manually set angles for this reference point as initial guesses
@@ -347,13 +349,13 @@ class AutoMapper(Node):
             # Assumes self.ref_points_angles[ref_point_name] gives [theta1_left, theta1_right]
             ref_point_name = next(name for name, coords in self.ref_points_coordinates.items() if (x, z) == coords)
             initial_theta1_left, initial_theta1_right = self.ref_points_angles.get(ref_point_name, [0, 0])  # Provide a default value to avoid KeyError
-            return [initial_theta1_left, default_theta2, initial_theta1_right, default_theta2]
+            return [initial_theta1_left, default_theta2_L, initial_theta1_right, default_theta2_R]
         
         # Fallback for non-reference points
         # Calculate averages or use another method for initial_theta1_left and initial_theta1_right
         initial_theta1_left = np.mean([self.MIN_THETA1_LEFT, self.MAX_THETA1_LEFT])
         initial_theta1_right = np.mean([self.MIN_THETA1_RIGHT, self.MAX_THETA1_RIGHT])
-        return [initial_theta1_left, default_theta2, initial_theta1_right, default_theta2]
+        return [initial_theta1_left, default_theta2_L, initial_theta1_right, default_theta2_R]
 
 
 

@@ -240,11 +240,13 @@ class motorControl(Node):
             self.set_limp_and_reset_origin(new_origin_offset0, new_origin_offset1)
         except ValueError as e:
             self.get_logger().error(f"Invalid input for origin offsets: {e}")
+        except IndexError as e:
+            self.get_logger().error(f"Error parsing offsets: {e}")
 
 
     def set_limp_and_reset_origin(self, new_origin_offset0, new_origin_offset1):
         """
-        Makes the servos go limp, waits for 3 seconds, and then sets a new origin offset.
+        Makes the servos go limp, waits for X seconds, and then sets a new origin offset.
 
         :param new_origin_offset: The new origin offset to be set for the servos.
         """

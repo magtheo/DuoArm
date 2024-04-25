@@ -1,3 +1,3 @@
 import sys
 sys.real_prefix = sys.prefix
-sys.prefix = sys.exec_prefix = '/home/theo/DuoArm/install/controll_center'
+sys.prefix = sys.exec_prefix = '/home/theomagnor/DuoArm/install/controll_center'

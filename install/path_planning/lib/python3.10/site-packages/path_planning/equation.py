@@ -11,8 +11,8 @@ D = 2             # Distance between the tool hub joints in cm
 
 #initial_guesses = np.radians([30, 90, -30, 90])
 
-grid_size_x = 22;
-grid_size_z = 22;
+grid_size_x = 20;
+grid_size_z = 30;
 
 
 def equationNotShifted( p, x_target, z_target, D):
