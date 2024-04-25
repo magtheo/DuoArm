@@ -113,12 +113,34 @@ class DisplayNode(Node):
         #     self.ax.plot([0, self.arm_position['x']], [0, self.arm_position['z']], 'k-', lw=2) 
         
         # Visualize robot arm position
+        # if self.arm_position:
+        #     x_base = self.arm_position["x_base"]
+        #     y_base = self.arm_position["y_base"]
+        #     for segment in self.arm_position["segments"]:
+        #         self.ax.plot([x_base, segment["x_end"]], [y_base, segment["y_end"]], 'k-', lw=2)
+        #         x_base, y_base = segment["x_end"], segment["y_end"]  # Update base for next segment
+
+        # Visualize robot arm base and end effectors
         if self.arm_position:
-            x_base = self.arm_position["x_base"]
-            y_base = self.arm_position["y_base"]
-            for segment in self.arm_position["segments"]:
-                self.ax.plot([x_base, segment["x_end"]], [y_base, segment["y_end"]], 'k-', lw=2)
-                x_base, y_base = segment["x_end"], segment["y_end"]  # Update base for next segment
+            # Base positions
+            self.ax.scatter([self.arm_position["x_base_left"], self.arm_position["x_base_right"]],
+                            [self.arm_position["z_base"], self.arm_position["z_base"]],
+                            color='blue', label='Base')
+
+            # Arm segments: Shoulder to Elbow, Elbow to Hand
+            self.ax.plot([self.arm_position["x_base_left"], self.arm_position["x_left_elbow"]],
+                        [self.arm_position["z_base"], self.arm_position["z_left_elbow"]], 'r-')
+            self.ax.plot([self.arm_position["x_left_elbow"], self.arm_position["x_left_hand"]],
+                        [self.arm_position["z_left_elbow"], self.arm_position["z_left_hand"]], 'r--')
+
+            self.ax.plot([self.arm_position["x_base_right"], self.arm_position["x_right_elbow"]],
+                        [self.arm_position["z_base"], self.arm_position["z_right_elbow"]], 'b-')
+            self.ax.plot([self.arm_position["x_right_elbow"], self.arm_position["x_right_hand"]],
+                        [self.arm_position["z_right_elbow"], self.arm_position["z_right_hand"]], 'b--')
+
+            self.ax.scatter([self.arm_position["x_left_hand"], self.arm_position["x_right_hand"]],
+                            [self.arm_position["z_left_hand"], self.arm_position["z_right_hand"]],
+                            color='green', label='Hands')
 
         # Clear previous scatters to avoid overplotting
         scatters = [self.inside_scatter, self.outside_scatter, self.target_scatter]

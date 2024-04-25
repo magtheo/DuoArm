@@ -9,7 +9,7 @@ from std_msgs.msg import String, Float64MultiArray
 from scipy.optimize import fsolve
 import json
 import time
-from .equation import equation, D, W, grid_size_x, grid_size_z
+from .equation import equation_offset, D, W, grid_size_x, grid_size_z
 import threading
 import tkinter as tk
 from queue import Queue
@@ -467,7 +467,7 @@ class AutoMapper(Node):
         }
 
         # Solve the equations using fsolve
-        solution = fsolve(equation, initial_guesses, args=(x, z, D, W, grid_size_x, grid_size_z), full_output=True, **solver_options)
+        solution = fsolve(equation_offset, initial_guesses, args=(x, z, D, W, grid_size_x, grid_size_z), full_output=True, **solver_options)
      
         # fsolve returns a tuple where the first element is the solution
         # and the fourth element is an integer flag indicating if a solution was found
@@ -490,8 +490,35 @@ class AutoMapper(Node):
 
         theta2_right: This is the angle of the second joint of the right arm, the "elbow" angle. It measures how the second segment (LR2) of the right arm bends relative to the first segment.
         """
-        
+        # Calculate positions of each segment of the arm
+        x_center = grid_size_x / 2
+        z_base = grid_size_z
+        x_base_left = x_center - W / 2
+        x_base_right = x_center + W / 2
+
+        # Left arm
+        x_elbow_left = x_base_left + LL1 * np.cos(theta1_left)
+        z_elbow_left = z_base + LL1 * np.sin(theta1_left)
+        x_hand_left = x_elbow_left + LL2 * np.cos(theta1_left + theta2_left)
+        z_hand_left = z_elbow_left + LL2 * np.sin(theta1_left + theta2_left)
+
+        # Right arm
+        x_elbow_right = x_base_right + LR1 * np.cos(theta1_right)
+        z_elbow_right = z_base + LR1 * np.sin(theta1_right)
+        x_hand_right = x_elbow_right + LR2 * np.cos(theta1_right + theta2_right)
+        z_hand_right = z_elbow_right + LR2 * np.sin(theta1_right + theta2_right)
+
+        arm_position_data = {
+            "x_base_left": x_base_left, "z_base": z_base, "x_base_right": x_base_right,
+            "x_left_elbow": x_elbow_left, "z_left_elbow": z_elbow_left,
+            "x_right_elbow": x_elbow_right, "z_right_elbow": z_elbow_right,
+            "x_left_hand": x_hand_left, "z_left_hand": z_hand_left,
+            "x_right_hand": x_hand_right, "z_right_hand": z_hand_right
+        }
+
+        self.arm_position_pub.publish(String(data=json.dumps(arm_position_data)))
         return theta1_left, theta2_left, theta1_right, theta2_right
+
     
     def send_calculated_joint_angles(self, theta1_left, theta1_right):
         if self.mapping_done == False:

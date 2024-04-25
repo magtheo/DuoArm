@@ -122,16 +122,25 @@ class DisplayNode(Node):
 
         # Visualize robot arm base and end effectors
         if self.arm_position:
-            # Visualize the bases
+            # Base positions
             self.ax.scatter([self.arm_position["x_base_left"], self.arm_position["x_base_right"]],
                             [self.arm_position["z_base"], self.arm_position["z_base"]],
-                            color='blue', label='Base', zorder=3)
+                            color='blue', label='Base')
 
-            # Visualize the arms
-            self.ax.plot([self.arm_position["x_base_left"], self.arm_position["x_left_end"]],
-                        [self.arm_position["z_base"], self.arm_position["z_left_end"]], 'r-')
-            self.ax.plot([self.arm_position["x_base_right"], self.arm_position["x_right_end"]],
-                        [self.arm_position["z_base"], self.arm_position["z_right_end"]], 'r-')
+            # Arm segments: Shoulder to Elbow, Elbow to Hand
+            self.ax.plot([self.arm_position["x_base_left"], self.arm_position["x_left_elbow"]],
+                        [self.arm_position["z_base"], self.arm_position["z_left_elbow"]], 'r-')
+            self.ax.plot([self.arm_position["x_left_elbow"], self.arm_position["x_left_hand"]],
+                        [self.arm_position["z_left_elbow"], self.arm_position["z_left_hand"]], 'r--')
+
+            self.ax.plot([self.arm_position["x_base_right"], self.arm_position["x_right_elbow"]],
+                        [self.arm_position["z_base"], self.arm_position["z_right_elbow"]], 'b-')
+            self.ax.plot([self.arm_position["x_right_elbow"], self.arm_position["x_right_hand"]],
+                        [self.arm_position["z_right_elbow"], self.arm_position["z_right_hand"]], 'b--')
+
+            self.ax.scatter([self.arm_position["x_left_hand"], self.arm_position["x_right_hand"]],
+                            [self.arm_position["z_left_hand"], self.arm_position["z_right_hand"]],
+                            color='green', label='Hands')
 
         # Clear previous scatters to avoid overplotting
         scatters = [self.inside_scatter, self.outside_scatter, self.target_scatter]
