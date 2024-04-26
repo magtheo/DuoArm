@@ -89,7 +89,7 @@ class motorControl(Node):
         self.limp_and_reset_origin_sub = self.create_subscription(
             String,
             'limp_and_reset_origin',
-            self.limp_and_reset_origin_callback,
+            self.limp_and_set_origin,
             10)
         
         # self.srv = self.create_service(MoveServos, 'set_target_angles', self.set_target_angles_callback)
@@ -147,8 +147,8 @@ class motorControl(Node):
 
     def move_servos_mapping(self, received_joint_angles):
         # self.get_logger().info(f'Received calculated joint angles: {np.rad2deg(received_angle_left_rad), np.rad2deg(received_angle_right_rad)}')
-        deg0 = np.rad2deg(received_joint_angles[0])
-        deg1 = np.rad2deg(received_joint_angles[1])
+        deg0 = np.rad2deg(received_joint_angles[1])
+        deg1 = np.rad2deg(received_joint_angles[0])
 
         # move servo if within limits
         lss0_position = self.calc_position(deg0)
@@ -230,21 +230,9 @@ class motorControl(Node):
             self.get_logger().info(lss0.getPosition())
             self.get_logger().info(lss1.getPosition())
 
-    
-    def limp_and_reset_origin_callback(self, msg):
-        try:
-            # Assuming the message data is now correctly formatted as "float, float"
-            offsets = msg.data.split(", ")
-            new_origin_offset0 = float(offsets[0])
-            new_origin_offset1 = float(offsets[1])
-            self.set_limp_and_reset_origin(new_origin_offset0, new_origin_offset1)
-        except ValueError as e:
-            self.get_logger().error(f"Invalid input for origin offsets: {e}")
-        except IndexError as e:
-            self.get_logger().error(f"Error parsing offsets: {e}")
 
 
-    def set_limp_and_reset_origin(self, new_origin_offset0, new_origin_offset1):
+    def limp_and_set_origin(self, msg):
         """
         Makes the servos go limp, waits for X seconds, and then sets a new origin offset.
 
@@ -255,19 +243,26 @@ class motorControl(Node):
         lss0.limp()
         lss1.limp()
 
+        lss0.setGyre(-1, LSS_SetConfig)
+        lss1.setGyre(-1, LSS_SetConfig)
+
         # Wait for 3 seconds
         self.get_logger().info('Waiting for 3 seconds...')
-        time.sleep(5)
+        time.sleep(3)
 
         # Set new origin offset
+        new_origin_offset0 = 0
+        new_origin_offset1 = 1800
         self.get_logger().info('Setting new origin offset...')
         lss0.setOriginOffset(new_origin_offset0, LSS_SetConfig)  # Assuming you want to set this in configuration memory.
         lss1.setOriginOffset(new_origin_offset1, LSS_SetConfig)
 
         self.get_logger().info(f'New origin offset set to {new_origin_offset0, new_origin_offset1}.')
 
-        self.get_logger().info(f'actual angles after new null point for lss0: {self.calc_angle(lss0.getPosition())}')
-        self.get_logger().info(f'actual angles after new null point for lss1: {self.calc_angle(lss1.getPosition())}')
+        for i in range(3):
+            self.get_logger().info(f'actual angles after new null point for lss0: {self.calc_angle(lss0.getPosition())}')
+            self.get_logger().info(f'actual angles after new null point for lss1: {self.calc_angle(lss1.getPosition())}')
+            time.sleep(3)
 
     def start_test_callback(self, msg):
         if msg.data == "start":
@@ -276,6 +271,8 @@ class motorControl(Node):
 
     def manualy_read_angles(self):
         self.get_logger().info( 'test ')
+        lss0.limp()
+        lss1.limp()
 
         for i in range(6):
             self.get_logger().info(f'current loop: {i}')

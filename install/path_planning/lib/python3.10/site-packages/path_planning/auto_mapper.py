@@ -191,48 +191,6 @@ class AutoMapper(Node):
         self.get_logger().info(f'first ref point to map: {list(self.ref_points_coordinates.keys())[0]}')
 
 
-    def process_grid_point_OLD(self):
-        
-        # Is the mapping done?
-        if self.current_point_index >= len(self.grid_points):
-            self.save_mappings_to_file()
-            self.get_logger().info('All points have been processed.')
-            self.mapping_done_pub.publish(String(data="done"))  # Notify that mapping is done
-            self.mapping_done = True
-            return
-        
-        self.get_logger().info(f'-----------------------------------')
-        self.get_logger().info(f'Processing point: {self.current_point_index}')
-
-        # Get the current grid point
-        self.x, self.z, _ = self.grid_points[self.current_point_index]
-
-        # Check if the point is within the workspace
-        if not self.is_point_within_workspace(self.x, self.z):
-            # Mark the point as outside and move to the next point
-            self.mapping[f"{self.x},{self.z}"] = "outside"
-            self.get_logger().info(f'mapped point ({self.x}, {self.z}) as outside, {self.current_point_index}/{len(self.grid_points)}')
-
-            self.current_point_index += 1
-            self.process_grid_point()  # Proceed to the next point
-        else:
-            
-            # Dynamically determine initial guesses based on the target point's coordinates
-            initial_guesses = self.dynamic_initial_guesses(self.x, self.z)
-
-            # Solve the IK for this grid point using the dynamically determined initial guesses
-            theta1_left, theta2_left, theta1_right, theta2_right = self.solve_IK(self.x, self.z, initial_guesses)
-            self.get_logger().info(f'calculated angles: {np.rad2deg(theta1_left)}  { np.rad2deg(theta1_right)}')
-
-
-            if not self.is_within_max_min_angles(theta1_left, theta1_right):
-                self.mapping[f"{self.x},{self.z}"] = "outside"
-                self.get_logger().info(f'Marked point ({self.x}, {self.z}) as outside. OUTOF BOUNDS Skipping to next.')
-                self.current_point_index += 1  # Move to the next point
-                self.process_grid_point()  # Continue processing
-            else:
-                # Sending calculated angels to motorController, this initates the motors to move to these angles
-                self.send_calculated_joint_angles(theta1_left, theta1_right)
 
     def process_grid_point(self):
         # Is the mapping done?
@@ -387,7 +345,7 @@ class AutoMapper(Node):
     
     def is_within_max_min_angles(self, theta1_left, theta1_right):
         # Checks if the given angles are within the max and min limits
-        self.get_logger().info(f'angels in rad ({self.MIN_THETA1_LEFT, theta1_left, self.MAX_THETA1_LEFT}, {self.MIN_THETA1_RIGHT, theta1_right, self.MAX_THETA1_RIGHT}) .')
+        self.get_logger().info(f'theta1(MIN:({self.MIN_THETA1_LEFT} | calced angel:{theta1_left} | MAX: {self.MAX_THETA1_LEFT} || theta2(MIN:({self.MIN_THETA1_RIGHT} | calced angel:{theta1_right} | MAX: {self.MAX_THETA1_RIGHT}) .')
         return (self.MIN_THETA1_LEFT <= theta1_left <= self.MAX_THETA1_LEFT) and \
                (self.MIN_THETA1_RIGHT <= theta1_right <= self.MAX_THETA1_RIGHT)
 
@@ -405,15 +363,15 @@ class AutoMapper(Node):
         self.start_read_publisher.publish(String(data="start"))
 
         
-        # Check if we have processed all reference points
-        if self.current_ref_point_index >= len(self.ref_points):
-            self.get_logger().info("All reference points set. Starting automatic mapping...")
-            self.process_grid_point()
-            return
+        # # Check if we have processed all reference points
+        # if self.current_ref_point_index >= len(self.ref_points):
+        #     self.get_logger().info("All reference points set. Starting automatic mapping...")
+        #     self.process_grid_point()
+        #     return
         
-        # Inform the user which reference point to move to next
-        ref_point_name = list(self.ref_points_coordinates.keys())[self.current_ref_point_index]
-        self.get_logger().info(f"Move to the reference point: {ref_point_name} and press the button after positioning.")
+        # # Inform the user which reference point to move to next
+        # ref_point_name = list(self.ref_points_coordinates.keys())[self.current_ref_point_index]
+        # self.get_logger().info(f"Move to the reference point: {ref_point_name} and press the button after positioning.")
 
     def state_callback(self, msg):
         self.current_state = msg.data
