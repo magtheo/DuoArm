@@ -6,28 +6,28 @@ from std_msgs.msg import String
 import json
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+from rclpy.qos import QoSProfile, ReliabilityPolicy
+import threading
+
+
+
 
 class DisplayNode(Node):
     def __init__(self):
         super().__init__('display_node')
 
+
+        
+        self.fig, self.ax = plt.subplots(figsize=(10, 10))
+
+        # Create an animation that updates the plot
+        self.ani = FuncAnimation(self.fig, self.animate, interval=100)
+
         # Load the initial work area mapping from the JSON file
         self.mapping = self.read_mapping('robot_arm_mappings.json')
 
-        # used to display predefined path
-        self.subscription = self.create_subscription(
-            String,
-            'display_data',
-            self.display_callback,
-            10)
-        
-        self.subscription  # prevent unused variable warning
-        self.target_point_subscription = self.create_subscription(
-            String,
-            'target_point',
-            self.target_point_callback,
-            10)
-        self.fig, self.ax = plt.subplots(figsize=(10, 10))
+        # Define a QoS profile for real-time updates
+        real_time_qos = QoSProfile(depth=1, reliability=ReliabilityPolicy.RELIABLE)
 
         # Initialize the plot elements with None, they will be created in animate()
         self.inside_scatter = None
@@ -37,12 +37,26 @@ class DisplayNode(Node):
         # Initialize variable to store the arm position
         self.arm_position = None
 
+
+        # used to display predefined path
+        self.subscription = self.create_subscription(
+            String,
+            'display_data',
+            self.display_callback,
+            10)
+
+        self.target_point_subscription = self.create_subscription(
+            String,
+            'target_point',
+            self.target_point_callback,
+            10)
+
         # Add subscription to arm_position topic
         self.arm_position_subscription = self.create_subscription(
             String,
             'arm_position',
             self.arm_position_callback,
-            10
+            qos_profile=real_time_qos
         )
 
         self.grid_data_subscription = self.create_subscription(
@@ -80,6 +94,7 @@ class DisplayNode(Node):
         self.visualize(data["mapping"], data["spine_points"], data["points"])
 
     def arm_position_callback(self, msg):
+        self.get_logger().info(f"DISPLY recived arm position")
         self.arm_position = json.loads(msg.data) 
 
     def grid_data_callback(self, msg):
@@ -107,18 +122,6 @@ class DisplayNode(Node):
                     if point_type == 'ref_top' or point_type == 'ref_bottom' or point_type == 'ref_max_x' or point_type == 'ref_min_x':
                         self.ax.scatter(x, z, color='yellow', s=100, edgecolor='black', label='Reference Point', alpha=0.8, zorder=5)
         
-        # # Visualize robot arm position
-        # if self.arm_position:
-        #     # Example visualization, adjust according to actual arm position data
-        #     self.ax.plot([0, self.arm_position['x']], [0, self.arm_position['z']], 'k-', lw=2) 
-        
-        # Visualize robot arm position
-        # if self.arm_position:
-        #     x_base = self.arm_position["x_base"]
-        #     y_base = self.arm_position["y_base"]
-        #     for segment in self.arm_position["segments"]:
-        #         self.ax.plot([x_base, segment["x_end"]], [y_base, segment["y_end"]], 'k-', lw=2)
-        #         x_base, y_base = segment["x_end"], segment["y_end"]  # Update base for next segment
 
         # Visualize robot arm base and end effectors
         if self.arm_position:
@@ -143,9 +146,9 @@ class DisplayNode(Node):
                             color='green', label='Hands')
 
         # Clear previous scatters to avoid overplotting
-        scatters = [self.inside_scatter, self.outside_scatter, self.target_scatter]
-        for scatter in filter(None, scatters):  # Removes None from the list
-            scatter.remove()
+        # scatters = [self.inside_scatter, self.outside_scatter, self.target_scatter]
+        # for scatter in filter(None, scatters):  # Removes None from the list
+        #     scatter.remove()
 
         inside_coords = {'x': [], 'z': []}
         outside_coords = {'x': [], 'z': []}
@@ -183,17 +186,16 @@ def main(args=None):
     display_node = DisplayNode()
 
     # Create an animation that updates the plot
-    ani = FuncAnimation(display_node.fig, display_node.animate, interval=1000)
+    # ani = FuncAnimation(display_node.fig, display_node.animate, interval=1000)
 
     # Run the ROS node alongside the animation
     def ros_spin():
         rclpy.spin(display_node)
 
     # Use a separate thread to not block the matplotlib animation loop
-    import threading
-    spin_thread = threading.Thread(target=ros_spin)
-    spin_thread.start()
-
+    spin_thread = threading.Thread(target=lambda: rclpy.spin(display_node), daemon=True)
+    spin_thread.start()    
+    
     plt.show()  # This will block until the plot window is closed
 
     rclpy.shutdown()

@@ -66,7 +66,7 @@ def generate_launch_description():
     
 
     ld.add_action(auto_mapper)
-    #ld.add_action(path_planner)
+    ld.add_action(path_planner)
     ld.add_action(action_controller)
     ld.add_action(motor_controller)
     

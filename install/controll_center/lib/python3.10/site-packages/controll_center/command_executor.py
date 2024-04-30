@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# command_executor
+
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
@@ -19,15 +21,27 @@ class CommandExecutor(Node):
         # Publisher for starting mapping
         self.start_mapping_pub = self.create_publisher(String, 'command_start_mapping', 10)
 
+        # publisher for state changes
+        self.state_change_pub = self.create_publisher(String, 'state_change', 10)
+
         # start test
         self.start_test_pub = self.create_publisher(String, 'start_test', 10)
         
         # start read_angles
         self.start_read_pub = self.create_publisher(String, 'start_read', 10)
 
+        # start path
+        self.start_path_pub = self.create_publisher(String, 'start_path', 10)
+
         #set new nullpoint
         self.limp_and_reset_origin_pub = self.create_publisher(String, 'limp_and_reset_origin', 10)
 
+    def set_state(self, state):
+        """Publish a command to change the state of the action controller."""
+        msg = String()
+        msg.data = state
+        self.state_change_pub.publish(msg)
+        self.get_logger().info(f'Command sent to change state to: {state}')
 
     def command_callback(self, msg):
         command = msg.data
@@ -36,14 +50,11 @@ class CommandExecutor(Node):
         self.process_command(command)
 
     def process_command(self, command):
-        if command == 'start_path':
-            result = subprocess.run(["ros2", "launch", "path_planning", "path_planning_launch.py"],
-                capture_output=True, text=True, shell=True)
-            print("Launching path_planner:", result.stdout, result.stderr)
+        if command == 'path': # TODO set arm state to path
+            self.set_state("path")
         
         if command == 'start_map':
-            self.start_mapping_pub.publish(String(data="start"))
-            print("mapping command executed")
+            self.set_state("map")
 
         if command == 'test':
             self.start_test_pub.publish(String(data='start'))

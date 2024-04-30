@@ -4,13 +4,13 @@
 
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import String
+from std_msgs.msg import String, Float64MultiArray
 from sensor_msgs.msg import JointState  # Missing import added
 import json
 import numpy as np
 from scipy.interpolate import CubicSpline
 import matplotlib.pyplot as plt
-from .equation import equation, D, grid_size_x, grid_size_z # initial_guesses
+from .equation import equation_offset, D, W, grid_size_x, grid_size_z
 from scipy.optimize import fsolve
 from matplotlib.animation import FuncAnimation
 
@@ -21,6 +21,32 @@ class PathPlanner(Node):
         # Publisher for display data
         self.display_publisher = self.create_publisher(String, 'display_data', 10)
  
+        # publisher for joint angles
+        self.joint_angles_publisher = self.create_publisher(Float64MultiArray, 'joint_angles_array', 10)
+
+        # Topic for reading arm state from action controller
+        self.state_subscription = self.create_subscription(
+            String,
+            'action_controller_state',
+            self.state_callback,
+            10)
+
+
+    def start_path_processing(self):
+        mapping = self.load_mapping('robot_arm_mappings.json')
+        waypoints = self.generate_point_path()
+        interpolated_points, points = self.interpolate(waypoints)
+        joint_angles = self.map_path_to_angles(interpolated_points, mapping)
+        self.joint_angles_publisher(joint_angles)
+        self.publish_display_data(mapping, interpolated_points, points)
+
+    def state_callback(self, msg):
+        self.current_state = msg.data
+        self.get_logger().info(f'path_planner current state: {self.current_state}')
+        if self.current_state == 'path':
+            self.get_logger().info('Starting path process...')
+            self.start_path_processing()
+
 
     # Load the mapping from a JSON file
     def load_mapping(self, filename):
@@ -29,14 +55,20 @@ class PathPlanner(Node):
         return mapping
     
     # Defining waypoints through which the path should go
-    # These are defined manually, but can be extracted from the mapping
     def generate_point_path(self):
+        # Define waypoints as percentages of the grid dimensions
+        relative_waypoints = np.array([
+            [0.3, 0.1],
+            [0.3, 0.4],
+            [0.4, 0.6],
+            [0.6, 0.6],
+            [0.7, 0.5],
+            [0.7, 0.4]   
+        ])
+
+        # Assume grid_size_x and grid_size_z are available as class variables or from a config
         waypoints = np.array([
-            [1, 1],
-            [1, 2],
-            [3, 2],
-            [3, 2],
-            [3, 3]
+            [wp[0] * grid_size_x, wp[1] * grid_size_z] for wp in relative_waypoints
         ])
         return waypoints
 
@@ -62,12 +94,40 @@ class PathPlanner(Node):
     def solve_ik(self, x, z, initial_guesses):
 
         # Solve using fsolve
-        solution = fsolve(equation, initial_guesses, args=(x, z, D))
+        solution = fsolve(equation_offset, initial_guesses, args=(x, z, D, W, grid_size_x, grid_size_z))
         return solution
 
-    def map_path_to_angles(self, interpolated_points):
-        joint_angles = [self.solve_ik(x, z, initial_guesses) for x, z in zip(*interpolated_points)]
-        return np.array(joint_angles)
+
+    def map_path_to_angles(self, interpolated_points, mapping):
+        joint_angles = []
+        for x, z in zip(*interpolated_points):
+            grid_x = int(x / grid_size_x * 100)
+            grid_z = int(z / grid_size_z * 100)
+            key = f"{grid_x},{grid_z}"
+
+            if key in mapping and isinstance(mapping[key], list):
+                angles = [np.radians(angle) for angle in mapping[key][:2]]
+                initial_guesses = [angles[0], np.radians(90), angles[1], np.radians(270)]
+            else:
+                initial_guesses = [0, np.radians(90), 0, np.radians(270)]
+
+            solution = self.solve_ik(x, z, initial_guesses)
+            if not np.all(np.isfinite(solution)):
+                self.get_logger().error(f"Invalid IK solution for point ({x}, {z}): {solution}")
+                continue  # Skip this set of angles if the solution is not valid
+
+            joint_angles.append(solution)
+
+        joint_angles_array = np.array(joint_angles)
+        if joint_angles_array.size == 0:
+            self.get_logger().error("No valid joint angles generated.")
+            return
+
+        angles_msg = Float64MultiArray()
+        angles_msg.data = joint_angles_array.flatten()
+        self.joint_angles_publisher.publish(angles_msg)
+        self.get_logger().info('Published joint angles to motor controller')
+        return joint_angles_array
 
 
     def publish_display_data(self, mapping, spine_points, points):
@@ -95,15 +155,7 @@ def main(args=None):
     rclpy.init(args=args)
 
     path_planner =PathPlanner()
-    mapping = path_planner.load_mapping('robot_arm_mappings.json')
-    
-    waypoints = path_planner.generate_point_path()
-    interpolated_points, points = path_planner.interpolate(waypoints)
 
-    joint_angles = path_planner.map_path_to_angles(interpolated_points)
-    # TODO Send joint angles to motor controller
-
-    path_planner.publish_display_data(mapping, interpolated_points, points)
         
     rclpy.spin(path_planner)
     rclpy.shutdown()

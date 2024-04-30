@@ -1,3 +1,5 @@
 {
-    "cmake.sourceDirectory": "/home/theomagnor/DuoArm/src/arm"
+    "cmake.sourceDirectory": "/home/theomagnor/DuoArm/src/arm",
+    "python.analysis.typeCheckingMode": "off",
+    "python.analysis.autoImportCompletions": false
 }

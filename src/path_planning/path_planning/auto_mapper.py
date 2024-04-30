@@ -13,9 +13,11 @@ from .equation import equation_offset, D, W, grid_size_x, grid_size_z
 import threading
 import tkinter as tk
 from queue import Queue
+from rclpy.qos import QoSProfile, ReliabilityPolicy
 
-# from controll_center.srv import MoveServos
 
+# Define a QoS profile for real-time updates
+real_time_qos = QoSProfile(depth=1, reliability=ReliabilityPolicy.RELIABLE)
 
 # Define the lengths of the robot arm segments
 LL1, LL2 = 12, 27  # Left arm segment lengths in cm
@@ -40,6 +42,9 @@ class AutoMapper(Node):
 
         self.ref_points = ['top', 'bottom', 'max_x', 'min_x']
         self.current_ref_point_index = 0  # Start with the first reference point
+
+        self.angle_limits = ['min_theta_left', 'max_theta_right', 'max_theta_left', 'min_theta_right']
+        self.current_angle_limit_index = 0
 
         # Initialize the communication queue
         self.gui_queue = Queue()
@@ -94,13 +99,14 @@ class AutoMapper(Node):
         self.arm_position_pub = self.create_publisher(
             String,
             'arm_position',
-            10
+            qos_profile=real_time_qos
         )
 
         self.grid_data_publisher = self.create_publisher(
             String,
             'grid_data',
-            10)
+            qos_profile=real_time_qos
+        )
         
         # self.servo_client = self.create_client(MoveServos, 'move_servos')
         # while not self.servo_client.wait_for_service(timeout_sec=1.0):
@@ -111,26 +117,6 @@ class AutoMapper(Node):
         self.MAX_THETA1_LEFT = np.radians(270)
         self.MIN_THETA1_RIGHT = np.radians(-90)
         self.MAX_THETA1_RIGHT = np.radians(40)
-
-        # Manually determined reference angles for the top and bottom center points
-        self.ref_angles_top = [self.MIN_THETA1_LEFT, np.radians(45), self.MAX_THETA1_RIGHT, np.radians(-45)] 
-        self.ref_angles_bottom = [self.MAX_THETA1_LEFT, np.radians(175), self.MIN_THETA1_RIGHT, np.radians(-175)]
-
-        # angels for ref point in max x
-        self.theta1_left_max_x = np.radians(-185)
-        self.theta2_left_max_x = np.radians(110)
-        self.theta1_right_max_x = np.radians(-50)
-        self.theta2_right_max_x = np.radians(90)
-        
-        # angels for ref point in min x
-        self.theta1_left_min_x = np.radians(19)
-        self.theta2_left_min_x = np.radians(90)
-        self.theta1_right_min_x = np.radians(170)
-        self.theta2_right_min_x = np.radians(120)
-
-        # Define new reference angles for max/min X at center Z
-        self.ref_angles_max_x = [self.theta1_left_max_x, self.theta2_left_max_x, self.theta1_right_max_x, self.theta2_right_max_x]  # Replace with your actual angles
-        self.ref_angles_min_x = [self.theta1_left_min_x, self.theta2_left_min_x, self.theta1_right_min_x, self.theta2_right_min_x]  # Replace with your actual angles
 
 
         #new ref point method
@@ -147,22 +133,6 @@ class AutoMapper(Node):
         }
 
         self.ref_points_angles = {}
-
-    # def request_target_movement(self, target_angles):
-    #     req = MoveServos.Request()
-    #     req.target_angles = target_angles
-    #     future = self.cli.call_async(req)
-    #     rclpy.spin_until_future_complete(self, future)
-    #     if future.result() is not None:
-    #         actual_angles = future.result().actual_angles
-    #         success = future.result().success
-    #         message = future.result().message
-    #         # Process the response
-    #         self.map_point(actual_angles)
-    #         return actual_angles, success, message
-    #     else:
-    #         self.get_logger().error('Service call failed')
-    #         return None, False, 'Failed'
 
     def prepare_grid_points(self):
         self.grid_points = []
@@ -188,7 +158,7 @@ class AutoMapper(Node):
         self.get_logger().info('Published grid data.')
 
         # Print ref point to map
-        self.get_logger().info(f'first ref point to map: {list(self.ref_points_coordinates.keys())[0]}')
+        self.get_logger().info(f'MAP MAX/MIN ANGELS at top position, angles to read: {self.angle_limits[0], self.angle_limits[1]}')
 
 
 
@@ -258,16 +228,14 @@ class AutoMapper(Node):
             self.current_point_index += 1  # Move to the next point
             self.process_grid_point()  # Continue processing
         else:
-            # SERVICE METHOD
-            # self.request_target_movement((theta1_left, theta1_right))
             
-            # TOPIC METHOD Sending calculated angels to motorController, this initates the motors to move to these angles
+            # Sending calculated angels to motorController, this initates the motors to move to these angles
             self.send_calculated_joint_angles(theta1_left, theta1_right)
 
             arm_position = {"x": self.x, "z": self.z, "theta1_left": theta1_left, "theta1_right": theta1_right}  # sends arm position to display
             self.arm_position_pub.publish(String(data=json.dumps(arm_position)))
 
-    def manual_readings_callback(self, msg):
+    def manual_readings_callback_OLD(self, msg):
         manual_angles = msg.data
 
         # Determine the current reference point being set based on index
@@ -285,6 +253,53 @@ class AutoMapper(Node):
         else:
             self.get_logger().info(f"Move to the next reference point: {self.ref_points[self.current_ref_point_index]} and press a key.")
     
+    def manual_readings_callback(self, msg):
+            if self.current_angle_limit_index < len(self.angle_limits):
+                # Store angle limits
+                if self.current_angle_limit_index == 0: # set min left and max right
+                    # min left
+                    self.angle_limits[0] = msg.data[1]
+                    self.get_logger().info(f"set min for theta left: {msg.data[0]}")
+                    self.current_angle_limit_index += 1
+                    
+                    # max right
+                    self.angle_limits[1] = msg.data[0]
+                    self.get_logger().info(f"set max for theta right: {msg.data[1]}")
+                    self.current_angle_limit_index += 1
+
+                    self.get_logger().info(f"Move arm to max theta left and min right, bottom position: {self.angle_limits[2], self.angle_limits[3]}")
+
+                    return
+                
+                if self.current_angle_limit_index == 2:
+                    # max left
+                    self.angle_limits[2] = msg.data[1]
+                    self.get_logger().info(f"set max for theta left: {msg.data[0]}")
+                    self.current_angle_limit_index += 1
+                    
+                    # min right
+                    self.angle_limits[3] =  msg.data[0]
+                    self.get_logger().info(f"set min for theta right: {msg.data[1]}")
+                    self.get_logger().info(f"Move arm to top_ref_point")
+                    self.current_angle_limit_index += 2
+                    return
+            
+            elif self.current_ref_point_index < len(self.ref_points):
+                # Store reference point angles
+                ref_point_name = self.ref_points[self.current_ref_point_index]
+                self.ref_points_angles[ref_point_name] = msg.data
+                self.current_ref_point_index += 1
+                if self.current_ref_point_index < 4:
+                    self.get_logger().info(f"Move arm to {self.ref_points[self.current_ref_point_index]}")
+
+                return
+            
+
+            if self.current_ref_point_index >= len(self.ref_points) and self.current_angle_limit_index >= len(self.angle_limits):
+                self.get_logger().info("All settings completed. Starting automatic mapping...")
+                self.process_grid_point()
+                return
+
 
     def start_read_pub(self):
         """
@@ -303,8 +318,6 @@ class AutoMapper(Node):
         # Check if the current grid point matches any reference point's coordinates
         if any((x, z) == coords for coords in self.ref_points_coordinates.values()):
             # Use the manually set angles for this reference point as initial guesses
-            # But ensure theta2_left and theta2_right are set to 45 degrees
-            # Assumes self.ref_points_angles[ref_point_name] gives [theta1_left, theta1_right]
             ref_point_name = next(name for name, coords in self.ref_points_coordinates.items() if (x, z) == coords)
             initial_theta1_left, initial_theta1_right = self.ref_points_angles.get(ref_point_name, [0, 0])  # Provide a default value to avoid KeyError
             return [initial_theta1_left, default_theta2_L, initial_theta1_right, default_theta2_R]
@@ -360,18 +373,19 @@ class AutoMapper(Node):
 
     def ref_button_press(self, msg='init'):            
         self.get_logger().info('button pressed')
+
+        if self.current_angle_limit_index < len(self.angle_limits):
+            # Handling angle limits
+            angle_limit_name = self.angle_limits[self.current_angle_limit_index]
+            self.get_logger().info(f"button pressed max/min, reading angles for {angle_limit_name}.")
+        elif self.current_ref_point_index < len(self.ref_points):
+            # Handling reference points
+            ref_point_name = self.ref_points[self.current_ref_point_index]
+            self.get_logger().info(f"button pressed ref_point, reading angels for: {ref_point_name}")
+        
+
         self.start_read_publisher.publish(String(data="start"))
 
-        
-        # # Check if we have processed all reference points
-        # if self.current_ref_point_index >= len(self.ref_points):
-        #     self.get_logger().info("All reference points set. Starting automatic mapping...")
-        #     self.process_grid_point()
-        #     return
-        
-        # # Inform the user which reference point to move to next
-        # ref_point_name = list(self.ref_points_coordinates.keys())[self.current_ref_point_index]
-        # self.get_logger().info(f"Move to the reference point: {ref_point_name} and press the button after positioning.")
 
     def state_callback(self, msg):
         self.current_state = msg.data
@@ -379,7 +393,6 @@ class AutoMapper(Node):
         if self.current_state == 'map':
             self.get_logger().info('Starting mapping process...')
             self.prepare_grid_points()
-            # self.process_grid_point()
 
 
     def publish_start_ref_read(self):
