@@ -4,15 +4,15 @@
 import numpy as np
 
 # Define the lengths of the robot arm segments
-LL1, LL2 = 12, 27  # Left arm segment lengths in cm
-LR1, LR2 = 12, 27  # Right arm segment lengths in cm
+LL1, LL2 = 12, 29  # Left arm segment lengths in cm
+LR1, LR2 = 12, 29  # Right arm segment lengths in cm
 W = 6             # Distance between the base joints in cm
 D = 2             # Distance between the tool hub joints in cm
 
 #initial_guesses = np.radians([30, 90, -30, 90])
 
-grid_size_x = 30;
-grid_size_z = 40;
+grid_size_x = 60;
+grid_size_z = 60;
 
 
 def equationNotShifted( p, x_target, z_target, D):
@@ -73,6 +73,7 @@ def equation(p, x_target, z_target, D, W, grid_size_x, grid_size_z):
 
 def equation_offset(p, x_target, z_target, D, W, grid_size_x, grid_size_z, offset=1):
     theta1_left, theta2_left, theta1_right, theta2_right = p
+    adjusted_nullpoint_theta1_left = theta1_left + 180
     
     # Base position calculations
     x_center = grid_size_x / 2

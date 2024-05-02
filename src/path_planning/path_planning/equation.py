@@ -4,14 +4,14 @@
 import numpy as np
 
 # Define the lengths of the robot arm segments
-LL1, LL2 = 12, 27  # Left arm segment lengths in cm
-LR1, LR2 = 12, 27  # Right arm segment lengths in cm
+LL1, LL2 = 12, 29  # Left arm segment lengths in cm
+LR1, LR2 = 12, 29  # Right arm segment lengths in cm
 W = 6             # Distance between the base joints in cm
 D = 2             # Distance between the tool hub joints in cm
 
 #initial_guesses = np.radians([30, 90, -30, 90])
 
-grid_size_x = 30;
+grid_size_x = 40;
 grid_size_z = 40;
 
 
@@ -73,7 +73,8 @@ def equation(p, x_target, z_target, D, W, grid_size_x, grid_size_z):
 
 def equation_offset(p, x_target, z_target, D, W, grid_size_x, grid_size_z, offset=1):
     theta1_left, theta2_left, theta1_right, theta2_right = p
-    
+    adjusted_nullpoint_theta1_left = theta1_left + 180
+
     # Base position calculations
     x_center = grid_size_x / 2
     z_base = grid_size_z
@@ -81,10 +82,10 @@ def equation_offset(p, x_target, z_target, D, W, grid_size_x, grid_size_z, offse
     x_base_right = x_center + W / 2
 
     # Left arm calculations
-    x_elbow_left = x_base_left + LL1 * np.cos(theta1_left)
-    z_elbow_left = z_base + LL1 * np.sin(theta1_left)
-    x_hand_left = x_elbow_left + LL2 * np.cos(theta1_left + theta2_left)
-    z_hand_left = z_elbow_left + LL2 * np.sin(theta1_left + theta2_left)
+    x_elbow_left = x_base_left + LL1 * np.cos(adjusted_nullpoint_theta1_left)
+    z_elbow_left = z_base + LL1 * np.sin(adjusted_nullpoint_theta1_left)
+    x_hand_left = x_elbow_left + LL2 * np.cos(adjusted_nullpoint_theta1_left + theta2_left)
+    z_hand_left = z_elbow_left + LL2 * np.sin(adjusted_nullpoint_theta1_left + theta2_left)
 
     # Right arm calculations
     x_elbow_right = x_base_right + LR1 * np.cos(theta1_right)

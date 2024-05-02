@@ -32,8 +32,9 @@ lss1_act_angle = 0
 lss0_act_position = 0
 lss1_act_position = 0
 
+gear_ratio = 2
+
 received_joint_angles = np.zeros(2)
-active_joint_angles = np.zeros(2)
 transmission_msg = Float64MultiArray()
 
 class motorControl(Node):
@@ -46,7 +47,7 @@ class motorControl(Node):
             self.calc_joint_angles_callback,
             10
         )
-        self.active_joint_angles_publisher = self.create_publisher(
+        self.actual_joint_angles_publisher = self.create_publisher(
             Float64MultiArray, 
             'actual_joint_angles',
             10
@@ -92,6 +93,9 @@ class motorControl(Node):
             self.limp_and_set_origin,
             10)
         
+        self.read_angels_sub = self.create_subscription(
+            String, 'read_angles', self.read_angles_callback, 10)
+        
         self.joint_angles_subscription = self.create_subscription(
             Float64MultiArray,
             'joint_angles_array',
@@ -108,16 +112,16 @@ class motorControl(Node):
         # self.srv = self.create_service(MoveServos, 'set_target_angles', self.set_target_angles_callback)
 
         # Define angle limits
-        self.MIN_THETA1_LEFT = np.radians(-140)
-        self.MAX_THETA1_LEFT = np.radians(15)
-        self.MIN_THETA1_RIGHT = np.radians(-50)
-        self.MAX_THETA1_RIGHT = np.radians(140)
+        self.MIN_THETA1_LEFT = -140
+        self.MAX_THETA1_LEFT = 15
+        self.MIN_THETA1_RIGHT = -50
+        self.MAX_THETA1_RIGHT = 140
         
     def set_target_angles_callback(self, request, response):
         target_angles = request.target_angles
         # Code to move the motors to target_angles
         self.move_servos_mapping(target_angles)
-        actual_angles = self.read_angles()
+        actual_angles = self._callback()
         response.actual_angles = actual_angles
         response.success = True  # Change based on actual movement success
         response.message = 'Moved successfully'  # Change based on actual movement success
@@ -126,7 +130,7 @@ class motorControl(Node):
 
     def calc_joint_angles_callback(self, msg):
         received_joint_angles = msg.data
-        self.get_logger().info(f'Received calculated joint angles: {np.rad2deg(received_joint_angles)}')
+        self.get_logger().info(f'Received calculated joint angles: {received_joint_angles}')
         self.move_servos_mapping(received_joint_angles)
         # Optionally, introduce a delay or use a more sophisticated mechanism
         # to ensure servos have reached their positions before reading
@@ -145,16 +149,16 @@ class motorControl(Node):
             return None  # Return None or a default value
         try:
             numeric_position = float(position)  # Safely convert position to float
-            return numeric_position / 10
+            joint_angle = (numeric_position / 10) * gear_ratio
+            return joint_angle
         except ValueError as e:
             self.get_logger().error(f"Error converting position to float: {e}")
             return None  # Or handle the error in a way that suits your application
 
 
     def move_servos_mapping(self, received_joint_angles):
-        # self.get_logger().info(f'Received calculated joint angles: {np.rad2deg(received_angle_left_rad), np.rad2deg(received_angle_right_rad)}')
-        deg0 = np.rad2deg(received_joint_angles[1])
-        deg1 = np.rad2deg(received_joint_angles[0])
+        deg0 = received_joint_angles[1] / gear_ratio
+        deg1 = received_joint_angles[0] / gear_ratio
 
         # move servo if within limits
         lss0_position = self.calc_position(deg0)
@@ -166,7 +170,7 @@ class motorControl(Node):
         self.get_logger().info(f"lss0 tried moving to pos{lss0_position}")
         self.get_logger().info(f"lss1 tried moving to pos{lss1_position}")
 
-    def read_angles(self):
+    def read_angles_callback(self):
         # Fetch current positions from servos
         lss0_act_position = float(lss0.getPosition())
         lss1_act_position = float(lss1.getPosition())
@@ -175,10 +179,27 @@ class motorControl(Node):
         lss0_act_angle = self.calc_angle(lss0_act_position)
         lss1_act_angle = self.calc_angle(lss1_act_position)
         actual_joint_angles = [lss0_act_angle, lss1_act_angle]
-        return actual_joint_angles
+        
+        transmission_msg = Float64MultiArray()
+        transmission_msg.data = actual_joint_angles
+        self.actual_joint_angles_publisher.publish(transmission_msg)
+        self.get_logger().info(f"Published angle readings: LSS0:{lss0_act_angle}| LSS1:{lss1_act_angle}")
 
 
-    def manualy_read_and_pub_servo_angles(self):
+    def read_and_pub_servo_angles(self):
+        # Fetch current positions from servos, convert to angles, and publish
+        lss0_act_position = float(lss0.getPosition())
+        lss1_act_position = float(lss1.getPosition())
+        lss0_act_angle = self.calc_angle(lss0_act_position)
+        lss1_act_angle = self.calc_angle(lss1_act_position)
+        actual_joint_angles = [lss0_act_angle, lss1_act_angle]
+        
+        transmission_msg = Float64MultiArray()
+        transmission_msg.data = actual_joint_angles
+        self.actual_joint_angles_publisher.publish(transmission_msg)
+        self.get_logger().info(f"Published angle readings: LSS0:{lss0_act_angle}| LSS1:{lss1_act_angle}")
+
+    def ref_point_read_and_pub_servo_angles(self):
         # Fetch current positions from servos, convert to angles, and publish
         lss0_act_position = float(lss0.getPosition())
         lss1_act_position = float(lss1.getPosition())
@@ -189,7 +210,7 @@ class motorControl(Node):
         transmission_msg = Float64MultiArray()
         transmission_msg.data = actual_joint_angles
         self.manual_readings_pub.publish(transmission_msg)
-        self.get_logger().info(f"Published manual angle readings: LSS0:{lss0_act_angle}| LSS1:{lss1_act_angle}")
+        self.get_logger().info(f"Published angle readings: LSS0:{lss0_act_angle}| LSS1:{lss1_act_angle}")
 
 
     def test_motors(self):
@@ -251,8 +272,8 @@ class motorControl(Node):
             self.get_logger().error("Angle pair does not contain exactly two elements.")
             return
 
-        lss0_angle_deg = np.rad2deg(angles[0])
-        lss1_angle_deg = np.rad2deg(angles[1])
+        lss0_angle_deg = angles[0]
+        lss1_angle_deg = angles[1]
 
         lss0_position = self.calc_position(lss0_angle_deg)
         lss1_position = self.calc_position(lss1_angle_deg)
@@ -280,9 +301,12 @@ class motorControl(Node):
         lss0.setGyre(-1, LSS_SetConfig)
         lss1.setGyre(-1, LSS_SetConfig)
 
+        self.get_logger().info(f'Motors are now limp, move arm for desired position, null points will be set in 5 sec')
+        time.sleep(5)
+
         # Set new origin offset
         lss0.setOriginOffset(0, LSS_SetConfig)
-        lss1.setOriginOffset(1800, LSS_SetConfig)
+        lss1.setOriginOffset(0, LSS_SetConfig)
 
         self.get_logger().info(f'actual angles for lss0: {self.calc_angle(lss0.getPosition())}')
         self.get_logger().info(f'actual angles for lss1: {self.calc_angle(lss1.getPosition())}')
@@ -297,9 +321,9 @@ class motorControl(Node):
 
         self.get_logger().info(f'actual angles after new null point for lss0: {self.calc_angle(lss0.getPosition())}')
         self.get_logger().info(f'actual angles after new null point for lss1: {self.calc_angle(lss1.getPosition())}')
-        time.sleep(3)
-        self.get_logger().info(f'actual angles after new null point for lss0: {self.calc_angle(lss0.getPosition())}')
-        self.get_logger().info(f'actual angles after new null point for lss1: {self.calc_angle(lss1.getPosition())}')
+        if self.calc_angle(lss1.getPosition()) == -180.0:
+            lss1.setOriginOffset(-1800, LSS_SetConfig)
+
 
 
     def start_test_callback(self, msg):
@@ -307,12 +331,12 @@ class motorControl(Node):
             self.get_logger().info('Starting test of motor movement')
             self.test_motors()
 
-    def manualy_read_angles(self):
+    def manualy__callback(self):
         self.get_logger().info( 'test ')
         lss0.limp()
         lss1.limp()
 
-        for i in range(2):
+        for i in range(6):
             self.get_logger().info(f'current loop: {i}')
 
             time.sleep(2)
@@ -323,13 +347,13 @@ class motorControl(Node):
     def start_read_callback(self, msg):
         if msg.data == "start":
             self.get_logger().info('Starting to read motor angles')
-            self.manualy_read_angles()    
+            self.manualy__callback()    
 
     def read_ref_point_callback(self, msg):
         if msg.data == "start":
             lss0.limp()
             lss1.limp()
-            self.manualy_read_and_pub_servo_angles()
+            self.ref_point_read_and_pub_servo_angles()
 
 
 def main(args=None):

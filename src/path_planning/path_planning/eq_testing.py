@@ -4,11 +4,11 @@ from scipy.optimize import fsolve
 import matplotlib.pyplot as plt
 
 # Define the lengths of the robot arm segments
-LL1, LL2 = 12, 27  # Left arm segment lengths in cm
-LR1, LR2 = 12, 27  # Right arm segment lengths in cm
+LL1, LL2 = 12, 29  # Left arm segment lengths in cm
+LR1, LR2 = 12, 29  # Right arm segment lengths in cm
 W = 6              # Distance between the base joints in cm
 D = 2              # Distance between the tool hub joints in cm
-grid_size_x = 20
+grid_size_x = 40
 grid_size_z = 40
 
 min_thetaL_rad = np.radians(160)
@@ -134,30 +134,6 @@ def equation_offset(p, x_target, z_target, D, W, grid_size_x, grid_size_z, offse
 
     return (eq1, eq2, eq3, eq4)
 
-
-
-def equationOLD2( p, x_target, z_target, D):
-    theta1_left, theta2_left, theta1_right, theta2_right = p
-
-    # Calculate the position of the end effector for each arm
-    x_left = LL1 * np.cos(theta1_left) + LL2 * np.cos(theta1_left + theta2_left)
-    y_left = LL1 * np.sin(theta1_left) + LL2 * np.sin(theta1_left + theta2_left)
-
-    x_right = W + LR1 * np.cos(theta1_right) + LR2 * np.cos(theta1_right + theta2_right)
-    y_right = LR1 * np.sin(theta1_right) + LR2 * np.sin(theta1_right + theta2_right)
-
-    # Equations describing the target position
-    # Assuming the end-effector is at the midpoint between the left and right arms' ends
-    eq1 = (x_left + x_right) / 2 - x_target
-    eq2 = (y_left + y_right) / 2 - z_target
-
-    # Equations to ensure the z-coordinates for the ends of both arms are the same
-    eq3 = y_left - y_right
-
-    # Constraint equation for the distance D between the tool hub joints
-    eq4 = np.sqrt((x_right - x_left)**2 + (y_right - y_left)**2) - D
-
-    return (eq1, eq2, eq3, eq4)
 
 def solve_IK(x_target, z_target):
     
@@ -353,8 +329,8 @@ if __name__ == '__main__':
     unittest.main(exit=False)
 
     # Visualize the IK for the center target
-    target_point_x = 2
-    target_point_z = 4
+    target_point_x = 20
+    target_point_z = 18
 
     center_thetas = solve_IK(target_point_x, target_point_z)
     plot_robot_arm(*center_thetas, target_point_x, target_point_z)

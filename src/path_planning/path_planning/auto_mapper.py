@@ -113,10 +113,10 @@ class AutoMapper(Node):
         #     self.get_logger().info('Service move_servos not available, waiting again...')
 
         # Define angle limits
-        self.MIN_THETA1_LEFT = np.radians(160)
-        self.MAX_THETA1_LEFT = np.radians(270)
-        self.MIN_THETA1_RIGHT = np.radians(-90)
-        self.MAX_THETA1_RIGHT = np.radians(40)
+        self.MIN_THETA1_LEFT = 160
+        self.MAX_THETA1_LEFT = 270
+        self.MIN_THETA1_RIGHT = -90
+        self.MAX_THETA1_RIGHT = 40
 
 
         #new ref point method
@@ -183,11 +183,11 @@ class AutoMapper(Node):
 
         # Solve the IK for this grid point using the dynamically determined initial guesses
         theta1_left, theta2_left, theta1_right, theta2_right = self.solve_IK(self.x, self.z, initial_guesses, D, W, grid_size_x, grid_size_z)
-
+        
 
 
         if not None in [theta1_left, theta2_left, theta1_right, theta2_right]:
-            self.get_logger().info(f'calculated angles: {np.rad2deg(theta1_left)}  { np.rad2deg(theta1_right)}')
+            self.get_logger().info(f'calculated angles: {theta1_left}  { theta1_right}')
             # Calculate the base positions
             x_center = grid_size_x / 2
             z_base = grid_size_z
@@ -254,17 +254,19 @@ class AutoMapper(Node):
             self.get_logger().info(f"Move to the next reference point: {self.ref_points[self.current_ref_point_index]} and press a key.")
     
     def manual_readings_callback(self, msg):
+            actual_angle_LSS0 = msg.data[0]
+            actual_angle_LSS1 = msg.data[1]
             if self.current_angle_limit_index < len(self.angle_limits):
                 # Store angle limits
                 if self.current_angle_limit_index == 0: # set min left and max right
                     # min left
-                    self.angle_limits[0] = msg.data[1]
-                    self.get_logger().info(f"set min for theta left: {msg.data[0]}")
+                    self.angle_limits[0] = actual_angle_LSS1
+                    self.get_logger().info(f"set min for theta left: {actual_angle_LSS1}")
                     self.current_angle_limit_index += 1
                     
                     # max right
-                    self.angle_limits[1] = msg.data[0]
-                    self.get_logger().info(f"set max for theta right: {msg.data[1]}")
+                    self.angle_limits[1] = actual_angle_LSS0
+                    self.get_logger().info(f"set max for theta right: {actual_angle_LSS0}")
                     self.current_angle_limit_index += 1
 
                     self.get_logger().info(f"Move arm to max theta left and min right, bottom position: {self.angle_limits[2], self.angle_limits[3]}")
@@ -273,13 +275,13 @@ class AutoMapper(Node):
                 
                 if self.current_angle_limit_index == 2:
                     # max left
-                    self.angle_limits[2] = msg.data[1]
-                    self.get_logger().info(f"set max for theta left: {msg.data[0]}")
+                    self.angle_limits[2] = actual_angle_LSS1
+                    self.get_logger().info(f"set max for theta left: {actual_angle_LSS1}")
                     self.current_angle_limit_index += 1
                     
                     # min right
-                    self.angle_limits[3] =  msg.data[0]
-                    self.get_logger().info(f"set min for theta right: {msg.data[1]}")
+                    self.angle_limits[3] =  actual_angle_LSS0
+                    self.get_logger().info(f"set min for theta right: {actual_angle_LSS0}")
                     self.get_logger().info(f"Move arm to top_ref_point")
                     self.current_angle_limit_index += 2
                     return
@@ -291,7 +293,8 @@ class AutoMapper(Node):
                 self.current_ref_point_index += 1
                 if self.current_ref_point_index < 4:
                     self.get_logger().info(f"Move arm to {self.ref_points[self.current_ref_point_index]}")
-
+                elif self.current_ref_point_index == 4:
+                    self.get_logger().info(f"All ref points set, press button again to start mapping")
                 return
             
 
@@ -312,8 +315,8 @@ class AutoMapper(Node):
 
     def dynamic_initial_guesses(self, x, z):
         # Define default initial guesses for theta2_left and theta2_right
-        default_theta2_L = np.deg2rad(90)
-        default_theta2_R = np.deg2rad(270)
+        default_theta2_L = 90
+        default_theta2_R = 270
 
         # Check if the current grid point matches any reference point's coordinates
         if any((x, z) == coords for coords in self.ref_points_coordinates.values()):
@@ -332,11 +335,11 @@ class AutoMapper(Node):
 
 
     def map_point(self, actual_joint_angles):
-        actual_theta_left, actual_theta_right = actual_joint_angles
+        actual_theta_rightLSS0, actual_theta_leftLSS1 = actual_joint_angles
         # Store the mapping
 
-        self.mapping[f"{self.x},{self.z}"] = (actual_theta_left, actual_theta_right, 'inside')       
-        self.get_logger().info(f'mapped x:{self.x} z:{self.z} as inside workspace with angles:{np.rad2deg(self.actual_joint_angles)}')
+        self.mapping[f"{self.x},{self.z}"] = (actual_theta_leftLSS1, actual_theta_rightLSS0, 'inside')       
+        self.get_logger().info(f'mapped x:{self.x} z:{self.z} as inside workspace with angles:{self.actual_joint_angles}')
 
 
         self.get_logger().info(f'mapped point {self.current_point_index}/{len(self.grid_points)}')
@@ -366,7 +369,7 @@ class AutoMapper(Node):
     def joint_angles_callback(self, msg):
         if self.mapping_done == False:
             self.actual_joint_angles = msg.data
-            self.get_logger().info(f'Received actual joint angles: {np.rad2deg(self.actual_joint_angles)}')
+            self.get_logger().info(f'Received actual joint angles: {(self.actual_joint_angles)}')
             self.map_point(self.actual_joint_angles)
         else:
             self.get_logger().info(f'---Mapping done---')
@@ -445,6 +448,8 @@ class AutoMapper(Node):
         # fsolve returns a tuple where the first element is the solution
         # and the fourth element is an integer flag indicating if a solution was found
         solution_values, infodict, ier, mesg = solution
+
+        np.rad2deg(solution_values)
 
         # Check the solution
         if ier != 1:

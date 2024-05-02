@@ -15,13 +15,11 @@ import threading
 class DisplayNode(Node):
     def __init__(self):
         super().__init__('display_node')
-
-
         
         self.fig, self.ax = plt.subplots(figsize=(10, 10))
-
+        self.lock = threading.Lock() # lock for thread-safe updates
         # Create an animation that updates the plot
-        self.ani = FuncAnimation(self.fig, self.animate, interval=100)
+        self.ani = FuncAnimation(self.fig, self.animate, interval=50)
 
         # Load the initial work area mapping from the JSON file
         self.mapping = self.read_mapping('robot_arm_mappings.json')
@@ -91,26 +89,48 @@ class DisplayNode(Node):
 
     def display_callback(self, msg):
         data = json.loads(msg.data)
-        self.visualize(data["mapping"], data["spine_points"], data["points"])
+        with self.lock:
+            self.process_new_data(data)
+        self.request_redraw()
 
-    def arm_position_callback(self, msg):
-        self.get_logger().info(f"DISPLY recived arm position")
-        self.arm_position = json.loads(msg.data) 
+        # self.visualize(data["mapping"], data["spine_points"], data["points"])
+        # self.update_plot()
 
-    def grid_data_callback(self, msg):
-        grid_data = json.loads(msg.data)
-        # Store the grid data for use in the animate() or another visualization method
-        self.grid_data = grid_data
-        # You might want to trigger a redraw of the visualization here
+    def process_new_data(self, data):
+        """
+        Process and update the internal state with new data received via ROS subscriptions.
+        
+        :param data: The data received from the display_data subscription, should be a dictionary.
+        """
+        # Assume data contains 'mapping', 'spine_points', and 'points' keys
+        # Update internal mapping if it's part of the data
+        if 'mapping' in data:
+            self.mapping = data['mapping']  # Directly replace or update the mapping
+        
+        # Update the visualization points for spine and other plotted elements
+        if 'spine_points' in data:
+            self.spine_points = data['spine_points']  # Store spine points for drawing
+        
+        if 'points' in data:
+            self.points = data['points']  # Store other points for drawing
+
+        # You might also have arm positions or other data elements to process
+        if 'arm_position' in data:
+            self.arm_position = data['arm_position']  # Update arm position for visualization
+
+        # If there are more complex processing needs, handle them here
+        # For example, you could compute additional statistics, filters, or transformations
+
+        # Log updates (optional, for debugging)
+        self.get_logger().info("Processed new data for display.")
 
 
-    def state_callback(self, msg):
-        self.arm_state = msg.data
-        self.get_logger().info(f'Received new state: {self.arm_state}')
+    def request_redraw(self):
+        """Request an immediate redraw of the plot."""
+        self.fig.canvas.draw_idle()
+        self.fig.canvas.flush_events()  
 
-
-    def animate(self, i):
-
+    def update_plot(self):
         # Clear the plot to draw a new frame
         self.ax.clear() 
 
@@ -181,6 +201,28 @@ class DisplayNode(Node):
         self.ax.set_title('Workspace Mapped with Coordinates')
         self.ax.grid(True)
 
+    def arm_position_callback(self, msg):
+        self.get_logger().info(f"DISPLY recived arm position")
+        data = json.loads(msg.data)
+        with self.lock:
+            self.process_new_data(data)
+        self.request_redraw() 
+
+    def grid_data_callback(self, msg):
+        grid_data = json.loads(msg.data)
+        # Store the grid data for use in the animate() or another visualization method
+        self.grid_data = grid_data
+        # You might want to trigger a redraw of the visualization here
+
+
+    def state_callback(self, msg):
+        self.arm_state = msg.data
+        self.get_logger().info(f'Received new state: {self.arm_state}')
+
+    def animate(self, i):
+        with self.lock: # lock when updating plot
+            self.update_plot()
+
 def main(args=None):
     rclpy.init(args=args)
     display_node = DisplayNode()
@@ -194,7 +236,7 @@ def main(args=None):
 
     # Use a separate thread to not block the matplotlib animation loop
     spin_thread = threading.Thread(target=lambda: rclpy.spin(display_node), daemon=True)
-    spin_thread.start()    
+    spin_thread.start()
     
     plt.show()  # This will block until the plot window is closed
 
