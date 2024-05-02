@@ -23,6 +23,7 @@ setup(
     entry_points={
         'console_scripts': [
             'motor_control = motor_controller.motor_control:main',
+            'joystick_controller = motor_controller.joystick_controller:main'
         ],
     },
 )
