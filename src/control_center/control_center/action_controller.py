@@ -40,17 +40,22 @@ class ActionController(Node):
             if (self.state == 'standby'):
                 self.state = 'joystick_arm_control'
                 self.publish_state()
+                return
 
             elif (self.state == 'joystick_arm_control'):
                 self.state = 'joystick_rail_control'
                 self.publish_state()
+                return
             else:
                 self.get_logger(f'The joystick button press was ignored -> The system is in a state that cannot be changed: {self.state}')
+                return
 
         elif (msg.data == 'joystick_arm_control'):
 
             if (self.state == 'joystick_rail_control'):
                 self.state = 'joystick_arm_control'
+                self.publish_state()
+                return
             else:
                 pass
 
@@ -59,25 +64,32 @@ class ActionController(Node):
             if (self.state == 'standby'):
                 self.state = msg.data
                 self.publish_state()
+                return
             else:
                 self.get_logger(f'The run a predefined path button press was ignored -> The system is in a state that cannot be changed: {self.state}')
+                return
 
         elif (msg.data == 'map'):
              
              if (self.state == 'standby'):
                  self.state = msg.data
                  self.publish_state()
+                 return
              else:
                  self.get_logger(f'The map button press was ignored -> The system is in a state that cannot be changed: {self.state}')
+                 return
         
         elif (msg.data == 'standby'):
 
             if (self.state == 'standby'):
                 self.get_logger(f'The reset/"stop the active process" button press was ignored -> The system is already in the {self.state} state')
+                self.publish_state()
+                return
 
             else:
                 self.state = msg.data
                 self.publish_state()
+                return
 
         
         

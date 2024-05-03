@@ -6,11 +6,12 @@ import rclpy
 import threading
 from rclpy.node import Node
 from std_msgs.msg import String
+import json
 
 
-class JoystickController(Node):
+class HardwareInterfaceController(Node):
     def __init__(self):
-        super().__init__('jc_obj')
+        super().__init__('hardware_interface_controller')
 
         self.temp_system_state = 'standby'
 
@@ -34,8 +35,8 @@ class JoystickController(Node):
         """Attribute related to "mapping" button pressing:"""
         self.map_button_pressed = 0
 
-        """Attributes related to communication between the Arduino MEGA, Raspberry PI, LSS adapter board and LSS motors:"""
-        self.CST_LSS_Port = "/dev/ttyUSB0"		
+        """Attributes and method related to communication between the Arduino MEGA, Raspberry PI, LSS adapter board and LSS motors:"""
+        self.CST_LSS_Port = "/dev/ttyUSB1"		
         self.CST_LSS_Baud = LSS_DefaultBaud
         initBus(self.CST_LSS_Port, self.CST_LSS_Baud)
         self.ser_obj = serial.Serial('/dev/ttyACM0', 115200)
@@ -43,38 +44,48 @@ class JoystickController(Node):
         """Attributes related to the received analog values:"""
         self.x_analog_value = 0
         self.z_analog_value = 0
-        self.mid_threshold = 30
         self.diagonal_threshold = 255
+        self.zero_value_deadzone = 100
 
-        """Attributes related to the LSS motors:"""
-        self.top_limit_lss1 = -60
-        self.bottom_limit_lss1 = 1680
-        self.top_limit_lss0 = 640
-        self.bottom_limit_lss0 = -1740
+        """Attributes and method related to the LSS motors and the rail system:"""
+        self.top_limit_lss1 = 0
+        self.bottom_limit_lss1 = 0
+        self.top_limit_lss0 = 0
+        self.bottom_limit_lss0 = 0
+        self.position_multiplier = 10
         self.lss0 = LSS(0)
         self.lss1 = LSS(1)
         self.lss2 = LSS(2)
-        
-        """Attributes related to the rail system:"""
-        self.position_threshold = 5
-        self.position_A_range = range(3586 - self.position_threshold, 3586 + self.position_threshold) 
-        self.position_B_range = range(0 - self.position_threshold, 0 + self.position_threshold)
+        self.rail_position = None
+        self.boundary_and_last_rail_position_data = None
+        self.set_boundaries_and_last_rail_position_data()
 
+        """Attributes related to multiple button pressing cases:"""
+        self.num_simultaneous_button_press_conditions = 10
+        self.simultaneous_button_press_conditions = [0]*self.num_simultaneous_button_press_conditions
 
-        """Attributes related to button pressing cases:"""
-        self.simultaneous_button_press_conditions = [
-            (self.reset_button_pressed and self.run_predefined_path_button_pressed),
-            (self.joystick_button_pressed and self.run_predefined_path_button_pressed),
-            (self.joystick_button_pressed and self.reset_button_pressed),
-            (self.joystick_button_pressed and self.reset_button_pressed and self.run_predefined_path_button_pressed),
-            (self.reset_button_pressed and self.map_button_pressed),
-            (self.reset_button_pressed and self.run_predefined_path_button_pressed and self.map_button_pressed),
-            (self.joystick_button_pressed and self.map_button_pressed),
-            (self.joystick_button_pressed and self.run_predefined_path_button_pressed and self.map_button_pressed),
-            (self.joystick_button_pressed and self.reset_button_pressed and self.map_button_pressed),
-            (self.joystick_button_pressed and self.reset_button_pressed and self.run_predefined_path_button_pressed and self.map_button_pressed)
-        ]
+    
+    def set_boundaries_and_last_rail_position_data(self):
+        try:
+            with open('boundary_path_and_rail_position.json', 'r') as file:
+                self.boundary_and_rail_position_data = json.load(file)
+                self.top_limit_lss0 = self.boundary_and_rail_position_data['boundaries'][0]['top_lss0']*self.position_multiplier
+                self.bottom_limit_lss0 = self.boundary_and_rail_position_data['boundaries'][1]['bottom_lss0']*self.position_multiplier
+                self.top_limit_lss1 = self.boundary_and_rail_position_data['boundaries'][0]['top_lss1']*self.position_multiplier
+                self.bottom_limit_lss1 = self.boundary_and_rail_position_data['boundaries'][1]['bottom_lss1']*self.position_multiplier
+                self.rail_position = self.boundary_and_rail_position_data['last_rail_position'][0]['last_rail_pos']
+                self.get_logger().info('Successfully set the boundaries for the LSS motors, and the last rail position in the rail_position variable')
 
+        except FileNotFoundError:
+                self.get_logger().error("File 'boundary_and_path.json' not found.")
+                return
+    
+    def save_last_rail_position(self):
+        self.boundary_and_rail_position_data['last_rail_position'][0]['last_rail_pos'] = self.rail_position
+        with open('boundary_path_and_rail_position.json', 'w') as file:
+            json.dump(self.boundary_and_rail_position_data, file, indent=4)
+        self.get_logger().info('Successfully stored the last rail position to the appropriate field in the JSON file')
+           
     def lss1_beyond_bottom_limit(self):
         return int(self.lss1.getPosition()) < self.bottom_limit_lss1
 
@@ -95,6 +106,21 @@ class JoystickController(Node):
 
     def stop_wheel(self, lss):
         lss.wheelRPM(0)
+    
+    def update_simultaneous_button_press_conditions(self):
+
+        self.simultaneous_button_press_conditions = [
+            (self.reset_button_pressed and self.run_predefined_path_button_pressed),
+            (self.joystick_button_pressed and self.run_predefined_path_button_pressed),
+            (self.joystick_button_pressed and self.reset_button_pressed),
+            (self.joystick_button_pressed and self.reset_button_pressed and self.run_predefined_path_button_pressed),
+            (self.reset_button_pressed and self.map_button_pressed),
+            (self.reset_button_pressed and self.run_predefined_path_button_pressed and self.map_button_pressed),
+            (self.joystick_button_pressed and self.map_button_pressed),
+            (self.joystick_button_pressed and self.run_predefined_path_button_pressed and self.map_button_pressed),
+            (self.joystick_button_pressed and self.reset_button_pressed and self.map_button_pressed),
+            (self.joystick_button_pressed and self.reset_button_pressed and self.run_predefined_path_button_pressed and self.map_button_pressed)
+        ]
 
     
     def read_values_from_serial(self):
@@ -108,8 +134,8 @@ class JoystickController(Node):
             self.reset_button_pressed = int(values[3])
             self.run_predefined_path_button_pressed = int(values[4])
             self.map_button_pressed = int(values[5])
+            self.update_simultaneous_button_press_conditions()
         else:
-            self.get_logger().info(f'Invalid number of values received: {values}')
             self.x_analog_value = self.z_analog_value = self.joystick_button_pressed = self.reset_button_pressed = \
             self.run_predefined_path_button_pressed = self.map_button_pressed = None
     
@@ -154,7 +180,7 @@ class JoystickController(Node):
         else:
             self.get_logger().info('Maximum positions in both or either of the servos has been reached: Eastward motion not allowed')
             self.get_logger().info(f'LSS1 reached maximum bottom position: {self.lss1_beyond_bottom_limit()}')
-            self.get_logger().info(f'LSS0 reached maximum bottom position: {self.lss0_beyond_top_limit()}')
+            self.get_logger().info(f'LSS0 reached maximum top position: {self.lss0_beyond_top_limit()}')
     
     def move_arm_west(self):
 
@@ -162,12 +188,12 @@ class JoystickController(Node):
 
             self.get_logger().info('Moving to the left (WEST)')
             self.get_logger().info(f'(x_analog_value, z_analog_value) -> ({self.x_analog_value, self.z_analog_value})')
-            self.up_step(self.lss1)
-            self.up_step(self.lss0)
+            self.down_step(self.lss1)
+            self.down_step(self.lss0)
 
         else:
             self.get_logger().info('Maximum positions in both or either of the servos has been reached: Westward motion not allowed')
-            self.get_logger().info(f'LSS1 reached maximum bottom position: {self.lss1_beyond_top_limit()}')
+            self.get_logger().info(f'LSS1 reached maximum top position: {self.lss1_beyond_top_limit()}')
             self.get_logger().info(f'LSS0 reached maximum bottom position: {self.lss0_beyond_bottom_limit()}')
 
     
@@ -199,7 +225,7 @@ class JoystickController(Node):
 
             self.get_logger().info('Moving in the left-up direction (Northwest)')
             self.get_logger().info(f'(x_analog_value, z_analog_value) -> ({self.x_analog_value, self.z_analog_value})')
-            self.up_step(self.lss1)
+            self.down_step(self.lss1)
 
         else:
             self.get_logger().info(f'LSS1 reached top position: {self.lss0_beyond_top_limit()} (Northwest motion not allowed)')
@@ -227,7 +253,7 @@ class JoystickController(Node):
         if (self.x_analog_value is not None and self.z_analog_value is not None):
                 
                 # Joystick at North (UP) placement
-                if ((self.x_analog_value == 0) and \
+                if ((0 <= self.x_analog_value <= self.zero_value_deadzone) and \
                     (512 - self.diagonal_threshold < self.z_analog_value < 512 + self.diagonal_threshold)):
 
                     self.move_arm_north()
@@ -240,12 +266,12 @@ class JoystickController(Node):
                     
                 # Joystick at East (RIGHT) placement 
                 elif ((512 - self.diagonal_threshold < self.x_analog_value < 512 + self.diagonal_threshold) and \
-                    (self.z_analog_value == 0)):
+                    (0 <= self.z_analog_value <= self.zero_value_deadzone)):
 
                     self.move_arm_east()
 
                 # Joystick at West (LEFT) placement
-                elif ((512 - self.diagonal_threshold < self.x_analog_value < self.diagonal_threshold) and \
+                elif ((512 - self.diagonal_threshold < self.x_analog_value < 512 + self.diagonal_threshold) and \
                     (self.z_analog_value == 1023)):
                     
                     self.move_arm_west()
@@ -272,7 +298,7 @@ class JoystickController(Node):
                 elif (( 512 + self.diagonal_threshold <= self.x_analog_value <= 1023) and \
                     (512 + self.diagonal_threshold <= self.x_analog_value <= 1023)):
 
-                    self.move_arm_northwest()
+                    self.move_arm_southwest()
 
                 # Joystick at middle placement
                 else:
@@ -325,84 +351,89 @@ class JoystickController(Node):
 
     def activate_rail_system(self):
 
-        match self.lss2.getPosition():
+        match self.rail_position:
 
-            case self.position_A_range:
+            case "A":
                 self.get_logger().info('Moving DuoArm to position B on the y - axis')
-                self.lss2.wheelRPM(-10)
-                time.sleep(6)
-                   
-            case self.position_B_range:
-                self.get_logger().info('Moving DuoArm to position A on the y - axis')
                 self.lss2.wheelRPM(10)
                 time.sleep(6)
-
-        self.get_logger().info("Target position reached -> Exiting the joystick_rail_control state")
-        self.send_system_state_request('joystick_arm_control')
-
-            
+                self.lss2.wheelRPM(0)
+                self.rail_position = "B"
+                self.save_last_rail_position()
+                self.get_logger().info("Target position reached -> Exiting the joystick_rail_control state")
+                self.send_system_state_request('joystick_arm_control')
+                self.wait_for_state_change('joystick_arm_control')
+                return  
+            case "B":
+                self.get_logger().info('Moving DuoArm to position A on the y - axis')
+                self.lss2.wheelRPM(-10)
+                time.sleep(6)
+                self.lss2.wheelRPM(0)
+                self.rail_position = "A"
+                self.save_last_rail_position()
+                self.get_logger().info("Target position reached -> Exiting the joystick_rail_control state")
+                self.send_system_state_request('joystick_arm_control')
+                self.wait_for_state_change('joystick_arm_control')
+                return  
     
+    def wait_for_state_change(self, expected_state):
+        while True:
+            if (self.temp_system_state == expected_state):
+                break
+
+  
 def main():
     rclpy.init()
 
-    jc_obj = JoystickController()
+    hic_obj = HardwareInterfaceController()
+
     try:
 
-        jc_obj_thread = threading.Thread(target=rclpy.spin, args=(jc_obj,))
-        jc_obj_thread.start()
+        hic_obj_thread = threading.Thread(target=rclpy.spin, args=(hic_obj,))
+        hic_obj_thread.start()
  
         while True:
 
-            jc_obj.read_values_from_serial()
+            hic_obj.read_values_from_serial()
 
-            jc_obj.get_logger().info(f'x val: {jc_obj.x_analog_value}\n\
-                                     z val: {jc_obj.z_analog_value}\n\
-                                        joy button pressed: {jc_obj.joystick_button_pressed}\n\
-                                        reset button pressed: {jc_obj.reset_button_pressed}\n\
-                                        rpp button pressed: {jc_obj.run_predefined_path_button_pressed}\n\
-                                        map button pressed: {jc_obj.map_button_pressed}')
+            if(hic_obj.joystick_button_pressed):
 
-            # if (jc_obj.joystick_button_pressed):
-
-            #     jc_obj.get_logger().info(f'Joystick button pressed: {jc_obj.joystick_button_pressed}')
-            #     jc_obj.send_system_state_request('joystick_control')
+                hic_obj.get_logger().info(f'Joystick button pressed: {hic_obj.joystick_button_pressed}')
+                hic_obj.send_system_state_request('joystick_control')
             
-            # if (jc_obj.temp_system_state == 'joystick_arm_control'):
-
-            #     jc_obj.get_logger().info('Currently controlling the arm with a joystick')
-            #     #jc_obj.control_arm_with_joystick()
+            if (hic_obj.temp_system_state == 'joystick_arm_control'):
+                hic_obj.control_arm_with_joystick()
             
-            # if (jc_obj.temp_system_state == 'joystick_rail_control'):
+            if(hic_obj.temp_system_state == 'joystick_rail_control'):
 
-            #     jc_obj.get_logger().info('Activated the rail system')
-            #     jc_obj.activate_rail_system()
+                hic_obj.get_logger().info('Activated the rail system')
+                hic_obj.activate_rail_system()
             
-            # if (jc_obj.reset_button_pressed):
-            #     jc_obj.send_system_state_request('standby')
+            # if(hic_obj.reset_button_pressed):
+            #    hic_obj.send_system_state_request('standby')
 
-            # if (jc_obj.run_predefined_path_button_pressed):
-            #     jc_obj.send_system_state_request('run_predefined_path')
+            # if(hic_obj.run_predefined_path_button_pressed):
+            #   hic_obj.send_system_state_request('run_predefined_path')
             
-            # if (jc_obj.map_button_pressed):
+            # if(hic_obj.map_button_pressed):
 
-            #     if (jc_obj.temp_system_state == 'map'):
-            #         jc_obj.send_map_button_presses(String(jc_obj.map_button_pressed))
+            #    if(hic_obj.temp_system_state == 'map'):
+            #        hic_obj.send_map_button_presses(String(hic_obj.map_button_pressed))
+            #    else:
+            #        hic_obj.send_system_state_request('map')
 
-            #     else:
-            #         jc_obj.send_system_state_request('map')
-
-            # if (any(jc_obj.simultaneous_button_press_conditions)):
-            #     jc_obj.get_logger().info('Multiple buttons were pressed simultaneously -> Button presses was ignored')
+            if (any(hic_obj.simultaneous_button_press_conditions)):
+                    hic_obj.get_logger().info('Multiple buttons were pressed simultaneously -> Button presses was ignored')
 
     except KeyboardInterrupt:
 
         GPIO.cleanup()
-        jc_obj.cleanup_serial()
+        hic_obj.cleanup_serial()
     
     finally:
 
-        jc_obj_thread.join()
-        jc_obj.destroy_node()
+        hic_obj_thread.join()
+        hic_obj.destroy_node()
         rclpy.shutdown()
 
 if __name__ == '__main__':

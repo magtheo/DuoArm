@@ -44,17 +44,11 @@ def generate_launch_description():
     )
 
     # Joystick 
-    joystick_controller = Node(
+    hardware_interface_controller= Node(
         package='motor_controller',
-        executable='joystick_controller',
-        name='joystick_controller'
-    )
-
-    joy_node = Node(
-        package='joy',
-        executable='joy_node',
-        name='joy_node'
-    )    
+        executable='hardware_interface_controller',
+        name='hardware_interface_controller'
+    ) 
 
     # motor controller
     motor_controller = Node(
@@ -75,7 +69,7 @@ def generate_launch_description():
     # ld.add_action(command_executor_node)
     # ld.add_action(display_node)
 
-    ld.add_action(joystick_controller)
+    ld.add_action(hardware_interface_controller)
     # ld.add_action(joy_node)
 
 
