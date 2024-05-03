@@ -58,6 +58,7 @@ class HardwareInterfaceController(Node):
         self.lss2 = LSS(2)
         self.rail_position = None
         self.boundary_and_last_rail_position_data = None
+        self.rail_system_active = False
         self.set_boundaries_and_last_rail_position_data()
 
         """Attributes related to multiple button pressing cases:"""
@@ -107,6 +108,10 @@ class HardwareInterfaceController(Node):
     def stop_wheel(self, lss):
         lss.wheelRPM(0)
     
+    def clear_button_press_flags(self):
+        self.joystick_button_pressed = self.reset_button_pressed = \
+        self.run_predefined_path_button_pressed = self.map_button_pressed = 0 
+
     def update_simultaneous_button_press_conditions(self):
 
         self.simultaneous_button_press_conditions = [
@@ -121,6 +126,8 @@ class HardwareInterfaceController(Node):
             (self.joystick_button_pressed and self.reset_button_pressed and self.map_button_pressed),
             (self.joystick_button_pressed and self.reset_button_pressed and self.run_predefined_path_button_pressed and self.map_button_pressed)
         ]
+
+
 
     
     def read_values_from_serial(self):
@@ -250,6 +257,11 @@ class HardwareInterfaceController(Node):
                   
     def control_arm_with_joystick(self):
 
+        if (self.reset_button_pressed):
+            self.lss1.wheelRPM(0)
+            self.lss0.wheelRPM(0)
+            return
+
         if (self.x_analog_value is not None and self.z_analog_value is not None):
                 
                 # Joystick at North (UP) placement
@@ -309,29 +321,6 @@ class HardwareInterfaceController(Node):
         self.temp_system_state = msg.data
         self.get_logger().info(f'Set the temp system state variable to: {self.temp_system_state}')
 
-    # def send_general_joystick_control_state_request(self):
-    #     msg = String()
-    #     msg.data = 'set joystick control state'
-    #     self.get_logger().info('Publishing a request to set the system state to one of the two joystick states')
-    #     self.set_joystick_control_state_publisher.publish(msg)
-    
-    # def send_reset_or_rpp_system_state_request(self, request):
-    #     msg = String()
-    #     msg.data = request
-    #     self.get_logger().info(f'Publishing a request: ({request}) to the action_controller node')
-    #     self.reset_system_state_to_standby_publisher.publish(msg)
-    
-    # def send_joystick_arm_control_state_request(self):
-    #     msg = String()
-    #     msg.data = 'set joystick_arm_control state'
-    #     self.get_logger().info('Publishing a request to set the system state to the joystick_arm_control state')
-    #     self.set_joystick_arm_control_state_publisher.publish(msg)
-    
-    # def send_map_state_request(self):
-    #     msg = String()
-    #     msg.data = 'set system state to map'
-    #     self.get_logger().info('Publishing a request to set the system state to the map state')
-    #     self.set_system_state_map_publisher.publish(msg)
     def cleanup_serial(self):
         if self.ser_obj.is_open:
             self.ser_obj.close()
@@ -389,16 +378,18 @@ def main():
 
     try:
 
-        hic_obj_thread = threading.Thread(target=rclpy.spin, args=(hic_obj,))
-        hic_obj_thread.start()
- 
+        hic_obj_node_spin_thread = threading.Thread(target=rclpy.spin, args=(hic_obj,))
+        hic_obj_node_spin_thread.start()
+        
         while True:
 
             hic_obj.read_values_from_serial()
 
-            if(hic_obj.joystick_button_pressed):
+            if (any(hic_obj.simultaneous_button_press_conditions)):
+                    hic_obj.get_logger().info('Multiple buttons were pressed simultaneously -> Button presses was ignored')
+                    hic_obj.clear_button_press_flags()
 
-                hic_obj.get_logger().info(f'Joystick button pressed: {hic_obj.joystick_button_pressed}')
+            if(hic_obj.joystick_button_pressed):
                 hic_obj.send_system_state_request('joystick_control')
             
             if (hic_obj.temp_system_state == 'joystick_arm_control'):
@@ -409,8 +400,9 @@ def main():
                 hic_obj.get_logger().info('Activated the rail system')
                 hic_obj.activate_rail_system()
             
-            # if(hic_obj.reset_button_pressed):
-            #    hic_obj.send_system_state_request('standby')
+            if(hic_obj.reset_button_pressed):
+
+                hic_obj.send_system_state_request('standby')
 
             # if(hic_obj.run_predefined_path_button_pressed):
             #   hic_obj.send_system_state_request('run_predefined_path')
@@ -422,8 +414,6 @@ def main():
             #    else:
             #        hic_obj.send_system_state_request('map')
 
-            if (any(hic_obj.simultaneous_button_press_conditions)):
-                    hic_obj.get_logger().info('Multiple buttons were pressed simultaneously -> Button presses was ignored')
 
     except KeyboardInterrupt:
 
@@ -432,7 +422,7 @@ def main():
     
     finally:
 
-        hic_obj_thread.join()
+        hic_obj_node_spin_thread.join()
         hic_obj.destroy_node()
         rclpy.shutdown()
 

@@ -4,9 +4,9 @@ from lss import *
 import time
 
 lss2 = LSS(2)
-lss2.setOriginOffset(0)
+lss2.setOriginOffset(0, LSS_SetConfig)
 
-CST_LSS_Port = "/dev/ttyUSB0"		# For Linux/Unix platforms
+CST_LSS_Port = "/dev/ttyUSB1"		# For Linux/Unix platforms
 CST_LSS_Baud = LSS_DefaultBaud
 initBus(CST_LSS_Port, CST_LSS_Baud) 
 

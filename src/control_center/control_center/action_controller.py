@@ -66,7 +66,7 @@ class ActionController(Node):
                 self.publish_state()
                 return
             else:
-                self.get_logger(f'The run a predefined path button press was ignored -> The system is in a state that cannot be changed: {self.state}')
+                self.get_logger().info(f'The run a predefined path button press was ignored -> The system is in a state that cannot be changed: {self.state}')
                 return
 
         elif (msg.data == 'map'):
@@ -76,13 +76,13 @@ class ActionController(Node):
                  self.publish_state()
                  return
              else:
-                 self.get_logger(f'The map button press was ignored -> The system is in a state that cannot be changed: {self.state}')
+                 self.get_logger().info(f'The map button press was ignored -> The system is in a state that cannot be changed: {self.state}')
                  return
         
         elif (msg.data == 'standby'):
 
             if (self.state == 'standby'):
-                self.get_logger(f'The reset/"stop the active process" button press was ignored -> The system is already in the {self.state} state')
+                self.get_logger().info(f'The reset/"stop the active process" button press was ignored -> The system is already in the {self.state} state')
                 self.publish_state()
                 return
 
