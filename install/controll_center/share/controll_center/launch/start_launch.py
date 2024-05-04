@@ -63,17 +63,36 @@ def generate_launch_description():
         name='motor_controller'
     )
 
-    
+    mapper = Node(
+        package='map_and_path',
+        executable='mapper',
+        name='mapper'
+    )
 
-    ld.add_action(auto_mapper)
-    ld.add_action(path_planner)
+    path = Node(
+        package='map_and_path',
+        executable='path',
+        name='path'
+    )
+
+    gui_buttons = Node(
+        package='controll_center',
+        executable='gui_buttons',
+        name='gui_buttons'
+    )
+
+    # ld.add_action(auto_mapper)
+    # ld.add_action(path_planner)
     ld.add_action(action_controller)
     ld.add_action(motor_controller)
-    
+
+    ld.add_action(mapper)
+    ld.add_action(path)    
+    ld.add_action(gui_buttons) 
 
     ld.add_action(command_window_node)
     ld.add_action(command_executor_node)
-    ld.add_action(display_node)
+    # ld.add_action(display_node)
 
     # ld.add_action(joystick_controller)
     # ld.add_action(joy_node)

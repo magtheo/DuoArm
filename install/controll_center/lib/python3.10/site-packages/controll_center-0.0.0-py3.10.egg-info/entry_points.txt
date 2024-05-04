@@ -3,5 +3,6 @@ action_controller = controll_center.action_controller:main
 command_executor = controll_center.command_executor:main
 command_window = controll_center.command_window:main
 display = controll_center.display:main
+gui_buttons = controll_center.gui_buttons:main
 joystick_controller = controll_center.joystick_controller:main
 

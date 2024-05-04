@@ -28,6 +28,7 @@ setup(
             'display = controll_center.display:main',
             'action_controller = controll_center.action_controller:main',
             'joystick_controller = controll_center.joystick_controller:main',
+            'gui_buttons = controll_center.gui_buttons:main',
          
         ],
     },

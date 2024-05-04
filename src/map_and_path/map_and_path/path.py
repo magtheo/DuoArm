@@ -27,26 +27,27 @@ class PathExecutor(Node):
     def execute_path(self):
         # Load joint angles from the JSON file
         try:
-            with open('path_mapping.json', 'r') as file:
+            with open('boundary_and_path.json', 'r') as file:
                 mapping_data = json.load(file)
             self.get_logger().info("Loaded mapping data successfully.")
         except FileNotFoundError:
-            self.get_logger().error("File 'path_mapping.json' not found.")
+            self.get_logger().error("File 'boundary_and_path.json' not found.")
             return
         
         # Collect all angles in a single array
         all_angles = []
-        for key, data in mapping_data.items():
-            if 'path_point' in key:
-                angles = [data['lss0_angle'], data['lss1_angle']]
-                all_angles.extend(angles)
+        for point in mapping_data.get('path_points', []):  # safely access path_points
+            angles = [point['lss0_angle'], point['lss1_angle']]
+            all_angles.extend(angles)
         
         if all_angles:
-            angles_array = Float64MultiArray(data=all_angles)
+            angles_array = Float64MultiArray()
+            angles_array.data = all_angles
             self.joint_angles_publisher.publish(angles_array)
-            self.get_logger().info(f"Sent all joint angles for the path to motor controller.")
+            self.get_logger().info("Sent all joint angles for the path to motor controller.")
         else:
             self.get_logger().info("No angles found for path execution.")
+
 
 def main(args=None):
     rclpy.init(args=args)

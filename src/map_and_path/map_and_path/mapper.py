@@ -38,71 +38,64 @@ class Mapper(Node):
             String, 'mapping_done', 10)
         
         self.joints = {'left': 0, 'right': 0}
-        self.mapping_data = {}
+        self.mapping_data = {'boundaries': [], 'path_points': []}
         self.button_press_index = 0
+        self.number_of_points = 3
+        self.point_number = 0
 
     def state_callback(self, msg):
         if msg.data == 'map':
             self.start_mapping()
+        if msg.data == 'standby':
+            self.button_press_index = 0
+            self.point_number = 0
+
 
     def start_mapping(self):
         # Make the motors limp
-        self.set_null_points_pub('start')
+        self.set_null_points_pub.publish(String(data='start'))
         time.sleep(5) 
         self.get_logger().info("--- move the arm to top position and press map button to record max angels. --- ") 
 
 
     def button_press_callback(self, msg):
+        self.get_logger().info("Recived button press in mapper node ") 
         self.button_press_index += 1
-        if self.button_press_index == 1: # angles at top position
-            self.read_angels_pub()
-        if self.button_press_index == 2: # angles at bottom position
-            self.read_angels_pub()
+        self.read_angels_pub.publish(String(data='start'))
 
     def joint_angles_callback(self, msg):
         self.actual_joint_angles = msg.data
         lss0_angle = self.actual_joint_angles[0]
         lss1_angle = self.actual_joint_angles[1]
         
-        if self.button_press_index == 1: # angles at top position
-            self.mapping_data['boundaries'] = {'top_lss0': lss0_angle, 'top_lss1': lss1_angle}
-            self.get_logger().info(f'Received and mapped boundaries for top position, angles: {(self.actual_joint_angles)}')
-            self.get_logger().info(f'--- move arm to bottom position and press map button --- ')
-            return
+        # Append new data based on button press index
+        if self.button_press_index == 1:  # Top position boundaries
+            self.mapping_data['boundaries'].append({'top_lss0': lss0_angle, 'top_lss1': lss1_angle})
+            self.get_logger().info(f'Received and mapped top boundaries, angles: {self.actual_joint_angles}')
+            self.get_logger().info('--- move arm to bottom position and press map button --- ')
+        
+        elif self.button_press_index == 2:  # Bottom position boundaries
+            self.mapping_data['boundaries'].append({'bottom_lss0': lss0_angle, 'bottom_lss1': lss1_angle})
+            self.get_logger().info(f'Received and mapped bottom boundaries, angles: {self.actual_joint_angles}')
+            self.get_logger().info('--- move arm to first point in path and press map button --- ')
 
-        if self.button_press_index == 2: # angles at bottom position
-            self.mapping_data['boundaries'] = {'bottom_lss0': lss0_angle, 'bottom_lss1': lss1_angle}
-            self.get_logger().info(f'Received and mapped boundaries for bottom position, angles: {(self.actual_joint_angles)}')
-            self.get_logger().info(f'--- move arm to first point in path and press map button --- ')
-
-            return
-
-        if self.button_press_index == 3:
-            self.mapping_data['path_point'] = {'nr': 1, 'lss0_angle': lss0_angle, 'lss1_angle': lss1_angle }
-            self.get_logger().info(f'Received and mapped angles for point nr 1, angles: {(self.actual_joint_angles)}')
-            self.get_logger().info(f'--- move arm to second point in path and press map button --- ')
-            return
-
-        if self.button_press_index == 4:
-            self.mapping_data['path_point'] = {'nr': 2, 'lss0_angle': lss0_angle, 'lss1_angle': lss1_angle }
-            self.get_logger().info(f'Received and mapped angles for point nr 2, angles: {(self.actual_joint_angles)}')
-            self.get_logger().info(f'--- move arm to third point in path and press map button --- ')
-            return
-
-        if self.button_press_index == 5:
-            self.mapping_data['path_point'] = {'nr': 3, 'lss0_angle': lss0_angle, 'lss1_angle': lss1_angle }
-            self.get_logger().info(f'Received and mapped angles for point nr 3, angles: {(self.actual_joint_angles)}')
-            self.get_logger().info(f'--- all path points mapped --- ')
-            # self.get_logger().info(f'--- move arm to forth point in path and press map button --- ')
-            self.mapping_done_pub.publish(String(data="done"))  # Notify that mapping is done
-            return
-
-
+        elif self.button_press_index >= 3:  # Path points
+            self.point_number += 1
+            self.mapping_data['path_points'].append({'nr': self.point_number, 'lss0_angle': lss0_angle, 'lss1_angle': lss1_angle})
+            self.get_logger().info(f'Received and mapped angles for point nr {self.point_number}, angles: {self.actual_joint_angles}')
+            if self.point_number < self.number_of_points:
+                self.get_logger().info(f'--- move arm to point {self.point_number + 1} in path and press map button --- ')
+            else:
+                self.get_logger().info('--- all path points mapped --- ')
+                self.point_number = 0
+                self.button_press_index = 0
+                self.mapping_done_pub.publish(String(data="done"))  # Notify that mapping is done
+                self.save_to_file()  # Save the data to file once all mapping is completed
 
     def save_to_file(self):
-        with open('path_mapping.json', 'w') as file:
+        with open('boundary_and_path.json', 'w') as file:
             json.dump(self.mapping_data, file, indent=4)
-        self.get_logger().info("Saved mapping data to 'path_mapping.json'.")
+        self.get_logger().info("Saved mapping data to 'boundary_and_path.json'.")
 
 def main(args=None):
     rclpy.init(args=args)

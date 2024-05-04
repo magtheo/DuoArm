@@ -3,12 +3,14 @@
 /home/theomagnor/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center/command_window.py
 /home/theomagnor/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center/action_controller.py
 /home/theomagnor/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center/joystick_controller.py
+/home/theomagnor/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center/gui_buttons.py
 /home/theomagnor/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center/__init__.py
 /home/theomagnor/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center/__pycache__/display.cpython-310.pyc
 /home/theomagnor/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center/__pycache__/command_executor.cpython-310.pyc
 /home/theomagnor/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center/__pycache__/command_window.cpython-310.pyc
 /home/theomagnor/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center/__pycache__/action_controller.cpython-310.pyc
 /home/theomagnor/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center/__pycache__/joystick_controller.cpython-310.pyc
+/home/theomagnor/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center/__pycache__/gui_buttons.cpython-310.pyc
 /home/theomagnor/DuoArm/install/controll_center/lib/python3.10/site-packages/controll_center/__pycache__/__init__.cpython-310.pyc
 /home/theomagnor/DuoArm/install/controll_center/share/ament_index/resource_index/packages/controll_center
 /home/theomagnor/DuoArm/install/controll_center/share/controll_center/package.xml
@@ -26,4 +28,5 @@
 /home/theomagnor/DuoArm/install/controll_center/lib/controll_center/command_executor
 /home/theomagnor/DuoArm/install/controll_center/lib/controll_center/command_window
 /home/theomagnor/DuoArm/install/controll_center/lib/controll_center/display
+/home/theomagnor/DuoArm/install/controll_center/lib/controll_center/gui_buttons
 /home/theomagnor/DuoArm/install/controll_center/lib/controll_center/joystick_controller
