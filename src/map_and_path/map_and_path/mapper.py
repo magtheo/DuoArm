@@ -65,6 +65,7 @@ class Mapper(Node):
 
     def joint_angles_callback(self, msg):
         self.actual_joint_angles = msg.data
+        self.joint_angles_pub.publish(self.actual_joint_angles) # publish joint angles to display node
         lss0_angle = self.actual_joint_angles[0]
         lss1_angle = self.actual_joint_angles[1]
         

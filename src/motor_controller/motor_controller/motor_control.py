@@ -73,7 +73,13 @@ class motorControl(Node):
         )
         self.actual_joint_angles_publisher = self.create_publisher(
             Float64MultiArray, 
-            'actual_joint_angles',
+            'actual_joint_angles', # used during mapping and motor control
+            10
+        )
+
+        self.joint_angles_publisher = self.create_publisher(
+            Float64MultiArray,
+            'joint_angles',  # Topic to publish the joint angles to display node
             10
         )
 
@@ -167,7 +173,7 @@ class motorControl(Node):
 
 
     def control_servo_speed(self, servo_key, target_angle):
-        tolerance = 1.0  # degrees within which we consider the target reached
+        tolerance = 2.0  # degrees within which we consider the target reached
         servo = self.servos[servo_key]
         self.get_logger().info(f"Servo:{servo}, servo_key{servo_key}")
 
@@ -182,22 +188,23 @@ class motorControl(Node):
                 current_angle = self.calc_angle(servo.getPosition())
                 if current_angle is None:
                     raise ValueError("Failed to read position from servo")
-
-                error = target_angle - current_angle
-                integral += error * 0.2  # Accumulate integral (error * time)
-                derivative = (error - last_error) / 0.2  # Derivative (change in error / time)
-                last_error = error
+                
+                self.publish_joint_angles(servo_key, current_angle)  # Publish the current angles
+                target_angle_minus_current_angle = target_angle - current_angle
+                integral += target_angle_minus_current_angle * 0.2  # Accumulate integral (error * time)
+                derivative = (target_angle_minus_current_angle - last_error) / 0.2  # Derivative (change in error / time)
+                last_error = target_angle_minus_current_angle
 
                 if np.isclose(current_angle, target_angle, atol=tolerance):
                     servo.wheelRPM(0)  # Stop the servo
-                    self.get_logger().info(f"target angels reached for {servo_key}")
+                    self.get_logger().info(f"target angle {self.completed_movements}/{self.total_movements} reached for {servo_key}")
                     break
 
-                speed = kp * error + ki * integral + kd * derivative
+                speed = kp * target_angle_minus_current_angle + ki * integral + kd * derivative
                 servo.wheelRPM(speed)
 
             # time.sleep(0.1)  # Adjust timing as necessary for more responsive control
-            self.get_logger().info(f"Servo: {servo}, speed: {speed}, error: {error}, target angle: {target_angle}, current angle: {current_angle}")
+            self.get_logger().info(f"Servo: {servo}, speed: {speed}, difference: {target_angle_minus_current_angle}, target angle: {target_angle}, current angle: {current_angle}")
 
     def iterate_and_move_servos_callback(self, msg):
         self.get_logger().info("motor_controller received array of angles")
@@ -249,6 +256,13 @@ class motorControl(Node):
         response.message = 'Moved successfully'  # Change based on actual movement success
         return response
 
+    def publish_joint_angles(self, servo_key, angle):
+        msg = Float64MultiArray()
+        # Here, we would add all current angles of servos to msg.data
+        # This example just adds one angle; modify according to your setup
+        msg.data = [angle]
+        self.joint_angles_publisher.publish(msg)
+        self.get_logger().info(f"Published current angles for {servo_key}")
 
     def calc_joint_angles_callback(self, msg):
         received_joint_angles = msg.data
@@ -334,113 +348,113 @@ class motorControl(Node):
         self.manual_readings_pub.publish(transmission_msg)
         self.get_logger().info(f"Published angle readings: LSS0:{lss0_act_angle}| LSS1:{lss1_act_angle}")
 
+# INACTIVE
+    # def test_motors(self):
+    #     self.get_logger().info( 'test ')
 
-    def test_motors(self):
-        self.get_logger().info( 'test ')
+    #     lss1.move(-900) # GPT; but this works
+    #     time.sleep(2)
+    #     self.get_logger().info(lss0.getPosition())
+    #     self.get_logger().info(lss1.getPosition())
 
-        lss1.move(-900) # GPT; but this works
-        time.sleep(2)
-        self.get_logger().info(lss0.getPosition())
-        self.get_logger().info(lss1.getPosition())
-
-        # lss0.move(0)
-        lss1.move(0)
-        time.sleep(2)
-        self.get_logger().info(lss0.getPosition())
-        self.get_logger().info(lss1.getPosition())  
+    #     # lss0.move(0)
+    #     lss1.move(0)
+    #     time.sleep(2)
+    #     self.get_logger().info(lss0.getPosition())
+    #     self.get_logger().info(lss1.getPosition())  
         
-        for i in range(4):
-            self.get_logger().info(f'current loop: {i}')
+    #     for i in range(4):
+    #         self.get_logger().info(f'current loop: {i}')
 
-            # lss0.move(0)
-            lss1.move(500)
-            time.sleep(2)
-            self.get_logger().info(lss0.getPosition())
-            self.get_logger().info(lss1.getPosition())
+    #         # lss0.move(0)
+    #         lss1.move(500)
+    #         time.sleep(2)
+    #         self.get_logger().info(lss0.getPosition())
+    #         self.get_logger().info(lss1.getPosition())
 
-            lss1.move(0)
-            time.sleep(2)
-            self.get_logger().info(lss0.getPosition())
-            self.get_logger().info(lss1.getPosition())
+    #         lss1.move(0)
+    #         time.sleep(2)
+    #         self.get_logger().info(lss0.getPosition())
+    #         self.get_logger().info(lss1.getPosition())
 
-    def iterate_and_move_servos_callbackV1(self, msg):
-        joint_angles = np.array(msg.data)
-        num_servos = 2  # Number of servos controlled
+    # def iterate_and_move_servos_callbackV1(self, msg):
+    #     joint_angles = np.array(msg.data)
+    #     num_servos = 2  # Number of servos controlled
 
-        if len(joint_angles) % num_servos != 0:
-            self.get_logger().error("Received joint angles array is not a multiple of the number of servos.")
-            return
+    #     if len(joint_angles) % num_servos != 0:
+    #         self.get_logger().error("Received joint angles array is not a multiple of the number of servos.")
+    #         return
         
-        self.load_and_set_boundaries() # load boundrys 
+    #     self.load_and_set_boundaries() # load boundrys 
 
-        # Loop to continuously move back and forth
-        for i in range(2):
-            # Forward iteration
-            for i in range(0, len(joint_angles), num_servos):
-                angle_pair = joint_angles[i:i+num_servos]
-                self.move_servos_to_anglesTHREAD(angle_pair)
-                time.sleep(0.5)  # Delay to allow for servo motion before the next command
+    #     # Loop to continuously move back and forth
+    #     for i in range(2):
+    #         # Forward iteration
+    #         for i in range(0, len(joint_angles), num_servos):
+    #             angle_pair = joint_angles[i:i+num_servos]
+    #             self.move_servos_to_anglesTHREAD(angle_pair)
+    #             time.sleep(0.5)  # Delay to allow for servo motion before the next command
 
-            # Reverse iteration
-            for i in range(len(joint_angles) - num_servos, -1, -num_servos):
-                angle_pair = joint_angles[i:i+num_servos]
-                self.move_servos_to_anglesTHREAD(angle_pair)
-                time.sleep(0.5)  # Delay to allow for servo motion before the next command
+    #         # Reverse iteration
+    #         for i in range(len(joint_angles) - num_servos, -1, -num_servos):
+    #             angle_pair = joint_angles[i:i+num_servos]
+    #             self.move_servos_to_anglesTHREAD(angle_pair)
+    #             time.sleep(0.5)  # Delay to allow for servo motion before the next command
 
-        # Notify completion of the return path
-        self.path_done_pub.publish(String(data="done"))
+    #     # Notify completion of the return path
+    #     self.path_done_pub.publish(String(data="done"))
 
-    def move_servos_to_anglesTHREAD_V1(self, angles):
-        """ Moves the servos to the specified angles received in a pair [lss0_angle, lss1_angle]. """
-        if len(angles) != 2:
-            self.get_logger().error("Angle pair does not contain exactly two elements.")
-            return
+    # def move_servos_to_anglesTHREAD_V1(self, angles):
+    #     """ Moves the servos to the specified angles received in a pair [lss0_angle, lss1_angle]. """
+    #     if len(angles) != 2:
+    #         self.get_logger().error("Angle pair does not contain exactly two elements.")
+    #         return
 
-        lss0_angle_deg, lss1_angle_deg = angles
-        target_lss0_position = self.calc_position(lss0_angle_deg)
-        target_lss1_position = self.calc_position(lss1_angle_deg)
-        self.get_logger().info(f"Target positions: LSS0 {target_lss0_position}, LSS1 {target_lss1_position}")
+    #     lss0_angle_deg, lss1_angle_deg = angles
+    #     target_lss0_position = self.calc_position(lss0_angle_deg)
+    #     target_lss1_position = self.calc_position(lss1_angle_deg)
+    #     self.get_logger().info(f"Target positions: LSS0 {target_lss0_position}, LSS1 {target_lss1_position}")
 
-        # Creating and starting threads for each servo movement:
-        thread0 = threading.Thread(target=self.move_servo, args=(lss0, target_lss0_position))
-        thread1 = threading.Thread(target=self.move_servo, args=(lss1, target_lss1_position))
+    #     # Creating and starting threads for each servo movement:
+    #     thread0 = threading.Thread(target=self.move_servo, args=(lss0, target_lss0_position))
+    #     thread1 = threading.Thread(target=self.move_servo, args=(lss1, target_lss1_position))
 
-        thread0.start()
-        thread1.start()
+    #     thread0.start()
+    #     thread1.start()
         
-        thread0.join()
-        thread1.join()
+    #     thread0.join()
+    #     thread1.join()
 
-    def move_servo(self, servo, angle):
-        if servo == lss0:
-            lss0.move(angle)
-            self.get_logger().info(f"Tried moving LSS0 to angle: {angle}")
-        elif servo == lss1:
-            lss1.move(angle) # GPT, why wont this work
-            self.get_logger().info(f"Tried moving LSS1 to angle: {angle}")
+    # def move_servo(self, servo, angle):
+    #     if servo == lss0:
+    #         lss0.move(angle)
+    #         self.get_logger().info(f"Tried moving LSS0 to angle: {angle}")
+    #     elif servo == lss1:
+    #         lss1.move(angle) # GPT, why wont this work
+    #         self.get_logger().info(f"Tried moving LSS1 to angle: {angle}")
 
-    def move_servos_to_angles(self, angles):
-        """ Moves the servos to the specified angles received in a pair [lss0_angle, lss1_angle] """
-        if len(angles) != 2:
-            self.get_logger().error("Angle pair does not contain exactly two elements.")
-            return
+    # def move_servos_to_angles(self, angles):
+    #     """ Moves the servos to the specified angles received in a pair [lss0_angle, lss1_angle] """
+    #     if len(angles) != 2:
+    #         self.get_logger().error("Angle pair does not contain exactly two elements.")
+    #         return
 
-        lss0_angle_deg = angles[0]
-        lss1_angle_deg = angles[1]
+    #     lss0_angle_deg = angles[0]
+    #     lss1_angle_deg = angles[1]
 
-        lss0_position = self.calc_position(lss0_angle_deg)
-        lss1_position = self.calc_position(lss1_angle_deg)
+    #     lss0_position = self.calc_position(lss0_angle_deg)
+    #     lss1_position = self.calc_position(lss1_angle_deg)
 
-        self.get_logger().info(f"LSS0, bottom boundary: {self.bottom_lss0}, move angle: {lss0_angle_deg}, top boundry: {self.top_lss0}")
-        self.get_logger().info(f"LSS1, bottom boundary: {self.bottom_lss1}, move angle: {lss1_angle_deg}, top boundry: {self.top_lss1}")
-        if self.bottom_lss0 >= lss0_angle_deg >= self.top_lss0 and \
-           self.bottom_lss1 <= lss1_angle_deg <= self.top_lss1:
-            lss0.move(lss0_position)
-            lss1.move(lss1_position)
-            self.get_logger().info(f"Moved LSS0 to {lss0_angle_deg} degrees, LSS1 to {lss1_angle_deg} degrees")
-        else:
-            self.get_logger().warn("Received angles are out of bounds")
-            self.out_of_bounds_publisher.publish(String(data="Angles out of bounds"))
+    #     self.get_logger().info(f"LSS0, bottom boundary: {self.bottom_lss0}, move angle: {lss0_angle_deg}, top boundry: {self.top_lss0}")
+    #     self.get_logger().info(f"LSS1, bottom boundary: {self.bottom_lss1}, move angle: {lss1_angle_deg}, top boundry: {self.top_lss1}")
+    #     if self.bottom_lss0 >= lss0_angle_deg >= self.top_lss0 and \
+    #        self.bottom_lss1 <= lss1_angle_deg <= self.top_lss1:
+    #         lss0.move(lss0_position)
+    #         lss1.move(lss1_position)
+    #         self.get_logger().info(f"Moved LSS0 to {lss0_angle_deg} degrees, LSS1 to {lss1_angle_deg} degrees")
+    #     else:
+    #         self.get_logger().warn("Received angles are out of bounds")
+    #         self.out_of_bounds_publisher.publish(String(data="Angles out of bounds"))
 
     def limp_and_set_origin(self, msg):
         """
