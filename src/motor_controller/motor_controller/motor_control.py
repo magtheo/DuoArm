@@ -83,7 +83,7 @@ class motorControl(Node):
         )
 
         self.joint_angles_publisher = self.create_publisher(
-            Float64MultiArray,
+            String,
             'joint_angles',  # Topic to publish the joint angles to display node
             qos_profile=self.real_time_qos
         )
@@ -182,7 +182,7 @@ class motorControl(Node):
         self.get_logger().info(f"Servo:{servo}, servo_key{servo_key}")
 
         kp = 0.2  # Proportional gain
-        ki = 0.03 # Integral gain
+        ki = 0.02 # Integral gain
         kd = 0.05  # Derivative gain
         integral = 0
         last_error = 0
@@ -245,7 +245,46 @@ class motorControl(Node):
         self.total_movements = 0
         self.get_logger().info("All cycles completed")
 
+    
+    def limp_and_set_origin(self, msg):
+        """
+        Makes the servos go limp, waits for X seconds, and then sets a new origin offset.
 
+        :param new_origin_offset: The new origin offset to be set for the servos.
+        """
+        self.get_logger().info('Making arm limp...')
+        # Make the arm limp
+        lss0.limp()
+        lss1.limp()
+        lss2.limp()
+
+        lss0.setGyre(-1, LSS_SetConfig)
+        lss1.setGyre(-1, LSS_SetConfig)
+
+        self.get_logger().info(f'Motors are now limp, move arm for desired position, null points will be set in 5 sec')
+        time.sleep(5)
+
+        # Set new origin offset
+        lss0.setOriginOffset(0, LSS_SetConfig)
+        lss1.setOriginOffset(0, LSS_SetConfig)
+        lss2.setOriginOffset(0, LSS_SetConfig)
+
+        self.get_logger().info(f'actual angles for lss0: {self.calc_angle(lss0.getPosition())}')
+        self.get_logger().info(f'actual angles for lss1: {self.calc_angle(lss1.getPosition())}')
+        self.get_logger().info(f'actual angles for lss2, rail: {self.calc_angle(lss2.getPosition())}')
+
+        new_origin_offset0 = int(lss0.getPosition()) 
+        new_origin_offset1 = int(lss1.getPosition())
+        self.get_logger().info('Setting new origin offset...')
+        lss0.setOriginOffset(new_origin_offset0, LSS_SetConfig)
+        lss1.setOriginOffset(new_origin_offset1, LSS_SetConfig)
+
+        self.get_logger().info(f'New origin offset set to {new_origin_offset0, new_origin_offset1}.')
+
+        self.get_logger().info(f'actual angles after new null point for lss0: {self.calc_angle(lss0.getPosition())}')
+        self.get_logger().info(f'actual angles after new null point for lss1: {self.calc_angle(lss1.getPosition())}')
+        if self.calc_angle(lss1.getPosition()) == -180.0:
+            lss1.setOriginOffset(-1800, LSS_SetConfig)
 
     # def notify_completion(self):
     #     # Handle the completion of all movements
@@ -262,13 +301,12 @@ class motorControl(Node):
         return response
 
     def publish_joint_angles(self, servo_key, angle):
-        msg = Float64MultiArray()
-        # Here, we would add all current angles of servos to msg.data
-        # This example just adds one angle; modify according to your setup
-        msg.data = [angle]
+        data = {'servo': servo_key, 'angle': angle}
+        msg = String()
+        msg.data = json.dumps(data)
         self.joint_angles_publisher.publish(msg)
         self.get_logger().info(f"Published current angles for {servo_key}")
-
+        
     def calc_joint_angles_callback(self, msg):
         received_joint_angles = msg.data
         self.get_logger().info(f'Received calculated joint angles: {received_joint_angles}')
@@ -323,11 +361,11 @@ class motorControl(Node):
         
         transmission_msg = Float64MultiArray()
         transmission_msg.data = actual_joint_angles
-        self.actual_joint_angles_publisher.publish(transmission_msg)
+        self.actual_joint_angles_publisher.publish(transmission_msg) # mapping
         self.get_logger().info(f"Published angle readings: LSS0:{lss0_act_angle}| LSS1:{lss1_act_angle}")
 
 
-    def read_and_pub_servo_angles(self):
+    def read_and_pub_servo_angles(self): # USED during old mapping sequence
         # Fetch current positions from servos, convert to angles, and publish
         lss0_act_position = float(lss0.getPosition())
         lss1_act_position = float(lss1.getPosition())
@@ -461,45 +499,6 @@ class motorControl(Node):
     #         self.get_logger().warn("Received angles are out of bounds")
     #         self.out_of_bounds_publisher.publish(String(data="Angles out of bounds"))
 
-    def limp_and_set_origin(self, msg):
-        """
-        Makes the servos go limp, waits for X seconds, and then sets a new origin offset.
-
-        :param new_origin_offset: The new origin offset to be set for the servos.
-        """
-        self.get_logger().info('Making arm limp...')
-        # Make the arm limp
-        lss0.limp()
-        lss1.limp()
-        lss2.limp()
-
-        lss0.setGyre(-1, LSS_SetConfig)
-        lss1.setGyre(-1, LSS_SetConfig)
-
-        self.get_logger().info(f'Motors are now limp, move arm for desired position, null points will be set in 5 sec')
-        time.sleep(5)
-
-        # Set new origin offset
-        lss0.setOriginOffset(0, LSS_SetConfig)
-        lss1.setOriginOffset(0, LSS_SetConfig)
-        lss2.setOriginOffset(0, LSS_SetConfig)
-
-        self.get_logger().info(f'actual angles for lss0: {self.calc_angle(lss0.getPosition())}')
-        self.get_logger().info(f'actual angles for lss1: {self.calc_angle(lss1.getPosition())}')
-        self.get_logger().info(f'actual angles for lss2, rail: {self.calc_angle(lss2.getPosition())}')
-
-        new_origin_offset0 = int(lss0.getPosition()) 
-        new_origin_offset1 = int(lss1.getPosition())
-        self.get_logger().info('Setting new origin offset...')
-        lss0.setOriginOffset(new_origin_offset0, LSS_SetConfig)
-        lss1.setOriginOffset(new_origin_offset1, LSS_SetConfig)
-
-        self.get_logger().info(f'New origin offset set to {new_origin_offset0, new_origin_offset1}.')
-
-        self.get_logger().info(f'actual angles after new null point for lss0: {self.calc_angle(lss0.getPosition())}')
-        self.get_logger().info(f'actual angles after new null point for lss1: {self.calc_angle(lss1.getPosition())}')
-        if self.calc_angle(lss1.getPosition()) == -180.0:
-            lss1.setOriginOffset(-1800, LSS_SetConfig)
 
     def start_test_callback(self, msg):
         if msg.data == "start":

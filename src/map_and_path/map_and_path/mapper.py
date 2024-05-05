@@ -33,7 +33,7 @@ class Mapper(Node):
         self.joint_angles_subscription = self.create_subscription(
             Float64MultiArray, 'actual_joint_angles', self.joint_angles_callback, 10)
         
-                # Publishing mapping completion notification
+        # Publishing mapping completion notification
         self.mapping_done_pub = self.create_publisher(
             String, 'mapping_done', 10)
         

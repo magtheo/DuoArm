@@ -39,23 +39,23 @@ class DisplayNode(Node):
         self.arm_state = 'standby'  # Default state
         self.state_text = self.ax.text(0.5, 0.01, '', transform=self.ax.transAxes, ha='center')
 
+        self.theta_lss0 = None
+        self.theta_lss1 = None
+        self.angles_received = {'theta_lss0': False, 'theta_lss1': False}  # Track received angles
+
         # Setup a timer to periodically call update_gui
         self.gui_update_timer = self.create_timer(0.1, self.update_display)  # every 100 ms
 
-        # used to display predefined path
-        self.subscription = self.create_subscription(
-            String,
-            'display_data',
-            self.display_callback,
-            10)
+
 
         # Add subscription to arm_position topic
         self.joint_angles_subscription = self.create_subscription(
-            Float64MultiArray,
+            String,
             'joint_angles',
             self.joint_angles_callback,
-            qos_profile=real_time_qos
-        )
+            qos_profile=real_time_qos,
+            callback_group=rclpy.callback_groups.MutuallyExclusiveCallbackGroup(),  # Ensure callbacks do not block each other
+            )
 
         self.grid_data_subscription = self.create_subscription(
             String,
@@ -70,13 +70,6 @@ class DisplayNode(Node):
             10)
         
         
-
-    def display_callback(self, msg):
-        data = json.loads(msg.data)
-        with self.lock:
-            self.process_new_data(data)
-        self.request_redraw()
-
 
 
     def compute_fk(self, theta1_left, theta1_right):
@@ -129,7 +122,6 @@ class DisplayNode(Node):
             'x_tool_left': x_tool_left, 'z_tool_left': z_tool_left,
             'x_tool_right': x_tool_right, 'z_tool_right': z_tool_right
         }
-        self.update_plot()
 
 
     def request_redraw(self):
@@ -166,16 +158,35 @@ class DisplayNode(Node):
 
 
     def joint_angles_callback(self, msg):
+        self.get_logger().info(f"DISPLY callback") # this line is not printed
         if not self.data_ready.is_set():# Check if data is not being processed
             self.data_ready.set() # Set the flag to block further processing
             try:
-                self.get_logger().info(f"DISPLY recived arm position")
-                data = msg.data
-                theta1_left = data[0]
-                theta1_right = data[1]
-                self.compute_fk(theta1_left, theta1_right)
-                self.request_redraw() 
+                data = json.loads(msg.data)
+                with self.lock:
+                    self.process_data(data)    
+            except Exception as e:
+                self.get_logger().error(f"Error in joint_angles_callback: {str(e)}")
             finally:
+                self.data_ready.clear()# Make sure to clear the flag
+
+    def process_data(self, data):
+        servo = data['servo']
+        angle = float(data['angle'])
+        self.get_logger().info(f"DISPLY recived arm position {servo} : {angle}")
+        if servo == 'lss0':
+            self.theta_lss0 = angle
+            self.angles_received['theta_lss0'] = True
+        elif servo == 'lss1':
+            self.theta_lss1 = angle
+            self.angles_received['theta_lss1'] = True
+
+        if self.angles_received['theta_lss0'] and self.angles_received['theta_lss1']:  # Check if both angles have been received
+                self.compute_fk(self.theta_lss0, self.theta_lss1)
+                self.request_redraw()
+                self.theta_lss0 = None  # Reset after processing
+                self.theta_lss1 = None
+                self.angles_received = {'theta_lss0': False, 'theta_lss1': False}
                 self.data_ready.clear()# Clear the flag after processing
 
     def grid_data_callback(self, msg):
@@ -189,7 +200,7 @@ class DisplayNode(Node):
         self.arm_state = msg.data
         self.get_logger().info(f'Received new state: {self.arm_state}')
 
-    def update_display(self):
+    def update_display(self, *args):
         if self.data_ready.is_set():
             with self.lock: # lock when updating plot
                 self.update_plot()
