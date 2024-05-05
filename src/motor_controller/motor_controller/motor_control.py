@@ -3,8 +3,8 @@
 
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import String
-from std_msgs.msg import Float64MultiArray
+from std_msgs.msg import String, Float64MultiArray
+from rclpy.qos import QoSProfile, ReliabilityPolicy
 import numpy as np
 import time
 import json
@@ -40,6 +40,9 @@ transmission_msg = Float64MultiArray()
 class motorControl(Node):
     def __init__(self):
         super().__init__("motor_control")
+
+        # Define a QoS profile for real-time updates
+        self.real_time_qos = QoSProfile(depth=10, reliability=ReliabilityPolicy.RELIABLE)
         self.setup_subscriptions_and_services()
         
         # Initialize other attributes and subscriptions...
@@ -63,6 +66,8 @@ class motorControl(Node):
         self.total_movements = 0
         self.completed_movements = 0
 
+        
+
 
     def setup_subscriptions_and_services(self):
         self.calc_joint_angles_subscription = self.create_subscription(
@@ -80,7 +85,7 @@ class motorControl(Node):
         self.joint_angles_publisher = self.create_publisher(
             Float64MultiArray,
             'joint_angles',  # Topic to publish the joint angles to display node
-            10
+            qos_profile=self.real_time_qos
         )
 
         # Subscriber for receiving start test command
@@ -130,10 +135,7 @@ class motorControl(Node):
             Float64MultiArray, 'joint_angles_array', self.iterate_and_move_servos_callback, 10)
 
         self.path_done_pub = self.create_publisher(
-            String,
-            'path_done',
-            10
-        )
+            String, 'path_done', 10)
 
   
     def load_and_set_boundaries(self):
@@ -168,12 +170,14 @@ class motorControl(Node):
                 self.completed_movements += 1
                 if self.completed_movements == self.total_movements:
                     self.path_done_pub.publish(String(data="done"))
+                    self.get_logger().info(f"published done to action_controller")
+
 
 
 
 
     def control_servo_speed(self, servo_key, target_angle):
-        tolerance = 2.0  # degrees within which we consider the target reached
+        tolerance = 1.0  # degrees within which we consider the target reached
         servo = self.servos[servo_key]
         self.get_logger().info(f"Servo:{servo}, servo_key{servo_key}")
 
@@ -222,7 +226,7 @@ class motorControl(Node):
 
             # Wait for all movements to complete before reversing
             while self.completed_movements < self.total_movements:
-                time.sleep(0.1)
+                time.sleep(0.5)
 
             self.get_logger().info("Reversing direction")
             # Reverse direction
@@ -240,6 +244,7 @@ class motorControl(Node):
         self.completed_movements = 0
         self.total_movements = 0
         self.get_logger().info("All cycles completed")
+
 
 
     # def notify_completion(self):
