@@ -7,6 +7,8 @@ import threading
 from rclpy.node import Node
 from std_msgs.msg import String
 import json
+import glob
+import numpy as np
 
 
 class HardwareInterfaceController(Node):
@@ -16,38 +18,41 @@ class HardwareInterfaceController(Node):
         self.temp_system_state = 'standby'
 
         self.state_subscriber = self.create_subscription(String, 'action_controller_state', self.check_state_callback, 10)
-        self.set_joystick_control_state_publisher = self.create_publisher(String, 'joystick_control_state_request', 10)
-        self.set_system_state_rst_or_rpp_publisher = self.create_publisher(String, 'reset_or_rpp_state_request', 10)
-        self.set_joystick_arm_control_state_publisher = self.create_publisher(String, 'joystick_arm_control_state_request', 10)
-        self.set_system_state_map_publisher = self.create_publisher(String, 'map_state_request', 10)
         self.send_map_button_press_publisher = self.create_publisher(String, 'map_button_pressed', 10)
         self.set_system_state_by_request_publisher = self.create_publisher(String, 'system_state_request', 10)
 
         """Attribute related to joystick button pressing:"""
         self.joystick_button_pressed = 0
 
-        """Attribute related to reset/"Stop the active process" button pressing:"""
+        """Attribute related to reset/"stop the active process" button pressing:"""
         self.reset_button_pressed = 0
 
-        """Attribute related to reset/"Stop the active process" button pressing:"""
+        """Attribute related to the "run a predefined path" button pressing:"""
         self.run_predefined_path_button_pressed = 0
 
         """Attribute related to "mapping" button pressing:"""
         self.map_button_pressed = 0
 
         """Attributes and method related to communication between the Arduino MEGA, Raspberry PI, LSS adapter board and LSS motors:"""
-        self.CST_LSS_Port = "/dev/ttyUSB1"		
+        self.avail_usb_ports = None
+        self.avail_serial_ports = None
+        self.CST_LSS_Port = None
+        self.ser_obj = None
+        self.set_usb_and_serial_port()
         self.CST_LSS_Baud = LSS_DefaultBaud
         initBus(self.CST_LSS_Port, self.CST_LSS_Baud)
-        self.ser_obj = serial.Serial('/dev/ttyACM0', 115200)
 
         """Attributes related to the received analog values:"""
         self.x_analog_value = 0
         self.z_analog_value = 0
         self.diagonal_threshold = 255
         self.zero_value_deadzone = 100
+        self.read_values_from_serial_clearance = True
 
         """Attributes and method related to the LSS motors and the rail system:"""
+        self.diameter_of_wheel = 2.4 # [cm]
+        self.circumference_of_wheel = np.pi * self.diameter_of_wheel # [cm]
+        self.distance_to_travel = 10 # [cm]
         self.top_limit_lss1 = 0
         self.bottom_limit_lss1 = 0
         self.top_limit_lss0 = 0
@@ -57,34 +62,61 @@ class HardwareInterfaceController(Node):
         self.lss1 = LSS(1)
         self.lss2 = LSS(2)
         self.rail_position = None
-        self.boundary_and_last_rail_position_data = None
-        self.rail_system_active = False
+        self.boundaries_and_last_rail_position_data = None
         self.set_boundaries_and_last_rail_position_data()
 
         """Attributes related to multiple button pressing cases:"""
         self.num_simultaneous_button_press_conditions = 10
         self.simultaneous_button_press_conditions = [0]*self.num_simultaneous_button_press_conditions
 
+        """Attributes related to the standby state"""
+        self.servos_moved_to_default = False
+
+
+    def set_usb_and_serial_port(self):
+
+        self.avail_usb_ports = glob.glob('/dev/ttyUSB*')
+        self.avail_serial_ports = glob.glob('/dev/ttyACM*')
+
+        if not self.avail_usb_ports and self.avail_serial_ports:
+            self.get_logger().info('No available USB ports found. Check connection between the Raspberry PI and LSS adapter board.')
+            self.ser_obj = serial.Serial(self.avail_serial_ports[0], 115200)
+            self.get_logger().info(f'Successfully set up the serial connection at {self.avail_serial_ports[0]}')
+
+        
+        elif not self.avail_serial_ports and self.avail_usb_ports:
+            self.get_logger().info('No available serial ports found. Check connection between the Raspberry PI and Arduino')
+            self.CST_LSS_Port = self.avail_usb_ports[0]
+            self.get_logger().info(f'Successfully assigned CST_LSS_port to {self.avail_usb_ports[0]}')
+        
+        elif not self.avail_serial_ports and not self.avail_usb_ports:
+            self.get_logger().info('No available serial or USB ports found. Check connection between the Raspberry PI, Arduino and the LSS adapter board')
+
+        else:
+            self.CST_LSS_Port = self.avail_usb_ports[0]
+            self.ser_obj = serial.Serial(self.avail_serial_ports[0], 115200)
+            self.get_logger().info(f'Successfully set up the serial connection at {self.avail_serial_ports[0]} and assigned CST_LSS_port to {self.avail_usb_ports[0]}')
+
     
     def set_boundaries_and_last_rail_position_data(self):
         try:
             with open('boundary_path_and_rail_position.json', 'r') as file:
-                self.boundary_and_rail_position_data = json.load(file)
-                self.top_limit_lss0 = self.boundary_and_rail_position_data['boundaries'][0]['top_lss0']*self.position_multiplier
-                self.bottom_limit_lss0 = self.boundary_and_rail_position_data['boundaries'][1]['bottom_lss0']*self.position_multiplier
-                self.top_limit_lss1 = self.boundary_and_rail_position_data['boundaries'][0]['top_lss1']*self.position_multiplier
-                self.bottom_limit_lss1 = self.boundary_and_rail_position_data['boundaries'][1]['bottom_lss1']*self.position_multiplier
-                self.rail_position = self.boundary_and_rail_position_data['last_rail_position'][0]['last_rail_pos']
+                self.boundaries_and_last_rail_position_data = json.load(file)
+                self.top_limit_lss0 = self.boundaries_and_last_rail_position_data['boundaries'][0]['top_lss0']*self.position_multiplier
+                self.bottom_limit_lss0 = self.boundaries_and_last_rail_position_data['boundaries'][1]['bottom_lss0']*self.position_multiplier
+                self.top_limit_lss1 = self.boundaries_and_last_rail_position_data['boundaries'][0]['top_lss1']*self.position_multiplier
+                self.bottom_limit_lss1 = self.boundaries_and_last_rail_position_data['boundaries'][1]['bottom_lss1']*self.position_multiplier
+                self.rail_position = self.boundaries_and_last_rail_position_data['last_rail_position'][0]['last_rail_pos']
                 self.get_logger().info('Successfully set the boundaries for the LSS motors, and the last rail position in the rail_position variable')
 
         except FileNotFoundError:
-                self.get_logger().error("File 'boundary_and_path.json' not found.")
+                self.get_logger().error("File 'boundary_path_and_rail_position.json' not found.")
                 return
     
     def save_last_rail_position(self):
-        self.boundary_and_rail_position_data['last_rail_position'][0]['last_rail_pos'] = self.rail_position
+        self.boundaries_and_last_rail_position_data['last_rail_position'][0]['last_rail_pos'] = self.rail_position
         with open('boundary_path_and_rail_position.json', 'w') as file:
-            json.dump(self.boundary_and_rail_position_data, file, indent=4)
+            json.dump(self.boundaries_and_last_rail_position_data, file, indent=4)
         self.get_logger().info('Successfully stored the last rail position to the appropriate field in the JSON file')
            
     def lss1_beyond_bottom_limit(self):
@@ -127,9 +159,6 @@ class HardwareInterfaceController(Node):
             (self.joystick_button_pressed and self.reset_button_pressed and self.run_predefined_path_button_pressed and self.map_button_pressed)
         ]
 
-
-
-    
     def read_values_from_serial(self):
 
         received_vals = self.ser_obj.readline().decode().strip()
@@ -338,32 +367,45 @@ class HardwareInterfaceController(Node):
         self.get_logger().info(f'The following request was sent to the action_controller node: {request}, on the topic: system_state_request')
         self.set_system_state_by_request_publisher.publish(msg)
 
+    def calculate_time_to_run_rail_system(self, rpm):
+        revolutions = self.distance_to_travel/self.circumference_of_wheel
+        time = (60/np.abs(rpm))*revolutions
+        return time
+
+    def move_rail_system(self, rpm, target_pos):
+
+        self.get_logger().info(f'Moving DuoArm to position {target_pos} on the y - axis')
+        self.lss2.wheelRPM(rpm)
+        time.sleep(self.calculate_time_to_run_rail_system(rpm))
+        self.lss2.wheelRPM(0)
+        self.rail_position = target_pos
+    
+    def move_servos_to_default_position(self):
+        self.lss1.move(0)
+        self.lss0.move(0)
+
+
     def activate_rail_system(self):
 
-        match self.rail_position:
+        if (self.rail_position == "A"):
+            self.move_rail_system(30, "B")
+            self.save_last_rail_position()
+            self.get_logger().info("Target position reached -> Exiting the joystick_rail_control state")
+            self.send_system_state_request('joystick_arm_control')
+            self.wait_for_state_change('joystick_arm_control')
+            self.ser_obj.reset_input_buffer()
 
-            case "A":
-                self.get_logger().info('Moving DuoArm to position B on the y - axis')
-                self.lss2.wheelRPM(10)
-                time.sleep(6)
-                self.lss2.wheelRPM(0)
-                self.rail_position = "B"
-                self.save_last_rail_position()
-                self.get_logger().info("Target position reached -> Exiting the joystick_rail_control state")
-                self.send_system_state_request('joystick_arm_control')
-                self.wait_for_state_change('joystick_arm_control')
-                return  
-            case "B":
-                self.get_logger().info('Moving DuoArm to position A on the y - axis')
-                self.lss2.wheelRPM(-10)
-                time.sleep(6)
-                self.lss2.wheelRPM(0)
-                self.rail_position = "A"
-                self.save_last_rail_position()
-                self.get_logger().info("Target position reached -> Exiting the joystick_rail_control state")
-                self.send_system_state_request('joystick_arm_control')
-                self.wait_for_state_change('joystick_arm_control')
-                return  
+        elif (self.rail_position == "B"):
+            self.move_rail_system(-30, "A")
+            self.save_last_rail_position()
+            self.get_logger().info("Target position reached -> Exiting the joystick_rail_control state")
+            self.send_system_state_request('joystick_arm_control')
+            self.wait_for_state_change('joystick_arm_control')
+            self.ser_obj.reset_input_buffer()
+
+        else: 
+            self.get_logger().info('Check the boundary_path_and_rail_position.json file for an invalid rail position value (The value should either be A or B)')
+            return
     
     def wait_for_state_change(self, expected_state):
         while True:
@@ -382,38 +424,46 @@ def main():
         hic_obj_node_spin_thread.start()
         
         while True:
-
+            
             hic_obj.read_values_from_serial()
 
             if (any(hic_obj.simultaneous_button_press_conditions)):
-                    hic_obj.get_logger().info('Multiple buttons were pressed simultaneously -> Button presses was ignored')
-                    hic_obj.clear_button_press_flags()
+                hic_obj.get_logger().info('Multiple buttons were pressed simultaneously -> Button presses was ignored')
+                hic_obj.clear_button_press_flags()
 
-            if(hic_obj.joystick_button_pressed):
+            if(hic_obj.joystick_button_pressed and hic_obj.boundaries_and_last_rail_position_data is not None):
                 hic_obj.send_system_state_request('joystick_control')
-            
+
+            elif (hic_obj.joystick_button_pressed and hic_obj.boundaries_and_last_rail_position_data is None):
+                hic_obj.get_logger().info('A mapping sequence have to be executed to control the arm with the joystick and/or activate the rail system')
+
             if (hic_obj.temp_system_state == 'joystick_arm_control'):
                 hic_obj.control_arm_with_joystick()
             
             if(hic_obj.temp_system_state == 'joystick_rail_control'):
-
                 hic_obj.get_logger().info('Activated the rail system')
                 hic_obj.activate_rail_system()
             
             if(hic_obj.reset_button_pressed):
-
                 hic_obj.send_system_state_request('standby')
-
-            # if(hic_obj.run_predefined_path_button_pressed):
-            #   hic_obj.send_system_state_request('run_predefined_path')
+                hic_obj.wait_for_state_change('standby')
             
-            # if(hic_obj.map_button_pressed):
+            if (hic_obj.temp_system_state == 'standby'):
+                # hic_obj.move_servos_to_default_position()
+                hic_obj.get_logger().info('standby')
 
-            #    if(hic_obj.temp_system_state == 'map'):
-            #        hic_obj.send_map_button_presses(String(hic_obj.map_button_pressed))
-            #    else:
-            #        hic_obj.send_system_state_request('map')
+            if(hic_obj.run_predefined_path_button_pressed and hic_obj.boundaries_and_last_rail_position_data is not None):
+               hic_obj.send_system_state_request('run_predefined_path')
+            
+            elif (hic_obj.run_predefined_path_button_pressed and hic_obj.boundaries_and_last_rail_position_data is None):
+                hic_obj.get_logger().info('A mapping sequence have to be executed to run a predefined path')
+            
+            if(hic_obj.map_button_pressed):
 
+               if(hic_obj.temp_system_state == 'map'):
+                   hic_obj.send_map_button_presses(String(hic_obj.map_button_pressed))
+               else:
+                   hic_obj.send_system_state_request('map')
 
     except KeyboardInterrupt:
 

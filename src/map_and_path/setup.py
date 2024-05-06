@@ -1,8 +1,6 @@
 from setuptools import find_packages, setup
-import os
-import glob
 
-package_name = 'arm'
+package_name = 'map_and_path'
 
 setup(
     name=package_name,
@@ -12,18 +10,18 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        (os.path.join('share', package_name, 'launch'), glob.glob('launch/*.py')),
-
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='theo',
-    maintainer_email='theo@todo.todo',
+    maintainer='asklindbraten',
+    maintainer_email='asklindbraten@hotmail.com',
     description='TODO: Package description',
     license='Apache-2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'mapper = map_and_path.mapper:main',
+            'path = map_and_path.path:main',
         ],
     },
 )

@@ -19,10 +19,6 @@ class ActionController(Node):
         self.create_subscription(String, 'predefined_path_button', self.set_predefined_path_state, 10)
         self.create_subscription(String, 'command_start_mapping', self.set_map_state_with_command, 10)
         self.create_subscription(String, 'mapping_done', self.mapping_done, 10)
-        # self.create_subscription(String, 'joystick_control_state_request', self.set_general_joystick_control_state, 10)
-        # self.create_subscription(String, 'joystick_arm_control_state_request', self.set_joystick_arm_control_state, 10)
-        # self.create_subscription(String, 'reset_or_rpp_state_request', self.set_reset_or_rpp_state, 10)
-        # self.create_subscription(String, 'reset_or_rpp_state_request', self.set_reset_or_rpp_state, 10)
         self.create_subscription(String, 'system_state_request', self.handle_state_change, 10)
         
 
@@ -83,76 +79,12 @@ class ActionController(Node):
 
             if (self.state == 'standby'):
                 self.get_logger().info(f'The reset/"stop the active process" button press was ignored -> The system is already in the {self.state} state')
-                self.publish_state()
                 return
 
             else:
                 self.state = msg.data
                 self.publish_state()
                 return
-
-        
-        
-    # def set_joystick_arm_control_state(self, msg):
-    #     if (msg.data == 'set joystick_arm_control state' and self.state == 'joystick_rail_control'):
-    #         self.state = 'joystick_arm_control'
-    #         self.publish_state()
-    #     else:
-    #         pass
-
-    
-    # def set_general_joystick_control_state(self, msg):
-
-    #     if (msg.data == 'set joystick control state' and self.state == 'standby'):
-    #         self.state = 'joystick_arm_control'
-    #         self.publish_state()
-    #     elif(msg.data == 'set joystick control state' and self.state == 'joystick_arm_control'):
-    #         self.state = 'joystick_rail_control'
-    #         self.publish_state()
-    #     else:
-    #         self.get_logger().info('The request was ignored based on one or both of the following statements:\n<The system is in another state that cannot be changed>\n\
-    #                                <The data was invalid>')
-    
-    # def set_reset_or_rpp_state(self, msg):
-
-    #     if (msg.data == 'reset the system state' and self.state == 'standby'):
-    #         self.get_logger().info('The system is already in the default/standby state -> Request ignored')
-    #     else:
-    #         self.state = 'standby'
-    #         self.get_logger().info('The system has been set to the default/standby state')
-        
-    #     if (msg.data == 'run the predefined path' and self.state == 'standby'):
-    #         if (os.path.exists('../../../robot_arm_mappings.json')):
-    #             self.state = 'predefined path'
-    #         else: 
-    #             self.get_logger().info('A mapping sequence have to be initiated before a predefined path can be run')
-    #     else:
-    #         self.get_logger().info(f'The run of a predefined path cannot be initiated -> System state: ({self.state})')
-
-
-    
-    # def set_joystick_arm_control_state(self, msg):
-    #     if (msg.data == 'set joystick_arm_control state' and self.state == 'joystick_rail_control'):
-    #         self.state = 'joystick_arm_control'
-    #         self publish_state()
-    #     else:
-    #         pass
-    
-    # def set_general_joystick_control_state(self, msg):
-
-    #     if (msg.data == 'set joystick_control state' and self.state == 'standby'):
-    #         self.state = 'joystick_arm_control'
-    #         self publish_state()
-
-
-    #     elif (msg.data == 'set joystick_control state' and self.state == 'joystick_arm_control'):
-    #         self.state = 'joystick_rail_control'
-    #         self publish_state()
-            
-    #     else:
-    #         self.get_logger().info('The request was ignored based on one or both of the following statements:\n<The system is in another state that cannot be changed>\n\
-    #                                <The data was invalid>')
-    #         self publish_state()
         
 
     def set_predefined_path_state(self, msg): # TODO needs rework

@@ -5,7 +5,7 @@ from launch_ros.actions import Node
 def generate_launch_description():
     ld = LaunchDescription()
 
-    # Controll center
+    # Control center
     command_window_node = Node(
         package='control_center',
         executable='command_window',
@@ -30,7 +30,7 @@ def generate_launch_description():
     )
 
 
-    # Mapping and movment
+    # Mapping and movement
     auto_mapper = Node(
         package='path_planning',
         executable='auto_mapper',
@@ -56,21 +56,34 @@ def generate_launch_description():
         executable='motor_control',
         name='motor_controller'
     )
+    mapper = Node(
+        package='map_and_path',
+        executable='mapper',
+        name='mapper'
+    )
 
-    
+    path = Node(
+        package='map_and_path',
+        executable='path',
+        name='path'
+    )
+    gui_buttons = Node(
+        package='control_center',
+        executable='gui_buttons',
+        name='gui_buttons'
+    )
 
     #ld.add_action(auto_mapper)
     #ld.add_action(path_planner)
     ld.add_action(action_controller)
-    #ld.add_action(motor_controller)
-    
-
-    # ld.add_action(command_window_node)
-    # ld.add_action(command_executor_node)
+    ld.add_action(motor_controller)
+    ld.add_action(mapper)
+    ld.add_action(path)    
+    #ld.add_action(gui_buttons) 
+    #ld.add_action(command_window_node)
+    #ld.add_action(command_executor_node)
     # ld.add_action(display_node)
-
     ld.add_action(hardware_interface_controller)
-    # ld.add_action(joy_node)
 
 
     return ld
