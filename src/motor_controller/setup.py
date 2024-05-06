@@ -23,6 +23,7 @@ setup(
     entry_points={
         'console_scripts': [
             'motor_control = motor_controller.motor_control:main',
+            'hardware_interface_controller = motor_controller.hardware_interface_controller:main'
         ],
     },
 )

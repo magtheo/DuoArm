@@ -1,0 +1,54 @@
+{
+    "boundaries": [
+        {
+            "top_lss0": -49.7,
+            "top_lss1": 16.1
+        },
+        {
+            "bottom_lss0": 78.5,
+            "bottom_lss1": -85.5
+        }
+    ],
+    "path_points": [
+        {
+            "nr": 1,
+            "lss0_angle": 68.2,
+            "lss1_angle": -78.1
+        },
+        {
+            "nr": 2,
+            "lss0_angle": 7.3,
+            "lss1_angle": -12.2
+        },
+        {
+            "nr": 3,
+            "lss0_angle": -32.1,
+            "lss1_angle": -13.4
+        },
+        {
+            "nr": 4,
+            "lss0_angle": -31.3,
+            "lss1_angle": -58.1
+        },
+        {
+            "nr": 5,
+            "lss0_angle": -7.9,
+            "lss1_angle": -70.1
+        },
+        {
+            "nr": 6,
+            "lss0_angle": 14.1,
+            "lss1_angle": -79.1
+        },
+        {
+            "nr": 7,
+            "lss0_angle": 17.1,
+            "lss1_angle": -79.1
+        }
+    ],
+    "last_rail_position": [
+        {
+            "last_rail_pos": "A"
+        }
+    ]
+}
