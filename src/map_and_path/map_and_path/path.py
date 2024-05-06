@@ -20,18 +20,18 @@ class PathExecutor(Node):
             Float64MultiArray, 'joint_angles_array', 10)
 
     def state_callback(self, msg):
-        if msg.data == 'path':
+        if msg.data == 'run_predefined_path':
             self.get_logger().info("Path execution state activated.")
             self.execute_path()
 
     def execute_path(self):
         # Load joint angles from the JSON file
         try:
-            with open('boundary_and_path.json', 'r') as file:
+            with open('boundary_path_and_rail_position.json', 'r') as file:
                 mapping_data = json.load(file)
             self.get_logger().info("Loaded mapping data successfully.")
         except FileNotFoundError:
-            self.get_logger().error("File 'boundary_and_path.json' not found.")
+            self.get_logger().error("File boundary_path_and_rail_position.json not found.")
             return
         
         # Collect all angles in a single array

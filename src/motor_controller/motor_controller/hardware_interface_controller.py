@@ -15,7 +15,8 @@ class HardwareInterfaceController(Node):
     def __init__(self):
         super().__init__('hardware_interface_controller')
 
-        self.temp_system_state = 'standby'
+        self.current_system_state = 'standby'
+        self.previous_system_state = None
 
         self.state_subscriber = self.create_subscription(String, 'action_controller_state', self.check_state_callback, 10)
         self.send_map_button_press_publisher = self.create_publisher(String, 'map_button_pressed', 10)
@@ -63,6 +64,7 @@ class HardwareInterfaceController(Node):
         self.lss2 = LSS(2)
         self.rail_position = None
         self.boundaries_and_last_rail_position_data = None
+        self.boundaries_and_last_rail_position_data_updated = False
         self.set_boundaries_and_last_rail_position_data()
 
         """Attributes related to multiple button pressing cases:"""
@@ -108,7 +110,7 @@ class HardwareInterfaceController(Node):
                 self.bottom_limit_lss1 = self.boundaries_and_last_rail_position_data['boundaries'][1]['bottom_lss1']*self.position_multiplier
                 self.rail_position = self.boundaries_and_last_rail_position_data['last_rail_position'][0]['last_rail_pos']
                 self.get_logger().info('Successfully set the boundaries for the LSS motors, and the last rail position in the rail_position variable')
-
+                self.boundaries_and_last_rail_position_data_updated = True
         except FileNotFoundError:
                 self.get_logger().error("File 'boundary_path_and_rail_position.json' not found.")
                 return
@@ -347,8 +349,9 @@ class HardwareInterfaceController(Node):
 
 
     def check_state_callback(self, msg):
-        self.temp_system_state = msg.data
-        self.get_logger().info(f'Set the temp system state variable to: {self.temp_system_state}')
+        self.previous_system_state = self.current_system_state
+        self.current_system_state = msg.data
+        self.get_logger().info(f'Set the current system state variable to: {self.current_system_state} and the previous system state to: {self.previous_system_state}')
 
     def cleanup_serial(self):
         if self.ser_obj.is_open:
@@ -409,7 +412,7 @@ class HardwareInterfaceController(Node):
     
     def wait_for_state_change(self, expected_state):
         while True:
-            if (self.temp_system_state == expected_state):
+            if (self.current_system_state == expected_state):
                 break
 
   
@@ -427,6 +430,12 @@ def main():
             
             hic_obj.read_values_from_serial()
 
+            if (hic_obj.previous_system_state == 'map' and hic_obj.current_system_state == 'standby' and not hic_obj.boundaries_and_last_rail_position_data_updated):
+                hic_obj.set_boundaries_and_last_rail_position_data()
+
+            if (hic_obj.previous_system_state == 'standby' and hic_obj.current_system_state == 'map'):
+                hic_obj.boundaries_and_last_rail_position_data_updated = False
+
             if (any(hic_obj.simultaneous_button_press_conditions)):
                 hic_obj.get_logger().info('Multiple buttons were pressed simultaneously -> Button presses was ignored')
                 hic_obj.clear_button_press_flags()
@@ -437,10 +446,10 @@ def main():
             elif (hic_obj.joystick_button_pressed and hic_obj.boundaries_and_last_rail_position_data is None):
                 hic_obj.get_logger().info('A mapping sequence have to be executed to control the arm with the joystick and/or activate the rail system')
 
-            if (hic_obj.temp_system_state == 'joystick_arm_control'):
+            if (hic_obj.current_system_state == 'joystick_arm_control'):
                 hic_obj.control_arm_with_joystick()
             
-            if(hic_obj.temp_system_state == 'joystick_rail_control'):
+            if(hic_obj.current_system_state == 'joystick_rail_control'):
                 hic_obj.get_logger().info('Activated the rail system')
                 hic_obj.activate_rail_system()
             
@@ -448,7 +457,7 @@ def main():
                 hic_obj.send_system_state_request('standby')
                 hic_obj.wait_for_state_change('standby')
             
-            if (hic_obj.temp_system_state == 'standby'):
+            if (hic_obj.current_system_state == 'standby'):
                 # hic_obj.move_servos_to_default_position()
                 hic_obj.get_logger().info('standby')
 
@@ -460,8 +469,8 @@ def main():
             
             if(hic_obj.map_button_pressed):
 
-               if(hic_obj.temp_system_state == 'map'):
-                   hic_obj.send_map_button_presses(String(hic_obj.map_button_pressed))
+               if(hic_obj.current_system_state == 'map'):
+                   hic_obj.send_map_button_presses("1")
                else:
                    hic_obj.send_system_state_request('map')
 

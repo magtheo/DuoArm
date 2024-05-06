@@ -130,7 +130,7 @@ class motorControl(Node):
             Float64MultiArray, 'joint_angles_array', self.iterate_and_move_servos_callback, 10)
 
         self.path_done_pub = self.create_publisher(
-            String, 'path_done', 10)
+            String, 'system_state_request', 10)
 
   
     def load_and_set_boundaries(self):
@@ -163,9 +163,6 @@ class motorControl(Node):
             self.control_servo_speed(servo_key, target_angle)
             with self.lock:
                 self.completed_movements += 1
-                if self.completed_movements == self.total_movements:
-                    self.path_done_pub.publish(String(data="done"))
-                    self.get_logger().info(f"published done to action_controller")
 
 
 
@@ -216,7 +213,7 @@ class motorControl(Node):
             for i in range(0, len(angles), 2):
                 self.angles_queues['lss0'].put(angles[i])
                 self.angles_queues['lss1'].put(angles[i + 1])
-                self.total_movements += 1
+                self.total_movements += 2
                 time.sleep(2)  # Wait for some time between movements
 
             # Wait for all movements to complete before reversing
@@ -228,7 +225,7 @@ class motorControl(Node):
             for i in range(len(angles) - 2, -1, -2):
                 self.angles_queues['lss0'].put(angles[i])
                 self.angles_queues['lss1'].put(angles[i + 1])
-                self.total_movements += 1
+                self.total_movements += 2
                 time.sleep(2)  # Wait for some time between movements
             
             # Wait for all movements to complete before next cycle
@@ -239,6 +236,9 @@ class motorControl(Node):
         self.completed_movements = 0
         self.total_movements = 0
         self.get_logger().info("All cycles completed")
+        self.path_done_pub.publish(String(data="path_done"))
+        self.get_logger().info(f"published done to action_controller")
+
 
     
     def limp_and_set_origin(self, msg):

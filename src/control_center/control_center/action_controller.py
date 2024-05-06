@@ -16,9 +16,6 @@ class ActionController(Node):
         self.state_publisher = self.create_publisher(String, 'action_controller_state', 10)
 
         # Subscriptions
-        self.create_subscription(String, 'predefined_path_button', self.set_predefined_path_state, 10)
-        self.create_subscription(String, 'command_start_mapping', self.set_map_state_with_command, 10)
-        self.create_subscription(String, 'mapping_done', self.mapping_done, 10)
         self.create_subscription(String, 'system_state_request', self.handle_state_change, 10)
         
 
@@ -43,7 +40,7 @@ class ActionController(Node):
                 self.publish_state()
                 return
             else:
-                self.get_logger(f'The joystick button press was ignored -> The system is in a state that cannot be changed: {self.state}')
+                self.get_logger().info(f'The joystick button press was ignored -> The system is in a state that cannot be changed: {self.state}')
                 return
 
         elif (msg.data == 'joystick_arm_control'):
@@ -77,33 +74,19 @@ class ActionController(Node):
         
         elif (msg.data == 'standby'):
 
-            if (self.state == 'standby'):
-                self.get_logger().info(f'The reset/"stop the active process" button press was ignored -> The system is already in the {self.state} state')
+            if (self.state == 'standby' or self.state == 'map'):
+                self.get_logger().info(f'The reset/"stop the active process" button press was ignored -> The system is in a state that cannot be changed: {self.state}')
                 return
 
             else:
                 self.state = msg.data
                 self.publish_state()
                 return
-        
-
-    def set_predefined_path_state(self, msg): # TODO needs rework
-        if msg.data == 'pressed':
-            self.state = 'predefined_path'
-            self.publish_state()
-            self.get_logger().info('Setting state: Starting predefined path')
-
-    def set_map_state_with_command(self, msg):
-        if msg.data == 'start' and self.state == 'standby':
-            self.state = 'map'
-            self.publish_state()
-            self.get_logger().info('state set: map')
-
-    def mapping_done(self, msg):
-        if msg.data == 'done':
+        elif (msg.data == 'path_done' or msg.data == 'mapping_done'):
             self.state = 'standby'
             self.publish_state()
-            self.get_logger().info('Setting state: Mapping completed. Returning to standby state.')
+            return
+            
 
 def main(args=None):
     rclpy.init(args=args)
