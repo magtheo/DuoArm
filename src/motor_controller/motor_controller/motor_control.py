@@ -91,6 +91,7 @@ class motorControl(Node):
             String,
             'joint_angles',  # Topic to publish the joint angles to display node
             qos_profile=self.real_time_qos
+        )
 
 
         self.joint_angles_publisher = self.create_publisher(
@@ -101,14 +102,12 @@ class motorControl(Node):
 
         # Subscriber for receiving start test command
         self.start_test_sub = self.create_subscription( # starting test form command
-        self.start_test_sub = self.create_subscription( # starting test form command
             String,
             'start_test',
             self.start_test_callback,
             10)
         
         # Subscriber for receiving start test command
-        self.start_read_sub = self.create_subscription( # manualy reading angles with command
         self.start_read_sub = self.create_subscription( # manualy reading angles with command
             String,
             'start_read',
@@ -432,7 +431,6 @@ class motorControl(Node):
         self.get_logger().info(f"lss1 tried moving to pos{lss1_position}")
 
     def read_angles_callback(self, msg):
-    def read_angles_callback(self, msg):
         # Fetch current positions from servos
         lss0_act_position = float(lss0.getPosition())
         lss1_act_position = float(lss1.getPosition())
@@ -449,7 +447,6 @@ class motorControl(Node):
         self.get_logger().info(f"Published angle readings: LSS0:{lss0_act_angle}| LSS1:{lss1_act_angle}")
 
 
-    def read_and_pub_servo_angles(self): # USED during old mapping sequence
     def read_and_pub_servo_angles(self): # USED during old mapping sequence
         # Fetch current positions from servos, convert to angles, and publish
         lss0_act_position = float(lss0.getPosition())
@@ -687,12 +684,10 @@ class motorControl(Node):
             self.test_motors()
 
     def manualy_callback(self):
-    def manualy_callback(self):
         self.get_logger().info( 'test ')
         lss0.limp()
         lss1.limp()
 
-        for i in range(2):
         for i in range(2):
             self.get_logger().info(f'current loop: {i}')
 

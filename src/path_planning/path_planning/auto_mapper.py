@@ -30,16 +30,8 @@ class AutoMapper(Node):
     def __init__(self):
         super().__init__('auto_mapper')
 
-<<<<<<< HEAD
         self.actual_joint_angles = None
         self.actual_joint_angle_flag = False
-=======
-        # Define angle limits
-        MIN_THETA1_LEFT = np.radians(-13)
-        MAX_THETA1_LEFT = np.radians(90)
-        MIN_THETA1_RIGHT = np.radians(-90)
-        MAX_THETA1_RIGHT = np.radians(13)
->>>>>>> ff002f6542b223921602b615f31a4889708bc41a
 
         self.current_point_index = 0  # Tracks the index of the current grid point being processed
         self.is_point_processed = True  # Flag to indicate when the robot has finished processing a point
@@ -67,14 +59,8 @@ class AutoMapper(Node):
             Float64MultiArray,
             'actual_joint_angles',
             self.joint_angles_callback,
-<<<<<<< HEAD
             10
             )
-=======
-            10)
-        self.joint_state_msg = None
-        self.mapping = {}  # To store the mapped coordinates with joint angles
->>>>>>> ff002f6542b223921602b615f31a4889708bc41a
         
         # Initialize the publisher for sending joint angles
         self.joint_command_publisher = self.create_publisher(
@@ -118,7 +104,6 @@ class AutoMapper(Node):
             qos_profile=real_time_qos
         )
 
-<<<<<<< HEAD
         self.grid_data_publisher = self.create_publisher(
             String,
             'grid_data',
@@ -134,16 +119,6 @@ class AutoMapper(Node):
         self.MAX_THETA1_LEFT = 270
         self.MIN_THETA1_RIGHT = -90
         self.MAX_THETA1_RIGHT = 40
-=======
-        # Manually determined reference angles for the top and bottom center points
-        self.ref_angles_top = [MIN_THETA1_LEFT, np.radians(45), MAX_THETA1_RIGHT, np.radians(-45)]  # Replace with your actual angles
-        self.ref_angles_bottom = [MAX_THETA1_LEFT, np.radians(175), MIN_THETA1_RIGHT, np.radians(-175)]
-
-    def map_workspace(self, initial_guesses):   
-#       Assume grid origin (0,0) is at the bottom left
-        ref_x = grid_size_x / 2
-        ref_y = grid_size_z  # Top of the grid
->>>>>>> ff002f6542b223921602b615f31a4889708bc41a
 
 
         #new ref point method
@@ -179,7 +154,6 @@ class AutoMapper(Node):
 
         self.get_logger().info(f'Prepared {len(self.grid_points)} grid points for mapping.')
 
-<<<<<<< HEAD
         # Publish generated grid to display node
         grid_data = [{'x': point['coords'][0], 'z': point['coords'][1], 'type': point['type']} for point in self.grid_points]
         self.grid_data_publisher.publish(String(data=json.dumps(grid_data)))
@@ -325,10 +299,6 @@ class AutoMapper(Node):
                     self.get_logger().info(f"All ref points set, press button again to start mapping")
                 return
             
-=======
-                # Wait for robot to reach the position and stabilize
-                self.wait_until_stable(theta1_left, theta1_right)
->>>>>>> ff002f6542b223921602b615f31a4889708bc41a
 
             if self.current_ref_point_index >= len(self.ref_points) and self.current_angle_limit_index >= len(self.angle_limits):
                 self.get_logger().info("All settings completed. Starting automatic mapping...")
@@ -399,7 +369,6 @@ class AutoMapper(Node):
 
 
     def joint_angles_callback(self, msg):
-<<<<<<< HEAD
         if self.mapping_done == False:
             self.actual_joint_angles = msg.data
             self.get_logger().info(f'Received actual joint angles: {(self.actual_joint_angles)}')
@@ -421,46 +390,6 @@ class AutoMapper(Node):
         
 
         self.start_read_publisher.publish(String(data="start"))
-=======
-        actual_joint_angles = msg
-        self.get_logger().info(f'Received a joint angles {actual_joint_angles}')
-
-    def wait_until_stable(self, theta_left, theta_right):
-        flag = False
-        while flag == False:
-            """Waits a given period for the robot to reach the position and stabilize."""
-            self.get_logger().info('Waiting for the robot to stabilize...')
-            time.sleep(0.5)  # Waits for 0.5 seconds
-            
-            # commanded_angles is a list with the calculated angles, 
-            # like [theta1_left, theta1_right], in radians.
-            commanded_angles = [theta_left, theta_right]
-            print(commanded_angles)
-
-            # Ensure that joint_state_msg is not None and has enough positions
-            if self.joint_state_msg is None or len(self.joint_state_msg.position) < 2:
-                self.get_logger().error('Insufficient joint state data.')
-                return False
-            
-            # actual_angles will be read from the robot's joint_state message.
-            # Assuming that positions 0 and 1 correspond to theta1_left and theta1_right.
-            actual_angles = [self.joint_state_msg.position[0], self.joint_state_msg.position[2]]
-            print(actual_angles)
-
-            # TESTING
-            # actual_angles = commanded_angles # Testing
-            # Testing
-
-            # Check if the actual angles are close enough to the commanded angles
-            tolerance = np.radians(5)  # 5 degree tolerance in radians. TODO play with this number
-            if all(np.isclose(commanded_angles, actual_angles, atol=tolerance)):
-                self.get_logger().info('Robot has stabilized at the target position.')
-                flag = True
-            else:
-                self.get_logger().warn('Robot has not stabilized at the target position.')
-                return False
-            
->>>>>>> ff002f6542b223921602b615f31a4889708bc41a
 
 
     def state_callback(self, msg):
@@ -572,7 +501,6 @@ class AutoMapper(Node):
 
     
     def send_calculated_joint_angles(self, theta1_left, theta1_right):
-<<<<<<< HEAD
         if self.mapping_done == False:
             # Create a message with the desired joint angles
             msg = Float64MultiArray()
@@ -582,17 +510,6 @@ class AutoMapper(Node):
             # The topic and message type might be different for your setup
             self.joint_command_publisher.publish(msg)
             self.get_logger().info('Published calculated joint angles during mapping')
-=======
-        
-        # Create a message with the desired joint angles
-        msg = Float64MultiArray()
-        msg.data = [theta1_left, theta1_right]        
-        
-        # Publish the message to the controller topic
-        # The topic and message type might be different for your setup
-        self.joint_command_publisher.publish(msg)
-        self.get_logger().info('Published joint angles to move robot to position')
->>>>>>> ff002f6542b223921602b615f31a4889708bc41a
 
             return msg.data
         else:
