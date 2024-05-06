@@ -62,6 +62,8 @@ class motorControl(Node):
         self.bottom_lss1 = None
         self.top_lss1 = None
 
+        self.state = 'standby'
+
         self.total_movements = 0
         self.completed_movements = 0
 
@@ -71,6 +73,8 @@ class motorControl(Node):
             self.calc_joint_angles_callback,
             10
         )
+
+        
         self.actual_joint_angles_publisher = self.create_publisher(
             Float64MultiArray, 
             'actual_joint_angles', # used during mapping and motor control
@@ -82,13 +86,6 @@ class motorControl(Node):
             'joint_angles',  # Topic to publish the joint angles to display node
             qos_profile=self.real_time_qos
         )
-
-        # Subscriber for receiving start test command
-        self.start_test_sub = self.create_subscription(
-            String,
-            'start_test',
-            self.start_test_callback,
-            10)
         
         # Subscriber for receiving start test command
         self.start_read_sub = self.create_subscription(
@@ -131,6 +128,10 @@ class motorControl(Node):
 
         self.path_done_pub = self.create_publisher(
             String, 'system_state_request', 10)
+        
+        self.state_subscription = self.create_subscription(
+            String, 'action_controller_state', self.state_callback, 10)
+
 
   
     def load_and_set_boundaries(self):
@@ -160,9 +161,9 @@ class motorControl(Node):
     def servo_control_loop(self, servo_key):
         while True:
             target_angle = self.angles_queues[servo_key].get()
-            self.control_servo_speed(servo_key, target_angle)
             with self.lock:
                 self.completed_movements += 1
+            self.control_servo_speed(servo_key, target_angle)
 
 
 
@@ -171,7 +172,7 @@ class motorControl(Node):
     def control_servo_speed(self, servo_key, target_angle):
         tolerance = 1.0  # degrees within which we consider the target reached
         servo = self.servos[servo_key]
-        self.get_logger().info(f"Servo:{servo}, servo_key{servo_key}")
+        self.get_logger().info(f" servo{servo_key} is moving to new target angle{target_angle}")
 
         kp = 0.2  # Proportional gain
         ki = 0.02 # Integral gain
@@ -200,17 +201,24 @@ class motorControl(Node):
                 servo.wheelRPM(speed)
 
             # time.sleep(0.1)  # Adjust timing as necessary for more responsive control
-            self.get_logger().info(f"Servo: {servo}, speed: {speed}, difference: {target_angle_minus_current_angle}, target angle: {target_angle}, current angle: {current_angle}")
+            self.get_logger().info(f"Servo: {servo_key}, speed: {np.round(speed)}, difference: {np.round(target_angle_minus_current_angle)}, target angle: {target_angle}, current angle: {current_angle}")
 
     def iterate_and_move_servos_callback(self, msg):
         self.get_logger().info("motor_controller received array of angles")
         angles = np.array(msg.data)
         num_cycles = 3  # Number of times to repeat the path back and forth
+        self.follow_path(angles, num_cycles)
         
+
+    def follow_path(self, angles, num_cycles):
         for _ in range(num_cycles):
             # Forward direction
             self.get_logger().info("Moving forward")
             for i in range(0, len(angles), 2):
+                # Check the state before moving each pair of angles
+                self.check_state_and_stop()
+                if self.state == 'standby':
+                    return  # Exit the method if state is standby
                 self.angles_queues['lss0'].put(angles[i])
                 self.angles_queues['lss1'].put(angles[i + 1])
                 self.total_movements += 2
@@ -223,6 +231,10 @@ class motorControl(Node):
             self.get_logger().info("Reversing direction")
             # Reverse direction
             for i in range(len(angles) - 2, -1, -2):
+                # Check the state before moving each pair of angles
+                self.check_state_and_stop()
+                if self.state == 'standby':
+                    return  # Exit the method if state is standby
                 self.angles_queues['lss0'].put(angles[i])
                 self.angles_queues['lss1'].put(angles[i + 1])
                 self.total_movements += 2
@@ -231,6 +243,7 @@ class motorControl(Node):
             # Wait for all movements to complete before next cycle
             while self.completed_movements < self.total_movements:
                 time.sleep(0.1)
+                self.check_state_and_stop()  # Check state continuously
 
         # Reset movements counters after completion of all cycles
         self.completed_movements = 0
@@ -238,7 +251,6 @@ class motorControl(Node):
         self.get_logger().info("All cycles completed")
         self.path_done_pub.publish(String(data="path_done"))
         self.get_logger().info(f"published done to action_controller")
-
 
     
     def limp_and_set_origin(self, msg):
@@ -495,11 +507,6 @@ class motorControl(Node):
     #         self.out_of_bounds_publisher.publish(String(data="Angles out of bounds"))
 
 
-    def start_test_callback(self, msg):
-        if msg.data == "start":
-            self.get_logger().info('Starting test of motor movement')
-            self.test_motors()
-
     def manualy_callback(self):
         self.get_logger().info( 'test ')
         lss0.limp()
@@ -523,6 +530,23 @@ class motorControl(Node):
             lss0.limp()
             lss1.limp()
             self.ref_point_read_and_pub_servo_angles()
+
+    def check_state_and_stop(self):            
+        self.get_logger().info('enterd check state and stop predefined path')
+        """Check the current state and stop movement if it's changed to standby."""
+        if self.state == 'standby':
+            # Stop the movement of servos
+            for servo_key in self.servos:
+                self.get_logger().info('stop path, for loop iteration')
+                self.angles_queues[servo_key].queue.clear()  # Clear the angles queue
+                self.servos[servo_key].wheelRPM(0)  # Stop the servo
+            self.completed_movements = 0
+            self.total_movements = 0
+
+    def state_callback(self, msg):
+        self.state = msg.data
+        self.get_logger().info(f'motor controller state updated: {self.state}')
+
 
 
 def main(args=None):

@@ -455,7 +455,6 @@ def main():
             
             if(hic_obj.reset_button_pressed):
                 hic_obj.send_system_state_request('standby')
-                hic_obj.wait_for_state_change('standby')
             
             if (hic_obj.current_system_state == 'standby'):
                 # hic_obj.move_servos_to_default_position()
