@@ -20,7 +20,7 @@ class PathExecutor(Node):
             Float64MultiArray, 'joint_angles_array', 10)
 
     def state_callback(self, msg):
-        if msg.data == 'path':
+        if msg.data == 'run_predefined_path':
             self.get_logger().info("Path execution state activated.")
             self.execute_path()
 

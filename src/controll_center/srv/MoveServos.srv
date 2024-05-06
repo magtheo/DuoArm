@@ -1,9 +1,0 @@
-# MoveServos.srv
-
-# Request
-float64[] target_angles
----
-# Response
-bool success
-string message
-float64[] actual_angles

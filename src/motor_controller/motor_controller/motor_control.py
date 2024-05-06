@@ -56,6 +56,8 @@ class motorControl(Node):
         self.lock = threading.Lock()
         self.current_target = None
 
+        self.state = 'standby'
+
        # Initialize boundary values
         self.bottom_lss0 = None
         self.top_lss0 = None
@@ -64,6 +66,9 @@ class motorControl(Node):
 
         self.total_movements = 0
         self.completed_movements = 0
+
+        self.state_subscription = self.create_subscription(
+            String, 'action_controller_state', self.state_callback, 10)
 
         self.calc_joint_angles_subscription = self.create_subscription(
             Float64MultiArray,
@@ -210,6 +215,10 @@ class motorControl(Node):
             # Forward direction
             self.get_logger().info("Moving forward")
             for i in range(0, len(angles), 2):
+                # Check the state before moving each pair of angles
+                self.check_state_and_stop()
+                if self.state == 'standby':
+                    return  # Exit the method if state is standby
                 self.angles_queues['lss0'].put(angles[i])
                 self.angles_queues['lss1'].put(angles[i + 1])
                 self.total_movements += 1
@@ -222,6 +231,10 @@ class motorControl(Node):
             self.get_logger().info("Reversing direction")
             # Reverse direction
             for i in range(len(angles) - 2, -1, -2):
+                # Check the state before moving each pair of angles
+                self.check_state_and_stop()
+                if self.state == 'standby':
+                    return  # Exit the method if state is standby
                 self.angles_queues['lss0'].put(angles[i])
                 self.angles_queues['lss1'].put(angles[i + 1])
                 self.total_movements += 1
@@ -230,6 +243,7 @@ class motorControl(Node):
             # Wait for all movements to complete before next cycle
             while self.completed_movements < self.total_movements:
                 time.sleep(0.1)
+                self.check_state_and_stop()  # Check state continuously
 
         # Reset movements counters after completion of all cycles
         self.completed_movements = 0
@@ -327,9 +341,7 @@ class motorControl(Node):
             String, 'read_angles', self.read_angles_callback, 10)
         
         self.joint_angles_subscription = self.create_subscription(
-            Float64MultiArray,
-            'joint_angles_array',
-            self.iterate_and_move_servos_callback,
+            Float64MultiArray, 'joint_angles_array', self.iterate_and_move_servos_callback,
             10
         )
 
@@ -338,14 +350,7 @@ class motorControl(Node):
             'path_done',
             10
         )
-        
-        # self.srv = self.create_service(MoveServos, 'set_target_angles', self.set_target_angles_callback)
 
-        # Define angle limits
-        self.MIN_THETA1_LEFT = -140
-        self.MAX_THETA1_LEFT = 15
-        self.MIN_THETA1_RIGHT = -50
-        self.MAX_THETA1_RIGHT = 140
         
     def set_target_angles_callback(self, request, response):
         target_angles = request.target_angles
@@ -579,6 +584,19 @@ class motorControl(Node):
             lss0.limp()
             lss1.limp()
             self.ref_point_read_and_pub_servo_angles()
+
+    def state_callback(self, msg):
+        self.state = msg.data
+
+    def check_state_and_stop(self):
+        """Check the current state and stop movement if it's changed to standby."""
+        if self.state == 'standby':
+            # Stop the movement of servos
+            for servo_key in self.servos:
+                self.angles_queues[servo_key].queue.clear()  # Clear the angles queue
+                self.servos[servo_key].wheelRPM(0)  # Stop the servo
+            self.completed_movements = 0
+            self.total_movements = 0
 
 
 def main(args=None):
