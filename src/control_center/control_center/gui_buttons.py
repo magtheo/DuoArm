@@ -62,4 +62,8 @@ def main():
     thread.join()
 
 if __name__ == '__main__':
+<<<<<<< HEAD:src/control_center/control_center/gui_buttons.py
     main()
+=======
+    main()
+>>>>>>> f99a8527a704b15c0031485ea0da93b97bf6bd83:src/controll_center/controll_center/gui_buttons.py

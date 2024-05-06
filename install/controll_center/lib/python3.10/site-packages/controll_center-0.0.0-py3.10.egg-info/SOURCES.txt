@@ -14,6 +14,7 @@ controll_center/action_controller.py
 controll_center/command_executor.py
 controll_center/command_window.py
 controll_center/display.py
+controll_center/gui_buttons.py
 controll_center/joystick_controller.py
 launch/controll_center_launch.py
 launch/start_launch.py

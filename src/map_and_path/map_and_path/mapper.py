@@ -21,9 +21,6 @@ class Mapper(Node):
         self.joint_angles_pub = self.create_publisher( # jointangels published to display
             Float64MultiArray, 'joint_angles', 10)
         
-        self.manual_readings_pub = self.create_publisher(
-            Float64MultiArray, 'manual_angle_readings', 10)
-        
         self.set_null_points_pub = self.create_publisher(
             String, 'limp_and_reset_origin', 10)
         
@@ -43,12 +40,14 @@ class Mapper(Node):
         self.number_of_points = 3
         self.point_number = 0
 
-        self.state = 'standby'
-
     def state_callback(self, msg):
         if msg.data == 'map' and self.state != 'map':
             self.state = 'map'
             self.start_mapping()
+        if msg.data == 'standby':
+            self.button_press_index = 0
+            self.point_number = 0
+
 
         if msg.data == 'standby':
             self.button_press_index = 0
@@ -58,7 +57,6 @@ class Mapper(Node):
     def start_mapping(self):
         # Make the motors limp
         self.set_null_points_pub.publish(String(data='start'))
-        self.get_logger().info('start map')
         time.sleep(5) 
         self.get_logger().info("--- move the arm to top position and press map button to record max angels. --- ") 
 
@@ -107,10 +105,8 @@ class Mapper(Node):
                     self.get_logger().info('--- all path points mapped --- ')
                     self.point_number = 0
                     self.button_press_index = 0
-                    self.state = 'standby'
                     self.mapping_done_pub.publish(String(data="done"))  # Notify that mapping is done
                     self.save_to_file()  # Save the data to file once all mapping is completed
-                    
         except Exception as e:
             self.get_logger().error(f'failed to process joint angels{e}')
 

@@ -73,16 +73,33 @@ def generate_launch_description():
         name='gui_buttons'
     )
 
+<<<<<<< HEAD:src/control_center/launch/start_launch.py
 <<<<<<< HEAD:install/controll_center/share/controll_center/launch/start_launch.py
     ld.add_action(auto_mapper)
     ld.add_action(path_planner)
     ld.add_action(action_controller)
     ld.add_action(motor_controller)
     
+=======
+    gui_buttons = Node(
+        package='controll_center',
+        executable='gui_buttons',
+        name='gui_buttons'
+    )
+
+    # ld.add_action(auto_mapper)
+    # ld.add_action(path_planner)
+    ld.add_action(action_controller)
+    ld.add_action(motor_controller)
+
+    ld.add_action(mapper)
+    ld.add_action(path)    
+    ld.add_action(gui_buttons) 
+>>>>>>> f99a8527a704b15c0031485ea0da93b97bf6bd83:src/controll_center/launch/start_launch.py
 
     ld.add_action(command_window_node)
     ld.add_action(command_executor_node)
-    ld.add_action(display_node)
+    # ld.add_action(display_node)
 
     # ld.add_action(joystick_controller)
     # ld.add_action(joy_node)
