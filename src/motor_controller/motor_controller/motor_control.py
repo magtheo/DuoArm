@@ -70,17 +70,13 @@ class motorControl(Node):
 
 
     def setup_subscriptions_and_services(self):
-        self.calc_joint_angles_subscription = self.create_subscription(
+        self.calc_joint_angles_subscription = self.create_subscription( # calculated joint angles from auto_mapper(old mapping)
             Float64MultiArray,
             'calculated_joint_angles',
             self.calc_joint_angles_callback,
             10
         )
-        self.actual_joint_angles_publisher = self.create_publisher(
-            Float64MultiArray, 
-            'actual_joint_angles', # used during mapping and motor control
-            10
-        )
+
 
         self.joint_angles_publisher = self.create_publisher(
             String,
@@ -89,21 +85,21 @@ class motorControl(Node):
         )
 
         # Subscriber for receiving start test command
-        self.start_test_sub = self.create_subscription(
+        self.start_test_sub = self.create_subscription( # starting test form command
             String,
             'start_test',
             self.start_test_callback,
             10)
         
         # Subscriber for receiving start test command
-        self.start_read_sub = self.create_subscription(
+        self.start_read_sub = self.create_subscription( # manualy reading angles with command
             String,
             'start_read',
             self.start_read_callback,
             10
         )
         
-        self.out_of_bounds_publisher = self.create_publisher(
+        self.out_of_bounds_publisher = self.create_publisher( # out of bounds publisher from old mapping sequance
             String, 
             'out_of_bounds',
             10
@@ -122,16 +118,16 @@ class motorControl(Node):
             10
         )
 
-        self.limp_and_reset_origin_sub = self.create_subscription(
-            String,
-            'limp_and_reset_origin',
-            self.limp_and_set_origin,
-            10)
+        self.actual_joint_angles_publisher = self.create_publisher( # used during new and old mapping
+            Float64MultiArray, 'actual_joint_angles', 10)
+
+        self.limp_and_reset_origin_sub = self.create_subscription( # make limp and sett origin at the start of mapping sequence
+            String, 'limp_and_reset_origin', self.limp_and_set_origin, 10)
         
-        self.read_angels_sub = self.create_subscription(
+        self.read_angels_sub = self.create_subscription( # used during mapping
             String, 'read_angles', self.read_angles_callback, 10)
         
-        self.joint_angles_subscription = self.create_subscription(
+        self.joint_angles_subscription = self.create_subscription( # array with angles from path node
             Float64MultiArray, 'joint_angles_array', self.iterate_and_move_servos_callback, 10)
 
         self.path_done_pub = self.create_publisher(

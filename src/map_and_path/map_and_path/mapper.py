@@ -18,16 +18,13 @@ class Mapper(Node):
         self.button_press_sub = self.create_subscription(
             String, 'map_button_press', self.button_press_callback, 10)
         
-        self.joint_angles_pub = self.create_publisher(
+        self.joint_angles_pub = self.create_publisher( # jointangels published to display
             Float64MultiArray, 'joint_angles', 10)
-        
-        self.manual_readings_pub = self.create_publisher(
-            Float64MultiArray, 'manual_angle_readings', 10)
         
         self.set_null_points_pub = self.create_publisher(
             String, 'limp_and_reset_origin', 10)
         
-        self.read_angels_pub = self.create_publisher(
+        self.read_angels_pub = self.create_publisher( # used during new mapping
             String, 'read_angles', 10)
         
         self.joint_angles_subscription = self.create_subscription(
@@ -108,9 +105,26 @@ class Mapper(Node):
             self.get_logger().error(f'failed to process joint angels{e}')
 
     def save_to_file(self):
-        with open('boundary_and_path.json', 'w') as file:
-            json.dump(self.mapping_data, file, indent=4)
-        self.get_logger().info("Saved mapping data to 'boundary_and_path.json'.")
+        try:
+            # Load existing data from file, if any
+            try:
+                with open('boundary_and_path.json', 'r') as file:
+                    existing_data = json.load(file)
+            except FileNotFoundError:
+                existing_data = {'boundaries': [], 'path_points': []}
+
+            # Append new data to existing data
+            existing_data['boundaries'].extend(self.mapping_data['boundaries'])
+            existing_data['path_points'].extend(self.mapping_data['path_points'])
+
+            # Write updated data to file
+            with open('boundary_and_path.json', 'w') as file:
+                json.dump(existing_data, file, indent=4)
+
+            self.get_logger().info("Saved mapping data to 'boundary_and_path.json'.")
+        except Exception as e:
+            self.get_logger().error(f"Failed to save mapping data: {e}")
+
 
 def main(args=None):
     rclpy.init(args=args)

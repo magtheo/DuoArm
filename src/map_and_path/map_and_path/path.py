@@ -12,12 +12,12 @@ class PathExecutor(Node):
         super().__init__('path_executor')
 
         # Subscription to the state controller
-        self.state_subscription = self.create_subscription(
+        self.state_subscription = self.create_subscription( # 
             String, 'action_controller_state', self.state_callback, 10)
 
         # Publisher to send joint angles
-        self.joint_angles_publisher = self.create_publisher(
-            Float64MultiArray, 'joint_angles_array', 10)
+        self.joint_angles_publisher = self.create_publisher( # publish array with angles for the motor_controller to move throgh
+            Float64MultiArray, 'joint_angles_array', 10) 
 
     def state_callback(self, msg):
         if msg.data == 'path':
