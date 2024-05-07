@@ -72,7 +72,7 @@ class HardwareInterfaceController(Node):
         self.simultaneous_button_press_conditions = [0]*self.num_simultaneous_button_press_conditions
 
         """Attributes related to the standby state"""
-        self.servos_moved_to_default = False
+        self.standby_logger_printed = False
 
 
     def set_usb_and_serial_port(self):
@@ -352,6 +352,8 @@ class HardwareInterfaceController(Node):
         self.previous_system_state = self.current_system_state
         self.current_system_state = msg.data
         self.get_logger().info(f'Set the current system state variable to: {self.current_system_state} and the previous system state to: {self.previous_system_state}')
+        if (self.current_system_state == 'standby'):
+            self.standby_logger_printed = False
 
     def cleanup_serial(self):
         if self.ser_obj.is_open:
@@ -364,10 +366,10 @@ class HardwareInterfaceController(Node):
         self.get_logger().info('Publishing a message to the map_button_pressed topic')
         self.send_map_button_press_publisher.publish(msg)
     
-    def send_system_state_request(self, request):
+    def send_system_state_request(self):
         msg = String()
-        msg.data = request
-        self.get_logger().info(f'The following request was sent to the action_controller node: {request}, on the topic: system_state_request')
+        msg.data = "1"
+        self.get_logger().info(f'The following request was sent to the action_controller node: map_button_pressed, on the topic: system_state_request')
         self.set_system_state_by_request_publisher.publish(msg)
 
     def calculate_time_to_run_rail_system(self, rpm):
@@ -382,11 +384,6 @@ class HardwareInterfaceController(Node):
         time.sleep(self.calculate_time_to_run_rail_system(rpm))
         self.lss2.wheelRPM(0)
         self.rail_position = target_pos
-    
-    def move_servos_to_default_position(self):
-        self.lss1.move(0)
-        self.lss0.move(0)
-
 
     def activate_rail_system(self):
 
@@ -456,9 +453,9 @@ def main():
             if(hic_obj.reset_button_pressed):
                 hic_obj.send_system_state_request('standby')
             
-            if (hic_obj.current_system_state == 'standby'):
-                # hic_obj.move_servos_to_default_position()
+            if (hic_obj.current_system_state == 'standby' and hic_obj.standby_logger_printed == False):
                 hic_obj.get_logger().info('standby')
+                hic_obj.standby_logger_printed = True
 
             if(hic_obj.run_predefined_path_button_pressed and hic_obj.boundaries_and_last_rail_position_data is not None):
                hic_obj.send_system_state_request('run_predefined_path')
@@ -469,7 +466,7 @@ def main():
             if(hic_obj.map_button_pressed):
 
                if(hic_obj.current_system_state == 'map'):
-                   hic_obj.send_map_button_presses("1")
+                   hic_obj.send_map_button_presses()
                else:
                    hic_obj.send_system_state_request('map')
 
