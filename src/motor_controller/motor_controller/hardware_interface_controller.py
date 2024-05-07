@@ -72,7 +72,6 @@ class HardwareInterfaceController(Node):
         self.simultaneous_button_press_conditions = [0]*self.num_simultaneous_button_press_conditions
 
         """Attributes related to the standby state"""
-        self.servos_moved_to_default = False
         self.standby_logger_printed = False
 
 
@@ -385,11 +384,6 @@ class HardwareInterfaceController(Node):
         time.sleep(self.calculate_time_to_run_rail_system(rpm))
         self.lss2.wheelRPM(0)
         self.rail_position = target_pos
-    
-    def move_servos_to_default_position(self):
-        self.lss1.move(0)
-        self.lss0.move(0)
-
 
     def activate_rail_system(self):
 
