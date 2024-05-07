@@ -1,4 +1,5 @@
 #!/bin/bash
+# build_and_launch_startup.bash
 
 cd Documents/DuoArm/
 
