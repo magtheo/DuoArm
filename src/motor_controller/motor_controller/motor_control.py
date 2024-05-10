@@ -13,7 +13,7 @@ from .lss import *
 import queue
 import math
 
-CST_LSS_Port = "/dev/ttyUSB0"		# For Linux/Unix platforms
+CST_LSS_Port = "/dev/ttyUSB1"		# For Linux/Unix platforms
 #CST_LSS_Port = "COM230"				# For windows platforms
 CST_LSS_Baud = LSS_DefaultBaud
 
@@ -268,8 +268,8 @@ class motorControl(Node):
         lss0.setGyre(-1, LSS_SetConfig)
         lss1.setGyre(-1, LSS_SetConfig)
 
-        self.get_logger().info(f'Motors are now limp, move arm for desired position, null points will be set in 5 sec')
-        time.sleep(5)
+        self.get_logger().info(f'Motors are now limp, move arm for desired position, null points will be set in 25 sec')
+        time.sleep(25)
 
         # Set new origin offset
         lss0.setOriginOffset(0, LSS_SetConfig)

@@ -37,11 +37,13 @@ class HardwareInterfaceController(Node):
         """Attributes and method related to communication between the Arduino MEGA, Raspberry PI, LSS adapter board and LSS motors:"""
         self.avail_usb_ports = None
         self.avail_serial_ports = None
-        self.CST_LSS_Port = None
-        self.ser_obj = None
-        self.set_usb_and_serial_port()
+        self.CST_LSS_Port = '/dev/ttyUSB1'
+        self.ser_obj_controller = serial.Serial('/dev/ttyUSB2', 115200)
+        self.ser_obj_LED = serial.Serial('/dev/ttyACM0', 115200)
+        # self.set_usb_and_serial_port()
         self.CST_LSS_Baud = LSS_DefaultBaud
         initBus(self.CST_LSS_Port, self.CST_LSS_Baud)
+        self.wait_to_read_serial_values = False
 
         """Attributes related to the received analog values:"""
         self.x_analog_value = 0
@@ -72,32 +74,35 @@ class HardwareInterfaceController(Node):
         self.simultaneous_button_press_conditions = [0]*self.num_simultaneous_button_press_conditions
 
         """Attributes related to the standby state"""
+        # self.ser_obj_LED.write(b'standby\n'
+        self.ser_obj_LED.write(b"standby\n")
+        self.get_logger().info('successfully wrote to led serial')
         self.standby_logger_printed = False
 
 
-    def set_usb_and_serial_port(self):
+    # def set_usb_and_serial_port(self):
 
-        self.avail_usb_ports = glob.glob('/dev/ttyUSB*')
-        self.avail_serial_ports = glob.glob('/dev/ttyACM*')
+    #     self.avail_usb_ports = glob.glob('/dev/ttyUSB*')
+    #     self.avail_serial_ports = glob.glob('/dev/ttyACM*')
 
-        if not self.avail_usb_ports and self.avail_serial_ports:
-            self.get_logger().info('No available USB ports found. Check connection between the Raspberry PI and LSS adapter board.')
-            self.ser_obj = serial.Serial(self.avail_serial_ports[0], 115200)
-            self.get_logger().info(f'Successfully set up the serial connection at {self.avail_serial_ports[0]}')
+    #     if not self.avail_usb_ports and self.avail_serial_ports:
+    #         self.get_logger().info('No available USB ports found. Check connection between the Raspberry PI and LSS adapter board.')
+    #         self.ser_obj = serial.Serial(self.avail_serial_ports[0], 115200)
+    #         self.get_logger().info(f'Successfully set up the serial connection at {self.avail_serial_ports[0]}')
 
         
-        elif not self.avail_serial_ports and self.avail_usb_ports:
-            self.get_logger().info('No available serial ports found. Check connection between the Raspberry PI and Arduino')
-            self.CST_LSS_Port = self.avail_usb_ports[0]
-            self.get_logger().info(f'Successfully assigned CST_LSS_port to {self.avail_usb_ports[0]}')
+    #     elif not self.avail_serial_ports and self.avail_usb_ports:
+    #         self.get_logger().info('No available serial ports found. Check connection between the Raspberry PI and Arduino')
+    #         self.CST_LSS_Port = self.avail_usb_ports[0]
+    #         self.get_logger().info(f'Successfully assigned CST_LSS_port to {self.avail_usb_ports[0]}')
         
-        elif not self.avail_serial_ports and not self.avail_usb_ports:
-            self.get_logger().info('No available serial or USB ports found. Check connection between the Raspberry PI, Arduino and the LSS adapter board')
+    #     elif not self.avail_serial_ports and not self.avail_usb_ports:
+    #         self.get_logger().info('No available serial or USB ports found. Check connection between the Raspberry PI, Arduino and the LSS adapter board')
 
-        else:
-            self.CST_LSS_Port = self.avail_usb_ports[0]
-            self.ser_obj = serial.Serial(self.avail_serial_ports[0], 115200)
-            self.get_logger().info(f'Successfully set up the serial connection at {self.avail_serial_ports[0]} and assigned CST_LSS_port to {self.avail_usb_ports[0]}')
+    #     else:
+    #         self.CST_LSS_Port = self.avail_usb_ports[0]
+    #         self.ser_obj = serial.Serial(self.avail_serial_ports[0], 115200)
+    #         self.get_logger().info(f'Successfully set up the serial connection at {self.avail_serial_ports[0]} and assigned CST_LSS_port to {self.avail_usb_ports[0]}')
 
     
     def set_boundaries_and_last_rail_position_data(self):
@@ -163,136 +168,206 @@ class HardwareInterfaceController(Node):
 
     def read_values_from_serial(self):
 
-        received_vals = self.ser_obj.readline().decode().strip()
-        values = received_vals.split(',')
-        if (len(values) == 6):
-            self.x_analog_value = int(values[0])
-            self.z_analog_value = int(values[1])
-            self.joystick_button_pressed = int(values[2])
-            self.reset_button_pressed = int(values[3])
-            self.run_predefined_path_button_pressed = int(values[4])
-            self.map_button_pressed = int(values[5])
-            self.update_simultaneous_button_press_conditions()
+        if (self.wait_to_read_serial_values == False):
+            time.sleep(1)
+            self.wait_to_read_serial_values = True
+
         else:
-            self.x_analog_value = self.z_analog_value = self.joystick_button_pressed = self.reset_button_pressed = \
-            self.run_predefined_path_button_pressed = self.map_button_pressed = None
+            received_vals = self.ser_obj_controller.readline().decode().strip()
+            values = received_vals.split(',')
+            if (len(values) == 6):
+                self.x_analog_value = int(values[0])
+                self.z_analog_value = int(values[1])
+                self.joystick_button_pressed = int(values[2])
+                self.reset_button_pressed = int(values[3])
+                self.run_predefined_path_button_pressed = int(values[4])
+                self.map_button_pressed = int(values[5])
+                self.update_simultaneous_button_press_conditions()
+            else:
+                self.x_analog_value = self.z_analog_value = self.joystick_button_pressed = self.reset_button_pressed = \
+                self.run_predefined_path_button_pressed = self.map_button_pressed = None
     
     def move_arm_north(self):
 
-        if (not self.lss1_beyond_top_limit() and not self.lss0_beyond_top_limit()):
+        if (self.current_system_state == 'joystick_arm_control'):
 
-            self.get_logger().info('Moving upwards (NORTH)')
-            self.get_logger().info(f'(x_analog_value, z_analog_value) -> ({self.x_analog_value, self.z_analog_value})')
+            if (not self.lss1_beyond_top_limit() and not self.lss0_beyond_top_limit()):
+
+                self.get_logger().info('Moving upwards (NORTH)')
+                self.get_logger().info(f'(x_analog_value, z_analog_value) -> ({self.x_analog_value, self.z_analog_value})')
+                self.down_step(self.lss1)
+                self.up_step(self.lss0)
+
+            else:
+                self.get_logger().info('Maximum top position in both or either of the servos has been reached: Upwards motion not allowed')
+                self.get_logger().info(f'LSS1 reached maximum top position: {self.lss1_beyond_top_limit()}')
+                self.get_logger().info(f'LSS0 reached maximum top position: {self.lss0_beyond_top_limit()}')
+
+        elif (self.current_system_state == 'map'):
+        
             self.down_step(self.lss1)
             self.up_step(self.lss0)
 
-        else:
-            self.get_logger().info('Maximum top position in both or either of the servos has been reached: Upwards motion not allowed')
-            self.get_logger().info(f'LSS1 reached maximum top position: {self.lss1_beyond_top_limit()}')
-            self.get_logger().info(f'LSS0 reached maximum top position: {self.lss0_beyond_top_limit()}')
 
     
     def move_arm_south(self):
 
-        if (not self.lss1_beyond_bottom_limit() and not self.lss0_beyond_bottom_limit()):
+        if (self.current_system_state == 'joystick_arm_control'):
 
-            self.get_logger().info('Moving downwards (SOUTH)')
-            self.get_logger().info(f'(x_analog_value, z_analog_value) -> ({self.x_analog_value, self.z_analog_value})')
+            if (not self.lss1_beyond_bottom_limit() and not self.lss0_beyond_bottom_limit()):
+
+                self.get_logger().info('Moving downwards (SOUTH)')
+                self.get_logger().info(f'(x_analog_value, z_analog_value) -> ({self.x_analog_value, self.z_analog_value})')
+                self.up_step(self.lss1)
+                self.down_step(self.lss0)
+
+            else:
+                self.get_logger().info('Maximum bottom position in both or either of the servos has been reached: downwards motion not allowed')
+                self.get_logger().info(f'LSS1 reached maximum bottom position: {self.lss1_beyond_bottom_limit()}')
+                self.get_logger().info(f'LSS0 reached maximum bottom position: {self.lss0_beyond_bottom_limit()}')
+
+        elif (self.current_system_state == 'map'):
+    
             self.up_step(self.lss1)
             self.down_step(self.lss0)
 
-        else:
-            self.get_logger().info('Maximum bottom position in both or either of the servos has been reached: downwards motion not allowed')
-            self.get_logger().info(f'LSS1 reached maximum bottom position: {self.lss1_beyond_bottom_limit()}')
-            self.get_logger().info(f'LSS0 reached maximum bottom position: {self.lss0_beyond_bottom_limit()}')
         
     def move_arm_east(self):
 
-        if (not self.lss1_beyond_bottom_limit() and not self.lss0_beyond_top_limit()):
+        if (self.current_system_state == 'joystick_arm_control'):
 
-            self.get_logger().info('Moving to the right (EAST)')
-            self.get_logger().info(f'(x_analog_value, z_analog_value) -> ({self.x_analog_value, self.z_analog_value})')
+            if (not self.lss1_beyond_bottom_limit() and not self.lss0_beyond_top_limit()):
+
+                self.get_logger().info('Moving to the right (EAST)')
+                self.get_logger().info(f'(x_analog_value, z_analog_value) -> ({self.x_analog_value, self.z_analog_value})')
+                self.up_step(self.lss1)
+                self.up_step(self.lss0)
+
+            else:
+                self.get_logger().info('Maximum positions in both or either of the servos has been reached: Eastward motion not allowed')
+                self.get_logger().info(f'LSS1 reached maximum bottom position: {self.lss1_beyond_bottom_limit()}')
+                self.get_logger().info(f'LSS0 reached maximum top position: {self.lss0_beyond_top_limit()}')
+
+        elif (self.current_system_state == 'map'):
+
             self.up_step(self.lss1)
             self.up_step(self.lss0)
 
-        else:
-            self.get_logger().info('Maximum positions in both or either of the servos has been reached: Eastward motion not allowed')
-            self.get_logger().info(f'LSS1 reached maximum bottom position: {self.lss1_beyond_bottom_limit()}')
-            self.get_logger().info(f'LSS0 reached maximum top position: {self.lss0_beyond_top_limit()}')
     
     def move_arm_west(self):
 
-        if (not self.lss1_beyond_top_limit() and not self.lss0_beyond_bottom_limit()):
+        if (self.current_system_state == 'joystick_arm_control'):
 
-            self.get_logger().info('Moving to the left (WEST)')
-            self.get_logger().info(f'(x_analog_value, z_analog_value) -> ({self.x_analog_value, self.z_analog_value})')
+            if (not self.lss1_beyond_top_limit() and not self.lss0_beyond_bottom_limit()):
+
+                self.get_logger().info('Moving to the left (WEST)')
+                self.get_logger().info(f'(x_analog_value, z_analog_value) -> ({self.x_analog_value, self.z_analog_value})')
+                self.down_step(self.lss1)
+                self.down_step(self.lss0)
+
+            else:
+                self.get_logger().info('Maximum positions in both or either of the servos has been reached: Westward motion not allowed')
+                self.get_logger().info(f'LSS1 reached maximum top position: {self.lss1_beyond_top_limit()}')
+                self.get_logger().info(f'LSS0 reached maximum bottom position: {self.lss0_beyond_bottom_limit()}')
+        
+        if (self.current_system_state == 'map'):
+
             self.down_step(self.lss1)
             self.down_step(self.lss0)
-
-        else:
-            self.get_logger().info('Maximum positions in both or either of the servos has been reached: Westward motion not allowed')
-            self.get_logger().info(f'LSS1 reached maximum top position: {self.lss1_beyond_top_limit()}')
-            self.get_logger().info(f'LSS0 reached maximum bottom position: {self.lss0_beyond_bottom_limit()}')
 
     
     def move_arm_northeast(self):
 
-        if (not self.lss0_beyond_top_limit()):
+        if (self.current_system_state == 'joystick_arm_control'):
 
-            self.get_logger().info('Moving in the right-up direction (Northeast)')
-            self.get_logger().info(f'(x_analog_value, z_analog_value) -> ({self.x_analog_value, self.z_analog_value})')
+            if (not self.lss0_beyond_top_limit()):
+
+                self.get_logger().info('Moving in the right-up direction (Northeast)')
+                self.get_logger().info(f'(x_analog_value, z_analog_value) -> ({self.x_analog_value, self.z_analog_value})')
+                self.up_step(self.lss0)
+
+            else:
+                self.get_logger().info(f'LSS0 reached top position: {self.lss0_beyond_top_limit()} (Northeast motion not allowed)')
+
+        elif (self.current_system_state == 'map'):
+        
             self.up_step(self.lss0)
 
-        else:
-            self.get_logger().info(f'LSS0 reached top position: {self.lss0_beyond_top_limit()} (Northeast motion not allowed)')
 
     def move_arm_southeast(self):
 
-        if (not self.lss1_beyond_bottom_limit()):
+        if (self.current_system_state == 'joystick_arm_control'):
 
-            self.get_logger().info('Moving in the right-down direction (Southeast)')
-            self.get_logger().info(f'(x_analog_value, z_analog_value) -> ({self.x_analog_value, self.z_analog_value})')
+            if (not self.lss1_beyond_bottom_limit()):
+
+                self.get_logger().info('Moving in the right-down direction (Southeast)')
+                self.get_logger().info(f'(x_analog_value, z_analog_value) -> ({self.x_analog_value, self.z_analog_value})')
+                self.up_step(self.lss1)
+
+            else:
+                self.get_logger().info(f'LSS1 reached bottom position: {self.lss0_beyond_bottom_limit()} (Southeast motion not allowed)')
+
+        elif (self.current_system_state == 'map'):
+
             self.up_step(self.lss1)
 
-        else:
-            self.get_logger().info(f'LSS1 reached bottom position: {self.lss0_beyond_bottom_limit()} (Southeast motion not allowed)')
 
     def move_arm_northwest(self):
 
-        if (not self.lss1_beyond_top_limit()):
+        if (self.current_system_state == 'joystick_arm_control'):
 
-            self.get_logger().info('Moving in the left-up direction (Northwest)')
-            self.get_logger().info(f'(x_analog_value, z_analog_value) -> ({self.x_analog_value, self.z_analog_value})')
+            if (not self.lss1_beyond_top_limit()):
+
+                self.get_logger().info('Moving in the left-up direction (Northwest)')
+                self.get_logger().info(f'(x_analog_value, z_analog_value) -> ({self.x_analog_value, self.z_analog_value})')
+                self.down_step(self.lss1)
+
+            else:
+                self.get_logger().info(f'LSS1 reached top position: {self.lss0_beyond_top_limit()} (Northwest motion not allowed)')
+        
+        elif (self.current_system_state == 'map'):
+        
             self.down_step(self.lss1)
-
-        else:
-            self.get_logger().info(f'LSS1 reached top position: {self.lss0_beyond_top_limit()} (Northwest motion not allowed)')
 
     def move_arm_southwest(self):
 
-        if (not self.lss0_beyond_bottom_limit()):
+        if (self.current_system_state == 'joystick_arm_control'):
 
-            self.get_logger().info('Moving in the left-down direction (Southwest)')
-            self.get_logger().info(f'(x_analog_value, z_analog_value) -> ({self.x_analog_value, self.z_analog_value})')
+            if (not self.lss0_beyond_bottom_limit()):
+
+                self.get_logger().info('Moving in the left-down direction (Southwest)')
+                self.get_logger().info(f'(x_analog_value, z_analog_value) -> ({self.x_analog_value, self.z_analog_value})')
+                self.down_step(self.lss0)
+
+            else:
+                self.get_logger().info(f'LSS0 reached bottom position: {self.lss0_beyond_bottom_limit()} (Southwest motion not allowed)')
+        
+        elif (self.current_system_state == 'map'):
             self.down_step(self.lss0)
 
-        else:
-            self.get_logger().info(f'LSS0 reached bottom position: {self.lss0_beyond_bottom_limit()} (Southwest motion not allowed)')
         
     def pause_arm_movement(self):
             
+        if (self.current_system_state == 'joystick_arm_control'):
             self.get_logger().info(f'(x_analog_value, z_analog_value) -> ({self.x_analog_value, self.z_analog_value})')
             self.get_logger().info('Joystick at middle placement (Motion paused)')
             self.stop_wheel(self.lss1)
             self.stop_wheel(self.lss0)
+        else:
+            self.stop_wheel(self.lss1)
+            self.stop_wheel(self.lss0)
+
                   
     def control_arm_with_joystick(self):
 
-        if (self.reset_button_pressed):
+        if (self.reset_button_pressed and self.current_system_state == 'joystick_arm_control'):
             self.lss1.wheelRPM(0)
             self.lss0.wheelRPM(0)
             return
-
+        
+        if (self.map_button_pressed and self.current_system_state == 'map'):
+            self.send_map_button_presses()
+    
         if (self.x_analog_value is not None and self.z_analog_value is not None):
                 
                 # Joystick at North (UP) placement
@@ -347,6 +422,71 @@ class HardwareInterfaceController(Node):
                 else:
                     self.pause_arm_movement()
 
+    # def control_arm_with_joystick_during_mapping(self):
+
+    #     if (self.map_button_pressed):
+    #         self.send_map_button_presses()
+
+    #     if (self.x_analog_value is not None and self.z_analog_value is not None):
+                
+    #             # Joystick at North (UP) placement
+    #             if ((0 <= self.x_analog_value <= self.zero_value_deadzone) and \
+    #                 (512 - self.diagonal_threshold < self.z_analog_value < 512 + self.diagonal_threshold)):
+
+    #                 self.down_step(self.lss1)
+    #                 self.up_step(self.lss0)
+
+    #             # Joystick at South (DOWN) placement 
+    #             elif ((self.x_analog_value == 1023) and \
+    #                 (512 - self.diagonal_threshold < self.z_analog_value < 512 + self.diagonal_threshold)):
+                
+    #                 self.up_step(self.lss1)
+    #                 self.down_step(self.lss0)
+                    
+    #             # Joystick at East (RIGHT) placement 
+    #             elif ((512 - self.diagonal_threshold < self.x_analog_value < 512 + self.diagonal_threshold) and \
+    #                 (0 <= self.z_analog_value <= self.zero_value_deadzone)):
+
+    #                 self.up_step(self.lss1)
+    #                 self.up_step(self.lss0)
+
+    #             # Joystick at West (LEFT) placement
+    #             elif ((512 - self.diagonal_threshold < self.x_analog_value < 512 + self.diagonal_threshold) and \
+    #                 (self.z_analog_value == 1023)):
+                    
+    #                 self.down_step(self.lss1)
+    #                 self.down_step(self.lss0)
+
+    #             # Joystick at Northeast (RIGHT-UP DIAGONAL) placement
+    #             elif ((0 <= self.x_analog_value <= 512 - self.diagonal_threshold) and \
+    #                 (0 <= self.z_analog_value <= 512 - self.diagonal_threshold)):
+
+    #                 self.up_step(self.lss0)
+                    
+    #             # Joystick at Southeast (RIGHT-DOWM DIAGONAL) placement
+    #             elif ((512 + self.diagonal_threshold <= self.x_analog_value <= 1023) and \
+    #                 (0 <= self.z_analog_value <= 512 - self.diagonal_threshold)):
+                    
+    #                 self.up_step(self.lss1)
+
+    #             # Joystick at Northwest (LEFT-UP DIAGONAL) placement
+    #             elif ((0 <= self.x_analog_value <= 512 - self.diagonal_threshold) and \
+    #                 (512 + self.diagonal_threshold <= self.z_analog_value <= 1023)):
+
+    #                 self.down_step(self.lss1)
+
+    #             # Joystick at Southwest (LEFT-DOWN DIAGONAL) placement
+    #             elif (( 512 + self.diagonal_threshold <= self.x_analog_value <= 1023) and \
+    #                 (512 + self.diagonal_threshold <= self.x_analog_value <= 1023)):
+
+    #                 self.down_step(self.lss0)
+
+    #             # Joystick at middle placement
+    #             else:
+    #                 self.stop_wheel(self.lss1)
+    #                 self.stop_wheel(self.lss0)
+
+
 
     def check_state_callback(self, msg):
         self.previous_system_state = self.current_system_state
@@ -354,22 +494,40 @@ class HardwareInterfaceController(Node):
         self.get_logger().info(f'Set the current system state variable to: {self.current_system_state} and the previous system state to: {self.previous_system_state}')
         if (self.current_system_state == 'standby'):
             self.standby_logger_printed = False
+            # self.ser_obj_LED.write(b'standby\n') 
+            return
+        # elif (self.current_system_state == 'joystick_arm_control'):
+        #     self.ser_obj_LED.write(b'joystick_arm_control\n')
+        #     return
+        # elif (self.current_system_state == 'joystick_rail_control'):
+        #     self.ser_obj_LED.write(b'joystick_rail_control\n')
+        #     return
+        # elif (self.current_system_state == 'map'):
+        #     self.ser_obj_LED.write(b'map\n')
+        #     return
+        # elif (self.current_system_state == 'run_predefined_path'):
+        #     self.ser_obj_LED.write(b'run_predefined_path\n')
+        #     return
+
+        
+      
 
     def cleanup_serial(self):
-        if self.ser_obj.is_open:
-            self.ser_obj.close()
-            self.get_logger().info('Serial connection closed')
+        if self.ser_obj_controller.is_open and self.ser_obj_LED.is_open:
+            self.ser_obj_controller.close()
+            self.ser_obj_LED.close()
+            self.get_logger().info('Serial connections closed')
     
-    def send_map_button_presses(self, map_button_pressed):
+    def send_map_button_presses(self):
         msg = String()
-        msg.data = map_button_pressed
+        msg.data = "1"
         self.get_logger().info('Publishing a message to the map_button_pressed topic')
         self.send_map_button_press_publisher.publish(msg)
     
-    def send_system_state_request(self):
+    def send_system_state_request(self, request):
         msg = String()
-        msg.data = "1"
-        self.get_logger().info(f'The following request was sent to the action_controller node: map_button_pressed, on the topic: system_state_request')
+        msg.data = request
+        self.get_logger().info(f'The following request was sent to the action_controller node: {request}, on the topic: system_state_request')
         self.set_system_state_by_request_publisher.publish(msg)
 
     def calculate_time_to_run_rail_system(self, rpm):
@@ -393,7 +551,7 @@ class HardwareInterfaceController(Node):
             self.get_logger().info("Target position reached -> Exiting the joystick_rail_control state")
             self.send_system_state_request('joystick_arm_control')
             self.wait_for_state_change('joystick_arm_control')
-            self.ser_obj.reset_input_buffer()
+            self.ser_obj_controller.reset_input_buffer()
 
         elif (self.rail_position == "B"):
             self.move_rail_system(-30, "A")
@@ -401,7 +559,7 @@ class HardwareInterfaceController(Node):
             self.get_logger().info("Target position reached -> Exiting the joystick_rail_control state")
             self.send_system_state_request('joystick_arm_control')
             self.wait_for_state_change('joystick_arm_control')
-            self.ser_obj.reset_input_buffer()
+            self.ser_obj_controller.reset_input_buffer()
 
         else: 
             self.get_logger().info('Check the boundary_path_and_rail_position.json file for an invalid rail position value (The value should either be A or B)')
@@ -443,7 +601,7 @@ def main():
             elif (hic_obj.joystick_button_pressed and hic_obj.boundaries_and_last_rail_position_data is None):
                 hic_obj.get_logger().info('A mapping sequence have to be executed to control the arm with the joystick and/or activate the rail system')
 
-            if (hic_obj.current_system_state == 'joystick_arm_control'):
+            if (hic_obj.current_system_state == 'joystick_arm_control'or hic_obj.current_system_state == 'map'):
                 hic_obj.control_arm_with_joystick()
             
             if(hic_obj.current_system_state == 'joystick_rail_control'):
@@ -454,7 +612,7 @@ def main():
                 hic_obj.send_system_state_request('standby')
             
             if (hic_obj.current_system_state == 'standby' and hic_obj.standby_logger_printed == False):
-                hic_obj.get_logger().info('standby')
+                hic_obj.get_logger().info('Currently in the standby state')
                 hic_obj.standby_logger_printed = True
 
             if(hic_obj.run_predefined_path_button_pressed and hic_obj.boundaries_and_last_rail_position_data is not None):
@@ -463,12 +621,12 @@ def main():
             elif (hic_obj.run_predefined_path_button_pressed and hic_obj.boundaries_and_last_rail_position_data is None):
                 hic_obj.get_logger().info('A mapping sequence have to be executed to run a predefined path')
             
-            if(hic_obj.map_button_pressed):
-
-               if(hic_obj.current_system_state == 'map'):
-                   hic_obj.send_map_button_presses()
-               else:
-                   hic_obj.send_system_state_request('map')
+            if(hic_obj.map_button_pressed and not hic_obj.current_system_state == 'map'):
+                hic_obj.send_system_state_request('map')
+           
+            # if (hic_obj.current_system_state == 'map'):
+            #    #hic_obj.control_arm_with_joystick_during_mapping()
+               
 
     except KeyboardInterrupt:
 
