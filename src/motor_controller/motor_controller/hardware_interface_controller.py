@@ -79,6 +79,17 @@ class HardwareInterfaceController(Node):
         self.get_logger().info('successfully wrote to led serial')
         self.standby_logger_printed = False
 
+        #LED comunication
+        # GPIO Pin setup
+        self.red_led_signal_pin = 17   # Corresponds to raspi_red_signal in Arduino
+        self.green_led_signal_pin = 22 # Corresponds to raspi_green_signal in Arduino
+        self.blue_led_signal_pin = 27  # Corresponds to raspi_blue_signal in Arduino
+
+        self.GPIO.setmode(GPIO.BCM)
+        self.GPIO.setup(self.red_led_signal_pin, GPIO.OUT)
+        self.GPIO.setup(self.green_led_signal_pin, GPIO.OUT)
+        self.GPIO.setup(self.blue_led_signal_pin, GPIO.OUT)
+
 
     # def set_usb_and_serial_port(self):
 
@@ -488,29 +499,25 @@ class HardwareInterfaceController(Node):
 
 
 
-    def check_state_callback(self, msg):
-        self.previous_system_state = self.current_system_state
-        self.current_system_state = msg.data
-        self.get_logger().info(f'Set the current system state variable to: {self.current_system_state} and the previous system state to: {self.previous_system_state}')
-        if (self.current_system_state == 'standby'):
-            self.standby_logger_printed = False
-            # self.ser_obj_LED.write(b'standby\n') 
-            return
-        # elif (self.current_system_state == 'joystick_arm_control'):
-        #     self.ser_obj_LED.write(b'joystick_arm_control\n')
-        #     return
-        # elif (self.current_system_state == 'joystick_rail_control'):
-        #     self.ser_obj_LED.write(b'joystick_rail_control\n')
-        #     return
-        # elif (self.current_system_state == 'map'):
-        #     self.ser_obj_LED.write(b'map\n')
-        #     return
-        # elif (self.current_system_state == 'run_predefined_path'):
-        #     self.ser_obj_LED.write(b'run_predefined_path\n')
-        #     return
+    def check_state_callback(msg):
+        # Example logic to control GPIO based on state
+        state = msg.data
+        if state == 'standby':
+            self.set_led_state(red=True, green=False, blue=False)
+        elif state == 'joystick_arm_control':
+            self.set_led_state(red=False, green=False, blue=True)  # Assuming blue for 'joystick_arm_control'
+        elif state == 'joystick_rail_control':
+            self.set_led_state(red=False, green=True, blue=False)  # Assuming green for 'joystick_rail_control'
+        elif state == 'map':
+            self.set_led_state(red=False, green=True, blue=True)  # Mixing colors for different states
+        elif state == 'run_predefined_path':
+            self.set_led_state(red=True, green=True, blue=False)
 
         
-      
+    def set_led_state(red, green, blue):
+        GPIO.output(self.red_led_signal_pin, GPIO.HIGH if red else GPIO.LOW)
+        GPIO.output(self.green_led_signal_pin, GPIO.HIGH if green else GPIO.LOW)
+        GPIO.output(self.blue_led_signal_pin, GPIO.HIGH if blue else GPIO.LOW)
 
     def cleanup_serial(self):
         if self.ser_obj_controller.is_open and self.ser_obj_LED.is_open:
