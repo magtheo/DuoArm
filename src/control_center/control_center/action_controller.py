@@ -20,7 +20,6 @@ class ActionController(Node):
         
 
     def publish_state(self):
-        # This method publishes the state when it changes
         msg = String()
         msg.data = self.state
         self.state_publisher.publish(msg)

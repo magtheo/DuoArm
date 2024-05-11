@@ -43,18 +43,16 @@ def generate_launch_description():
         name='path_planner_node'
     )
 
-    # Joystick 
     hardware_interface_controller= Node(
-        package='motor_controller',
+        package='hardware_center',
         executable='hardware_interface_controller',
         name='hardware_interface_controller'
     ) 
 
-    # motor controller
     motor_controller = Node(
-        package='motor_controller',
+        package='hardware_center',
         executable='motor_control',
-        name='motor_controller'
+        name='motor_control'
     )
     mapper = Node(
         package='map_and_path',

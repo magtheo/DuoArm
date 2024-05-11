@@ -13,7 +13,7 @@ from .lss import *
 import queue
 import math
 
-CST_LSS_Port = "/dev/ttyUSB1"		# For Linux/Unix platforms
+CST_LSS_Port = '/dev/lssMotorController'	# For Linux/Unix platforms
 #CST_LSS_Port = "COM230"				# For windows platforms
 CST_LSS_Baud = LSS_DefaultBaud
 

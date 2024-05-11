@@ -37,9 +37,8 @@ class HardwareInterfaceController(Node):
         """Attributes and method related to communication between the Arduino MEGA, Raspberry PI, LSS adapter board and LSS motors:"""
         self.avail_usb_ports = None
         self.avail_serial_ports = None
-        self.CST_LSS_Port = '/dev/ttyUSB1'
-        self.ser_obj_controller = serial.Serial('/dev/ttyUSB2', 115200)
-        self.ser_obj_LED = serial.Serial('/dev/ttyACM0', 115200)
+        self.CST_LSS_Port = '/dev/lssMotorController'
+        self.ser_obj_controller = serial.Serial('/dev/arduinoNano', 115200)
         # self.set_usb_and_serial_port()
         self.CST_LSS_Baud = LSS_DefaultBaud
         initBus(self.CST_LSS_Port, self.CST_LSS_Baud)
@@ -74,9 +73,6 @@ class HardwareInterfaceController(Node):
         self.simultaneous_button_press_conditions = [0]*self.num_simultaneous_button_press_conditions
 
         """Attributes related to the standby state"""
-        # self.ser_obj_LED.write(b'standby\n'
-        self.ser_obj_LED.write(b"standby\n")
-        self.get_logger().info('successfully wrote to led serial')
         self.standby_logger_printed = False
 
 
@@ -423,70 +419,6 @@ class HardwareInterfaceController(Node):
                 else:
                     self.pause_arm_movement()
 
-    # def control_arm_with_joystick_during_mapping(self):
-
-    #     if (self.map_button_pressed):
-    #         self.send_map_button_presses()
-
-    #     if (self.x_analog_value is not None and self.z_analog_value is not None):
-                
-    #             # Joystick at North (UP) placement
-    #             if ((0 <= self.x_analog_value <= self.zero_value_deadzone) and \
-    #                 (512 - self.diagonal_threshold < self.z_analog_value < 512 + self.diagonal_threshold)):
-
-    #                 self.down_step(self.lss1)
-    #                 self.up_step(self.lss0)
-
-    #             # Joystick at South (DOWN) placement 
-    #             elif ((self.x_analog_value == 1023) and \
-    #                 (512 - self.diagonal_threshold < self.z_analog_value < 512 + self.diagonal_threshold)):
-                
-    #                 self.up_step(self.lss1)
-    #                 self.down_step(self.lss0)
-                    
-    #             # Joystick at East (RIGHT) placement 
-    #             elif ((512 - self.diagonal_threshold < self.x_analog_value < 512 + self.diagonal_threshold) and \
-    #                 (0 <= self.z_analog_value <= self.zero_value_deadzone)):
-
-    #                 self.up_step(self.lss1)
-    #                 self.up_step(self.lss0)
-
-    #             # Joystick at West (LEFT) placement
-    #             elif ((512 - self.diagonal_threshold < self.x_analog_value < 512 + self.diagonal_threshold) and \
-    #                 (self.z_analog_value == 1023)):
-                    
-    #                 self.down_step(self.lss1)
-    #                 self.down_step(self.lss0)
-
-    #             # Joystick at Northeast (RIGHT-UP DIAGONAL) placement
-    #             elif ((0 <= self.x_analog_value <= 512 - self.diagonal_threshold) and \
-    #                 (0 <= self.z_analog_value <= 512 - self.diagonal_threshold)):
-
-    #                 self.up_step(self.lss0)
-                    
-    #             # Joystick at Southeast (RIGHT-DOWM DIAGONAL) placement
-    #             elif ((512 + self.diagonal_threshold <= self.x_analog_value <= 1023) and \
-    #                 (0 <= self.z_analog_value <= 512 - self.diagonal_threshold)):
-                    
-    #                 self.up_step(self.lss1)
-
-    #             # Joystick at Northwest (LEFT-UP DIAGONAL) placement
-    #             elif ((0 <= self.x_analog_value <= 512 - self.diagonal_threshold) and \
-    #                 (512 + self.diagonal_threshold <= self.z_analog_value <= 1023)):
-
-    #                 self.down_step(self.lss1)
-
-    #             # Joystick at Southwest (LEFT-DOWN DIAGONAL) placement
-    #             elif (( 512 + self.diagonal_threshold <= self.x_analog_value <= 1023) and \
-    #                 (512 + self.diagonal_threshold <= self.x_analog_value <= 1023)):
-
-    #                 self.down_step(self.lss0)
-
-    #             # Joystick at middle placement
-    #             else:
-    #                 self.stop_wheel(self.lss1)
-    #                 self.stop_wheel(self.lss0)
-
 
 
     def check_state_callback(self, msg):
@@ -495,29 +427,12 @@ class HardwareInterfaceController(Node):
         self.get_logger().info(f'Set the current system state variable to: {self.current_system_state} and the previous system state to: {self.previous_system_state}')
         if (self.current_system_state == 'standby'):
             self.standby_logger_printed = False
-            # self.ser_obj_LED.write(b'standby\n') 
             return
-        # elif (self.current_system_state == 'joystick_arm_control'):
-        #     self.ser_obj_LED.write(b'joystick_arm_control\n')
-        #     return
-        # elif (self.current_system_state == 'joystick_rail_control'):
-        #     self.ser_obj_LED.write(b'joystick_rail_control\n')
-        #     return
-        # elif (self.current_system_state == 'map'):
-        #     self.ser_obj_LED.write(b'map\n')
-        #     return
-        # elif (self.current_system_state == 'run_predefined_path'):
-        #     self.ser_obj_LED.write(b'run_predefined_path\n')
-        #     return
-
         
-      
-
     def cleanup_serial(self):
-        if self.ser_obj_controller.is_open and self.ser_obj_LED.is_open:
+        if self.ser_obj_controller.is_open:
             self.ser_obj_controller.close()
-            self.ser_obj_LED.close()
-            self.get_logger().info('Serial connections closed')
+            self.get_logger().info('Serial connection closed')
     
     def send_map_button_presses(self):
         msg = String()
@@ -624,11 +539,8 @@ def main():
             
             if(hic_obj.map_button_pressed and not hic_obj.current_system_state == 'map'):
                 hic_obj.send_system_state_request('map')
-           
-            # if (hic_obj.current_system_state == 'map'):
-            #    #hic_obj.control_arm_with_joystick_during_mapping()
-               
 
+            
     except KeyboardInterrupt:
 
         GPIO.cleanup()
