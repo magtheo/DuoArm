@@ -75,16 +75,7 @@ class HardwareInterfaceController(Node):
         """Attributes related to the standby state"""
         self.standby_logger_printed = False
 
-        #LED comunication
-        # GPIO Pin setup
-        self.red_led_signal_pin = 17   # Corresponds to raspi_red_signal in Arduino
-        self.green_led_signal_pin = 22 # Corresponds to raspi_green_signal in Arduino
-        self.blue_led_signal_pin = 27  # Corresponds to raspi_blue_signal in Arduino
 
-        self.GPIO.setmode(GPIO.BCM)
-        self.GPIO.setup(self.red_led_signal_pin, GPIO.OUT)
-        self.GPIO.setup(self.green_led_signal_pin, GPIO.OUT)
-        self.GPIO.setup(self.blue_led_signal_pin, GPIO.OUT)
 
 
     # def set_usb_and_serial_port(self):

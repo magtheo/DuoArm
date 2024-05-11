@@ -57,7 +57,7 @@ class Mapper(Node):
         # Make the motors limp
         self.set_null_points_pub.publish(String(data='start'))
         self.get_logger().info('start map')
-        time.sleep(22) 
+        time.sleep(25) 
         self.get_logger().info("--- move the arm to top position and press map button to record max angels. --- ") 
 
 

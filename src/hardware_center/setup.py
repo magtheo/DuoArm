@@ -24,6 +24,8 @@ setup(
         'console_scripts': [
             'motor_control = hardware_center.motor_control:main',
             'hardware_interface_controller = hardware_center.hardware_interface_controller:main',
+            'gpio_controller = hardware_center.gpio_controller:main',
+
         ],
     },
 )

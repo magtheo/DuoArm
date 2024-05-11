@@ -48,7 +48,12 @@ def generate_launch_description():
         executable='hardware_interface_controller',
         name='hardware_interface_controller'
     ) 
-
+    gpio_controller= Node(
+        package='hardware_center',
+        executable='gpio_controller',
+        name='gpio_controller'
+    ) 
+    
     motor_controller = Node(
         package='hardware_center',
         executable='motor_control',
@@ -82,6 +87,8 @@ def generate_launch_description():
     #ld.add_action(command_executor_node)
     # ld.add_action(display_node)
     ld.add_action(hardware_interface_controller)
+    ld.add_action(gpio_controller)
+
 
 
     return ld
