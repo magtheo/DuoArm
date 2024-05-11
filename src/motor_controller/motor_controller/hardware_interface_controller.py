@@ -154,6 +154,7 @@ class HardwareInterfaceController(Node):
     def update_simultaneous_button_press_conditions(self):
 
         self.simultaneous_button_press_conditions = [
+            (self.run_predefined_path_button_pressed and self.map_button_pressed),
             (self.reset_button_pressed and self.run_predefined_path_button_pressed),
             (self.joystick_button_pressed and self.run_predefined_path_button_pressed),
             (self.joystick_button_pressed and self.reset_button_pressed),
@@ -414,7 +415,7 @@ class HardwareInterfaceController(Node):
 
                 # Joystick at Southwest (LEFT-DOWN DIAGONAL) placement
                 elif (( 512 + self.diagonal_threshold <= self.x_analog_value <= 1023) and \
-                    (512 + self.diagonal_threshold <= self.x_analog_value <= 1023)):
+                    (512 + self.diagonal_threshold <= self.z_analog_value <= 1023)):
 
                     self.move_arm_southwest()
 
