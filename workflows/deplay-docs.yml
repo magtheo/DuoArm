@@ -1,0 +1,33 @@
+name: Generate and Deploy Documentation
+
+on:
+  push:
+    branches:
+      - main  # Set this to your default branch where you push changes
+
+jobs:
+  deploy-docs:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+      
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'  # Set this to the Python version you need
+
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install doxygen
+        pip install -r requirements.txt  # If you have Python dependencies
+
+    - name: Generate Documentation
+      run: doxygen Doxyfile
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./html  # Adjust this to your Doxygen output directory
