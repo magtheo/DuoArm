@@ -1,0 +1,398 @@
+\hypertarget{namespacehardware__center_1_1joysticktestarduino}{}\doxysection{hardware\+\_\+center.\+joysticktestarduino Namespace Reference}
+\label{namespacehardware__center_1_1joysticktestarduino}\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_af57b80a946e158d27f6cfe2435f641ff}{lss1\+\_\+beyond\+\_\+bottom\+\_\+limit}} ()
+\item 
+def \mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_add68a24af97718192da0201902d11de3}{lss1\+\_\+beyond\+\_\+top\+\_\+limit}} ()
+\item 
+def \mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_a2de3b073d23c4a3c29dc611fe2308093}{lss0\+\_\+beyond\+\_\+bottom\+\_\+limit}} ()
+\item 
+def \mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_a6366a109d36784fa75912feb56e32d8e}{lss0\+\_\+beyond\+\_\+top\+\_\+limit}} ()
+\item 
+def \mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_a66f041e6b261188a6559f6ed6d4c448a}{down\+\_\+step}} (self)
+\item 
+def \mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_a836ad21ffeabfeca0ca75bc4cc7d7782}{up\+\_\+step}} (self)
+\item 
+def \mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_a6d9300e32a9492b741fb67f441dbd66a}{stop\+\_\+wheel}} (self)
+\item 
+def \mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_a75ef1aaa9ca62f82136aca95c0d78a83}{read\+\_\+analog\+\_\+values}} (\mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_aee2e1a21a558e0ed3eb35a2a3b86db11}{ser\+\_\+obj}})
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_af97602e5a4abc6dbc2087e7afc642391}{joystick\+\_\+button\+\_\+pin}} = 18
+\item 
+bool \mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_af564018d944156c4e4c53057f659e4a9}{joystick\+\_\+button\+\_\+pressed}} = False
+\item 
+\mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_a1d6afdf135d3342bb1490c48f6a7250f}{IN}}
+\item 
+\mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_a189a4e8c406fb4dc8b2f619ab7922cda}{pull\+\_\+up\+\_\+down}}
+\item 
+\mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_ae18a2489c0a1feffa4a566453e614886}{prev\+\_\+joystick\+\_\+button\+\_\+state}} = GPIO.\+HIGH
+\item 
+float \mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_a3dd613d491e468ba15a1750927565396}{debounce\+\_\+duration}} = 0.\+5
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_ace55b07a9d7cb3d9b97162f89d78a0a0}{last\+\_\+joystick\+\_\+button\+\_\+press\+\_\+time}} = 0
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_a41577333367fcbe17b65ee48a4ed6937}{CST\+\_\+\+LSS\+\_\+\+Port}} = \char`\"{}/dev/tty\+USB0\char`\"{}
+\item 
+\mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_adcb76cda7d37e4ccf46eb5d509c0a65e}{CST\+\_\+\+LSS\+\_\+\+Baud}} = LSS\+\_\+\+Default\+Baud
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_a5cf8cac7f472b5b8436baf3f1bc3c490}{x\+\_\+analog\+\_\+value}} = 0
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_a2c00ef9e41ff6c1dc78da5faecb4402c}{z\+\_\+analog\+\_\+value}} = 0
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_ae8020595787a058bb81b7fc510e2bd8e}{mid\+\_\+threshold}} = 30
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_ae312f8001834e33378f7ef1afc9505db}{diagonal\+\_\+threshold\+\_\+cardinal}} = 255
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_a329036497e237d01f918f2335be55521}{diagonal\+\_\+threshold\+\_\+ordinal}} = \mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_ae312f8001834e33378f7ef1afc9505db}{diagonal\+\_\+threshold\+\_\+cardinal}} + 1
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_ae0ed149888490dd81d204c3b62d3a4cf}{top\+\_\+limit\+\_\+lss1}} = 230
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_a8f6fbb111c67edb673fc361393694270}{bottom\+\_\+limit\+\_\+lss1}} = -\/1600
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_ae0d01d30bffabc3a84dff22bb2497c89}{top\+\_\+limit\+\_\+lss0}} = -\/1060
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_a821f20897ad2a5dfcd3867c866b0e52a}{bottom\+\_\+limit\+\_\+lss0}} = 1400
+\item 
+\mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_aa6b82b0611c6c3d050664af74d5fd8c7}{lss0}} = \mbox{\hyperlink{classhardware__center_1_1lss_1_1LSS}{LSS}}(0)
+\item 
+\mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_a691c51e9dedd4891eeb9ce8a266675df}{lss1}} = \mbox{\hyperlink{classhardware__center_1_1lss_1_1LSS}{LSS}}(1)
+\item 
+\mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_a609f4a2ab7ccde84235b754a28bc45e0}{lss2}} = \mbox{\hyperlink{classhardware__center_1_1lss_1_1LSS}{LSS}}(2)
+\item 
+bool \mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_adaf31993503742aa324e30139e4146e7}{rail\+\_\+system\+\_\+active}} = False
+\item 
+\mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_aee2e1a21a558e0ed3eb35a2a3b86db11}{ser\+\_\+obj}} = serial.\+Serial(\textquotesingle{}/dev/tty\+ACM0\textquotesingle{}, 115200, timeout=1)
+\item 
+\mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_a706a5257ecc039aebdbf6e44eaf86666}{current\+\_\+joystick\+\_\+button\+\_\+state}} = GPIO.\+input(\mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_af97602e5a4abc6dbc2087e7afc642391}{joystick\+\_\+button\+\_\+pin}})
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_a66f041e6b261188a6559f6ed6d4c448a}\label{namespacehardware__center_1_1joysticktestarduino_a66f041e6b261188a6559f6ed6d4c448a}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!down\_step@{down\_step}}
+\index{down\_step@{down\_step}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{down\_step()}{down\_step()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+joysticktestarduino.\+down\+\_\+step (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Definition at line 50 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_a2de3b073d23c4a3c29dc611fe2308093}\label{namespacehardware__center_1_1joysticktestarduino_a2de3b073d23c4a3c29dc611fe2308093}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!lss0\_beyond\_bottom\_limit@{lss0\_beyond\_bottom\_limit}}
+\index{lss0\_beyond\_bottom\_limit@{lss0\_beyond\_bottom\_limit}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{lss0\_beyond\_bottom\_limit()}{lss0\_beyond\_bottom\_limit()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+joysticktestarduino.\+lss0\+\_\+beyond\+\_\+bottom\+\_\+limit (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 44 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_a6366a109d36784fa75912feb56e32d8e}\label{namespacehardware__center_1_1joysticktestarduino_a6366a109d36784fa75912feb56e32d8e}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!lss0\_beyond\_top\_limit@{lss0\_beyond\_top\_limit}}
+\index{lss0\_beyond\_top\_limit@{lss0\_beyond\_top\_limit}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{lss0\_beyond\_top\_limit()}{lss0\_beyond\_top\_limit()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+joysticktestarduino.\+lss0\+\_\+beyond\+\_\+top\+\_\+limit (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 47 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_af57b80a946e158d27f6cfe2435f641ff}\label{namespacehardware__center_1_1joysticktestarduino_af57b80a946e158d27f6cfe2435f641ff}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!lss1\_beyond\_bottom\_limit@{lss1\_beyond\_bottom\_limit}}
+\index{lss1\_beyond\_bottom\_limit@{lss1\_beyond\_bottom\_limit}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{lss1\_beyond\_bottom\_limit()}{lss1\_beyond\_bottom\_limit()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+joysticktestarduino.\+lss1\+\_\+beyond\+\_\+bottom\+\_\+limit (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 38 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_add68a24af97718192da0201902d11de3}\label{namespacehardware__center_1_1joysticktestarduino_add68a24af97718192da0201902d11de3}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!lss1\_beyond\_top\_limit@{lss1\_beyond\_top\_limit}}
+\index{lss1\_beyond\_top\_limit@{lss1\_beyond\_top\_limit}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{lss1\_beyond\_top\_limit()}{lss1\_beyond\_top\_limit()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+joysticktestarduino.\+lss1\+\_\+beyond\+\_\+top\+\_\+limit (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 41 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_a75ef1aaa9ca62f82136aca95c0d78a83}\label{namespacehardware__center_1_1joysticktestarduino_a75ef1aaa9ca62f82136aca95c0d78a83}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!read\_analog\_values@{read\_analog\_values}}
+\index{read\_analog\_values@{read\_analog\_values}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{read\_analog\_values()}{read\_analog\_values()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+joysticktestarduino.\+read\+\_\+analog\+\_\+values (\begin{DoxyParamCaption}\item[{}]{ser\+\_\+obj }\end{DoxyParamCaption})}
+
+
+
+Definition at line 60 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_a6d9300e32a9492b741fb67f441dbd66a}\label{namespacehardware__center_1_1joysticktestarduino_a6d9300e32a9492b741fb67f441dbd66a}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!stop\_wheel@{stop\_wheel}}
+\index{stop\_wheel@{stop\_wheel}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{stop\_wheel()}{stop\_wheel()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+joysticktestarduino.\+stop\+\_\+wheel (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Definition at line 56 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_a836ad21ffeabfeca0ca75bc4cc7d7782}\label{namespacehardware__center_1_1joysticktestarduino_a836ad21ffeabfeca0ca75bc4cc7d7782}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!up\_step@{up\_step}}
+\index{up\_step@{up\_step}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{up\_step()}{up\_step()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+joysticktestarduino.\+up\+\_\+step (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Definition at line 53 of file joysticktestarduino.\+py.
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_a821f20897ad2a5dfcd3867c866b0e52a}\label{namespacehardware__center_1_1joysticktestarduino_a821f20897ad2a5dfcd3867c866b0e52a}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!bottom\_limit\_lss0@{bottom\_limit\_lss0}}
+\index{bottom\_limit\_lss0@{bottom\_limit\_lss0}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{bottom\_limit\_lss0}{bottom\_limit\_lss0}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+joysticktestarduino.\+bottom\+\_\+limit\+\_\+lss0 = 1400}
+
+
+
+Definition at line 29 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_a8f6fbb111c67edb673fc361393694270}\label{namespacehardware__center_1_1joysticktestarduino_a8f6fbb111c67edb673fc361393694270}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!bottom\_limit\_lss1@{bottom\_limit\_lss1}}
+\index{bottom\_limit\_lss1@{bottom\_limit\_lss1}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{bottom\_limit\_lss1}{bottom\_limit\_lss1}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+joysticktestarduino.\+bottom\+\_\+limit\+\_\+lss1 = -\/1600}
+
+
+
+Definition at line 27 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_adcb76cda7d37e4ccf46eb5d509c0a65e}\label{namespacehardware__center_1_1joysticktestarduino_adcb76cda7d37e4ccf46eb5d509c0a65e}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!CST\_LSS\_Baud@{CST\_LSS\_Baud}}
+\index{CST\_LSS\_Baud@{CST\_LSS\_Baud}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{CST\_LSS\_Baud}{CST\_LSS\_Baud}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+joysticktestarduino.\+CST\+\_\+\+LSS\+\_\+\+Baud = LSS\+\_\+\+Default\+Baud}
+
+
+
+Definition at line 17 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_a41577333367fcbe17b65ee48a4ed6937}\label{namespacehardware__center_1_1joysticktestarduino_a41577333367fcbe17b65ee48a4ed6937}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!CST\_LSS\_Port@{CST\_LSS\_Port}}
+\index{CST\_LSS\_Port@{CST\_LSS\_Port}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{CST\_LSS\_Port}{CST\_LSS\_Port}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+joysticktestarduino.\+CST\+\_\+\+LSS\+\_\+\+Port = \char`\"{}/dev/tty\+USB0\char`\"{}}
+
+
+
+Definition at line 16 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_a706a5257ecc039aebdbf6e44eaf86666}\label{namespacehardware__center_1_1joysticktestarduino_a706a5257ecc039aebdbf6e44eaf86666}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!current\_joystick\_button\_state@{current\_joystick\_button\_state}}
+\index{current\_joystick\_button\_state@{current\_joystick\_button\_state}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{current\_joystick\_button\_state}{current\_joystick\_button\_state}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+joysticktestarduino.\+current\+\_\+joystick\+\_\+button\+\_\+state = GPIO.\+input(\mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_af97602e5a4abc6dbc2087e7afc642391}{joystick\+\_\+button\+\_\+pin}})}
+
+
+
+Definition at line 78 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_a3dd613d491e468ba15a1750927565396}\label{namespacehardware__center_1_1joysticktestarduino_a3dd613d491e468ba15a1750927565396}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!debounce\_duration@{debounce\_duration}}
+\index{debounce\_duration@{debounce\_duration}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{debounce\_duration}{debounce\_duration}}
+{\footnotesize\ttfamily float hardware\+\_\+center.\+joysticktestarduino.\+debounce\+\_\+duration = 0.\+5}
+
+
+
+Definition at line 12 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_ae312f8001834e33378f7ef1afc9505db}\label{namespacehardware__center_1_1joysticktestarduino_ae312f8001834e33378f7ef1afc9505db}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!diagonal\_threshold\_cardinal@{diagonal\_threshold\_cardinal}}
+\index{diagonal\_threshold\_cardinal@{diagonal\_threshold\_cardinal}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{diagonal\_threshold\_cardinal}{diagonal\_threshold\_cardinal}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+joysticktestarduino.\+diagonal\+\_\+threshold\+\_\+cardinal = 255}
+
+
+
+Definition at line 24 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_a329036497e237d01f918f2335be55521}\label{namespacehardware__center_1_1joysticktestarduino_a329036497e237d01f918f2335be55521}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!diagonal\_threshold\_ordinal@{diagonal\_threshold\_ordinal}}
+\index{diagonal\_threshold\_ordinal@{diagonal\_threshold\_ordinal}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{diagonal\_threshold\_ordinal}{diagonal\_threshold\_ordinal}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+joysticktestarduino.\+diagonal\+\_\+threshold\+\_\+ordinal = \mbox{\hyperlink{namespacehardware__center_1_1joysticktestarduino_ae312f8001834e33378f7ef1afc9505db}{diagonal\+\_\+threshold\+\_\+cardinal}} + 1}
+
+
+
+Definition at line 25 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_a1d6afdf135d3342bb1490c48f6a7250f}\label{namespacehardware__center_1_1joysticktestarduino_a1d6afdf135d3342bb1490c48f6a7250f}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!IN@{IN}}
+\index{IN@{IN}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{IN}{IN}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+joysticktestarduino.\+IN}
+
+
+
+Definition at line 9 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_af97602e5a4abc6dbc2087e7afc642391}\label{namespacehardware__center_1_1joysticktestarduino_af97602e5a4abc6dbc2087e7afc642391}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!joystick\_button\_pin@{joystick\_button\_pin}}
+\index{joystick\_button\_pin@{joystick\_button\_pin}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{joystick\_button\_pin}{joystick\_button\_pin}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+joysticktestarduino.\+joystick\+\_\+button\+\_\+pin = 18}
+
+
+
+Definition at line 6 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_af564018d944156c4e4c53057f659e4a9}\label{namespacehardware__center_1_1joysticktestarduino_af564018d944156c4e4c53057f659e4a9}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!joystick\_button\_pressed@{joystick\_button\_pressed}}
+\index{joystick\_button\_pressed@{joystick\_button\_pressed}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{joystick\_button\_pressed}{joystick\_button\_pressed}}
+{\footnotesize\ttfamily bool hardware\+\_\+center.\+joysticktestarduino.\+joystick\+\_\+button\+\_\+pressed = False}
+
+
+
+Definition at line 7 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_ace55b07a9d7cb3d9b97162f89d78a0a0}\label{namespacehardware__center_1_1joysticktestarduino_ace55b07a9d7cb3d9b97162f89d78a0a0}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!last\_joystick\_button\_press\_time@{last\_joystick\_button\_press\_time}}
+\index{last\_joystick\_button\_press\_time@{last\_joystick\_button\_press\_time}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{last\_joystick\_button\_press\_time}{last\_joystick\_button\_press\_time}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+joysticktestarduino.\+last\+\_\+joystick\+\_\+button\+\_\+press\+\_\+time = 0}
+
+
+
+Definition at line 13 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_aa6b82b0611c6c3d050664af74d5fd8c7}\label{namespacehardware__center_1_1joysticktestarduino_aa6b82b0611c6c3d050664af74d5fd8c7}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!lss0@{lss0}}
+\index{lss0@{lss0}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{lss0}{lss0}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+joysticktestarduino.\+lss0 = \mbox{\hyperlink{classhardware__center_1_1lss_1_1LSS}{LSS}}(0)}
+
+
+
+Definition at line 31 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_a691c51e9dedd4891eeb9ce8a266675df}\label{namespacehardware__center_1_1joysticktestarduino_a691c51e9dedd4891eeb9ce8a266675df}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!lss1@{lss1}}
+\index{lss1@{lss1}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{lss1}{lss1}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+joysticktestarduino.\+lss1 = \mbox{\hyperlink{classhardware__center_1_1lss_1_1LSS}{LSS}}(1)}
+
+
+
+Definition at line 32 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_a609f4a2ab7ccde84235b754a28bc45e0}\label{namespacehardware__center_1_1joysticktestarduino_a609f4a2ab7ccde84235b754a28bc45e0}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!lss2@{lss2}}
+\index{lss2@{lss2}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{lss2}{lss2}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+joysticktestarduino.\+lss2 = \mbox{\hyperlink{classhardware__center_1_1lss_1_1LSS}{LSS}}(2)}
+
+
+
+Definition at line 33 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_ae8020595787a058bb81b7fc510e2bd8e}\label{namespacehardware__center_1_1joysticktestarduino_ae8020595787a058bb81b7fc510e2bd8e}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!mid\_threshold@{mid\_threshold}}
+\index{mid\_threshold@{mid\_threshold}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{mid\_threshold}{mid\_threshold}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+joysticktestarduino.\+mid\+\_\+threshold = 30}
+
+
+
+Definition at line 23 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_ae18a2489c0a1feffa4a566453e614886}\label{namespacehardware__center_1_1joysticktestarduino_ae18a2489c0a1feffa4a566453e614886}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!prev\_joystick\_button\_state@{prev\_joystick\_button\_state}}
+\index{prev\_joystick\_button\_state@{prev\_joystick\_button\_state}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{prev\_joystick\_button\_state}{prev\_joystick\_button\_state}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+joysticktestarduino.\+prev\+\_\+joystick\+\_\+button\+\_\+state = GPIO.\+HIGH}
+
+
+
+Definition at line 11 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_a189a4e8c406fb4dc8b2f619ab7922cda}\label{namespacehardware__center_1_1joysticktestarduino_a189a4e8c406fb4dc8b2f619ab7922cda}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!pull\_up\_down@{pull\_up\_down}}
+\index{pull\_up\_down@{pull\_up\_down}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{pull\_up\_down}{pull\_up\_down}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+joysticktestarduino.\+pull\+\_\+up\+\_\+down}
+
+
+
+Definition at line 9 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_adaf31993503742aa324e30139e4146e7}\label{namespacehardware__center_1_1joysticktestarduino_adaf31993503742aa324e30139e4146e7}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!rail\_system\_active@{rail\_system\_active}}
+\index{rail\_system\_active@{rail\_system\_active}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{rail\_system\_active}{rail\_system\_active}}
+{\footnotesize\ttfamily bool hardware\+\_\+center.\+joysticktestarduino.\+rail\+\_\+system\+\_\+active = False}
+
+
+
+Definition at line 35 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_aee2e1a21a558e0ed3eb35a2a3b86db11}\label{namespacehardware__center_1_1joysticktestarduino_aee2e1a21a558e0ed3eb35a2a3b86db11}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!ser\_obj@{ser\_obj}}
+\index{ser\_obj@{ser\_obj}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{ser\_obj}{ser\_obj}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+joysticktestarduino.\+ser\+\_\+obj = serial.\+Serial(\textquotesingle{}/dev/tty\+ACM0\textquotesingle{}, 115200, timeout=1)}
+
+
+
+Definition at line 72 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_ae0d01d30bffabc3a84dff22bb2497c89}\label{namespacehardware__center_1_1joysticktestarduino_ae0d01d30bffabc3a84dff22bb2497c89}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!top\_limit\_lss0@{top\_limit\_lss0}}
+\index{top\_limit\_lss0@{top\_limit\_lss0}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{top\_limit\_lss0}{top\_limit\_lss0}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+joysticktestarduino.\+top\+\_\+limit\+\_\+lss0 = -\/1060}
+
+
+
+Definition at line 28 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_ae0ed149888490dd81d204c3b62d3a4cf}\label{namespacehardware__center_1_1joysticktestarduino_ae0ed149888490dd81d204c3b62d3a4cf}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!top\_limit\_lss1@{top\_limit\_lss1}}
+\index{top\_limit\_lss1@{top\_limit\_lss1}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{top\_limit\_lss1}{top\_limit\_lss1}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+joysticktestarduino.\+top\+\_\+limit\+\_\+lss1 = 230}
+
+
+
+Definition at line 26 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_a5cf8cac7f472b5b8436baf3f1bc3c490}\label{namespacehardware__center_1_1joysticktestarduino_a5cf8cac7f472b5b8436baf3f1bc3c490}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!x\_analog\_value@{x\_analog\_value}}
+\index{x\_analog\_value@{x\_analog\_value}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{x\_analog\_value}{x\_analog\_value}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+joysticktestarduino.\+x\+\_\+analog\+\_\+value = 0}
+
+
+
+Definition at line 20 of file joysticktestarduino.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1joysticktestarduino_a2c00ef9e41ff6c1dc78da5faecb4402c}\label{namespacehardware__center_1_1joysticktestarduino_a2c00ef9e41ff6c1dc78da5faecb4402c}} 
+\index{hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}!z\_analog\_value@{z\_analog\_value}}
+\index{z\_analog\_value@{z\_analog\_value}!hardware\_center.joysticktestarduino@{hardware\_center.joysticktestarduino}}
+\doxysubsubsection{\texorpdfstring{z\_analog\_value}{z\_analog\_value}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+joysticktestarduino.\+z\+\_\+analog\+\_\+value = 0}
+
+
+
+Definition at line 21 of file joysticktestarduino.\+py.
+

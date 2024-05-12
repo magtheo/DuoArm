@@ -1,0 +1,171 @@
+\hypertarget{namespacehardware__center_1_1motor__control}{}\doxysection{hardware\+\_\+center.\+motor\+\_\+control Namespace Reference}
+\label{namespacehardware__center_1_1motor__control}\index{hardware\_center.motor\_control@{hardware\_center.motor\_control}}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl}{motor\+Control}}
+\begin{DoxyCompactList}\small\item\em This class encapsulates methods to control motor behavior based on received commands. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespacehardware__center_1_1motor__control_aa430c835a7025b17bfdf625b49afd57e}{main}} (args=None)
+\begin{DoxyCompactList}\small\item\em Main function to initialize the ROS node. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1motor__control_a1dc548511fef11deaf9a0bcf2837b3a2}{CST\+\_\+\+LSS\+\_\+\+Port}} = \textquotesingle{}/dev/lss\+Motor\+Controller\textquotesingle{}
+\begin{DoxyCompactList}\small\item\em Constants for LSS Port configuration, with udev tools we have created symlinks to the physical ports, make sure to always connect usb to the same port. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespacehardware__center_1_1motor__control_a3d3e15c5c8db9987a7ae5be48c0e6299}{CST\+\_\+\+LSS\+\_\+\+Baud}} = LSS\+\_\+\+Default\+Baud
+\item 
+\mbox{\hyperlink{namespacehardware__center_1_1motor__control_a15cb0983ba414ddb7cbbeeb5da87a6f5}{lss0}} = \mbox{\hyperlink{classhardware__center_1_1lss_1_1LSS}{LSS}}(0)
+\begin{DoxyCompactList}\small\item\em Initialize and open a serial port for communication. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespacehardware__center_1_1motor__control_a718dff5e149fe09d04890daa8a7ef7a2}{lss1}} = \mbox{\hyperlink{classhardware__center_1_1lss_1_1LSS}{LSS}}(1)
+\item 
+\mbox{\hyperlink{namespacehardware__center_1_1motor__control_a41375b90688cd91391a073533be5d0a6}{lss2}} = \mbox{\hyperlink{classhardware__center_1_1lss_1_1LSS}{LSS}}(2)
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1motor__control_a15c2d86445eaf135c3bb84dddbf4548a}{lss0\+\_\+act\+\_\+angle}} = 0
+\begin{DoxyCompactList}\small\item\em Initial motor angles and positions. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1motor__control_a6355d465ca7db82e6eb2ef99739c8c46}{lss1\+\_\+act\+\_\+angle}} = 0
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1motor__control_acbba2ddbcc7d3260439e71b3159f0938}{lss0\+\_\+act\+\_\+position}} = 0
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1motor__control_a165486b5f3fd0905f1f1710d9b455c5d}{lss1\+\_\+act\+\_\+position}} = 0
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1motor__control_a8b0e134a261df086cfff250758051b29}{gear\+\_\+ratio}} = 2
+\begin{DoxyCompactList}\small\item\em Gear ratio used for calculations. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacehardware__center_1_1motor__control_aa430c835a7025b17bfdf625b49afd57e}\label{namespacehardware__center_1_1motor__control_aa430c835a7025b17bfdf625b49afd57e}} 
+\index{hardware\_center.motor\_control@{hardware\_center.motor\_control}!main@{main}}
+\index{main@{main}!hardware\_center.motor\_control@{hardware\_center.motor\_control}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+motor\+\_\+control.\+main (\begin{DoxyParamCaption}\item[{}]{args = {\ttfamily None} }\end{DoxyParamCaption})}
+
+
+
+Main function to initialize the ROS node. 
+
+
+
+Definition at line 368 of file motor\+\_\+control.\+py.
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespacehardware__center_1_1motor__control_a3d3e15c5c8db9987a7ae5be48c0e6299}\label{namespacehardware__center_1_1motor__control_a3d3e15c5c8db9987a7ae5be48c0e6299}} 
+\index{hardware\_center.motor\_control@{hardware\_center.motor\_control}!CST\_LSS\_Baud@{CST\_LSS\_Baud}}
+\index{CST\_LSS\_Baud@{CST\_LSS\_Baud}!hardware\_center.motor\_control@{hardware\_center.motor\_control}}
+\doxysubsubsection{\texorpdfstring{CST\_LSS\_Baud}{CST\_LSS\_Baud}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+motor\+\_\+control.\+CST\+\_\+\+LSS\+\_\+\+Baud = LSS\+\_\+\+Default\+Baud}
+
+
+
+Definition at line 22 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1motor__control_a1dc548511fef11deaf9a0bcf2837b3a2}\label{namespacehardware__center_1_1motor__control_a1dc548511fef11deaf9a0bcf2837b3a2}} 
+\index{hardware\_center.motor\_control@{hardware\_center.motor\_control}!CST\_LSS\_Port@{CST\_LSS\_Port}}
+\index{CST\_LSS\_Port@{CST\_LSS\_Port}!hardware\_center.motor\_control@{hardware\_center.motor\_control}}
+\doxysubsubsection{\texorpdfstring{CST\_LSS\_Port}{CST\_LSS\_Port}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+motor\+\_\+control.\+CST\+\_\+\+LSS\+\_\+\+Port = \textquotesingle{}/dev/lss\+Motor\+Controller\textquotesingle{}}
+
+
+
+Constants for LSS Port configuration, with udev tools we have created symlinks to the physical ports, make sure to always connect usb to the same port. 
+
+
+
+Definition at line 20 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1motor__control_a8b0e134a261df086cfff250758051b29}\label{namespacehardware__center_1_1motor__control_a8b0e134a261df086cfff250758051b29}} 
+\index{hardware\_center.motor\_control@{hardware\_center.motor\_control}!gear\_ratio@{gear\_ratio}}
+\index{gear\_ratio@{gear\_ratio}!hardware\_center.motor\_control@{hardware\_center.motor\_control}}
+\doxysubsubsection{\texorpdfstring{gear\_ratio}{gear\_ratio}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+motor\+\_\+control.\+gear\+\_\+ratio = 2}
+
+
+
+Gear ratio used for calculations. 
+
+
+
+Definition at line 40 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1motor__control_a15cb0983ba414ddb7cbbeeb5da87a6f5}\label{namespacehardware__center_1_1motor__control_a15cb0983ba414ddb7cbbeeb5da87a6f5}} 
+\index{hardware\_center.motor\_control@{hardware\_center.motor\_control}!lss0@{lss0}}
+\index{lss0@{lss0}!hardware\_center.motor\_control@{hardware\_center.motor\_control}}
+\doxysubsubsection{\texorpdfstring{lss0}{lss0}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+motor\+\_\+control.\+lss0 = \mbox{\hyperlink{classhardware__center_1_1lss_1_1LSS}{LSS}}(0)}
+
+
+
+Initialize and open a serial port for communication. 
+
+Create instances of LSS class for different motor IDs 
+
+Definition at line 28 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1motor__control_a15c2d86445eaf135c3bb84dddbf4548a}\label{namespacehardware__center_1_1motor__control_a15c2d86445eaf135c3bb84dddbf4548a}} 
+\index{hardware\_center.motor\_control@{hardware\_center.motor\_control}!lss0\_act\_angle@{lss0\_act\_angle}}
+\index{lss0\_act\_angle@{lss0\_act\_angle}!hardware\_center.motor\_control@{hardware\_center.motor\_control}}
+\doxysubsubsection{\texorpdfstring{lss0\_act\_angle}{lss0\_act\_angle}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+motor\+\_\+control.\+lss0\+\_\+act\+\_\+angle = 0}
+
+
+
+Initial motor angles and positions. 
+
+
+
+Definition at line 33 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1motor__control_acbba2ddbcc7d3260439e71b3159f0938}\label{namespacehardware__center_1_1motor__control_acbba2ddbcc7d3260439e71b3159f0938}} 
+\index{hardware\_center.motor\_control@{hardware\_center.motor\_control}!lss0\_act\_position@{lss0\_act\_position}}
+\index{lss0\_act\_position@{lss0\_act\_position}!hardware\_center.motor\_control@{hardware\_center.motor\_control}}
+\doxysubsubsection{\texorpdfstring{lss0\_act\_position}{lss0\_act\_position}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+motor\+\_\+control.\+lss0\+\_\+act\+\_\+position = 0}
+
+
+
+Definition at line 36 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1motor__control_a718dff5e149fe09d04890daa8a7ef7a2}\label{namespacehardware__center_1_1motor__control_a718dff5e149fe09d04890daa8a7ef7a2}} 
+\index{hardware\_center.motor\_control@{hardware\_center.motor\_control}!lss1@{lss1}}
+\index{lss1@{lss1}!hardware\_center.motor\_control@{hardware\_center.motor\_control}}
+\doxysubsubsection{\texorpdfstring{lss1}{lss1}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+motor\+\_\+control.\+lss1 = \mbox{\hyperlink{classhardware__center_1_1lss_1_1LSS}{LSS}}(1)}
+
+
+
+Definition at line 29 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1motor__control_a6355d465ca7db82e6eb2ef99739c8c46}\label{namespacehardware__center_1_1motor__control_a6355d465ca7db82e6eb2ef99739c8c46}} 
+\index{hardware\_center.motor\_control@{hardware\_center.motor\_control}!lss1\_act\_angle@{lss1\_act\_angle}}
+\index{lss1\_act\_angle@{lss1\_act\_angle}!hardware\_center.motor\_control@{hardware\_center.motor\_control}}
+\doxysubsubsection{\texorpdfstring{lss1\_act\_angle}{lss1\_act\_angle}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+motor\+\_\+control.\+lss1\+\_\+act\+\_\+angle = 0}
+
+
+
+Definition at line 34 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1motor__control_a165486b5f3fd0905f1f1710d9b455c5d}\label{namespacehardware__center_1_1motor__control_a165486b5f3fd0905f1f1710d9b455c5d}} 
+\index{hardware\_center.motor\_control@{hardware\_center.motor\_control}!lss1\_act\_position@{lss1\_act\_position}}
+\index{lss1\_act\_position@{lss1\_act\_position}!hardware\_center.motor\_control@{hardware\_center.motor\_control}}
+\doxysubsubsection{\texorpdfstring{lss1\_act\_position}{lss1\_act\_position}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+motor\+\_\+control.\+lss1\+\_\+act\+\_\+position = 0}
+
+
+
+Definition at line 37 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1motor__control_a41375b90688cd91391a073533be5d0a6}\label{namespacehardware__center_1_1motor__control_a41375b90688cd91391a073533be5d0a6}} 
+\index{hardware\_center.motor\_control@{hardware\_center.motor\_control}!lss2@{lss2}}
+\index{lss2@{lss2}!hardware\_center.motor\_control@{hardware\_center.motor\_control}}
+\doxysubsubsection{\texorpdfstring{lss2}{lss2}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+motor\+\_\+control.\+lss2 = \mbox{\hyperlink{classhardware__center_1_1lss_1_1LSS}{LSS}}(2)}
+
+
+
+Definition at line 30 of file motor\+\_\+control.\+py.
+

@@ -1,0 +1,1563 @@
+\hypertarget{namespacehardware__center_1_1lss}{}\doxysection{hardware\+\_\+center.\+lss Namespace Reference}
+\label{namespacehardware__center_1_1lss}\index{hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classhardware__center_1_1lss_1_1LSS}{LSS}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespacehardware__center_1_1lss_ad8244a7a59beb5fb5ca63cdb4a9bb2f2}{init\+Bus}} (port\+Name, port\+Baud)
+\begin{DoxyCompactList}\small\item\em Class functions. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{namespacehardware__center_1_1lss_a28d194d9d480ac935a87b696fc8ec679}{close\+Bus}} ()
+\item 
+def \mbox{\hyperlink{namespacehardware__center_1_1lss_aa4bef367d063480de6f0f907bbf35e25}{generic\+Write}} (id, cmd, param=None)
+\item 
+def \mbox{\hyperlink{namespacehardware__center_1_1lss_a259c73318a62e57427757d3e71c53ccd}{generic\+Read\+\_\+\+Blocking\+\_\+int}} (id, cmd)
+\item 
+def \mbox{\hyperlink{namespacehardware__center_1_1lss_a535b9e6c754bbc4e178176f9be18d248}{generic\+Read\+\_\+\+Blocking\+\_\+str}} (id, cmd, num\+Chars)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_abbe2a8ec97cfe2873aaca1b9456e15b2}{LSS\+\_\+\+Default\+Baud}} = 115200
+\begin{DoxyCompactList}\small\item\em Bus communication constants. \end{DoxyCompactList}\item 
+tuple \mbox{\hyperlink{namespacehardware__center_1_1lss_a21c19e9c1834cf444597de249f9cf121}{LSS\+\_\+\+Max\+Total\+Command\+Length}} = (30 + 1)
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a44affc9d20fa4e63058689019fb11af5}{LSS\+\_\+\+Timeout}} = 100
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_abbc0f1222f727b2359fa0a713e7acfbb}{LSS\+\_\+\+Command\+Start}} = \char`\"{}\#\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a02b4e9cac200f84c5d09e0eb0db07950}{LSS\+\_\+\+Command\+Reply\+Start}} = \char`\"{}$\ast$\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a72845619ad361d4776b3eb2f0e9b9caf}{LSS\+\_\+\+Command\+End}} = \char`\"{}\textbackslash{}r\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a8a98dea250d3050d1f03a17d07c6f231}{LSS\+\_\+\+First\+Position\+Disabled}} = \char`\"{}DIS\char`\"{}
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_af5ba8c49e74a59438226157f294d87f4}{LSS\+\_\+\+ID\+\_\+\+Default}} = 0
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a9feb7d9b0f6255c982d618b62387759c}{LSS\+\_\+\+ID\+\_\+\+Min}} = 0
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a29c07b0b0c5090b5d8894a6bc4d9f130}{LSS\+\_\+\+ID\+\_\+\+Max}} = 250
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_aafddb3aa640f2079a11606d0d65f6151}{LSS\+\_\+\+Mode255\+ID}} = 255
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a597fc9c1135fa6901bdb1e05d3ab899a}{LSS\+\_\+\+Broadcast\+ID}} = 254
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a308c2bee1f08382a560268454cdcccce}{LSS\+\_\+\+Comm\+Status\+\_\+\+Idle}} = 0
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_aaad2e44da15cc053a0a8a1aa40888657}{LSS\+\_\+\+Comm\+Status\+\_\+\+Read\+Success}} = 1
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_acb39aaef95335e81b8cbe08cc5513d32}{LSS\+\_\+\+Comm\+Status\+\_\+\+Read\+Timeout}} = 2
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a26e41ce22b98d3e605f64a1637456fac}{LSS\+\_\+\+Comm\+Status\+\_\+\+Read\+Wrong\+ID}} = 3
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_aca64299531c44305cf59f596a41d95b3}{LSS\+\_\+\+Comm\+Status\+\_\+\+Read\+Wrong\+Identifier}} = 4
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a399320ec0b21a5506f8bf34909f0b041}{LSS\+\_\+\+Comm\+Status\+\_\+\+Read\+Wrong\+Format}} = 5
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_aae1c45d8515d130635847213fdc220d5}{LSS\+\_\+\+Comm\+Status\+\_\+\+Read\+No\+Bus}} = 6
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a74d54fd0fe47a8761d8cbcbcce7645ce}{LSS\+\_\+\+Comm\+Status\+\_\+\+Read\+Unknown}} = 7
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a9647dc093cd92972bd5fc6de6edf74b1}{LSS\+\_\+\+Comm\+Status\+\_\+\+Write\+Success}} = 8
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a55000209b3a9a7278770e0f1e364dd36}{LSS\+\_\+\+Comm\+Status\+\_\+\+Write\+No\+Bus}} = 9
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a7ae1ac8aa5721e5c386c119e60171c0b}{LSS\+\_\+\+Comm\+Status\+\_\+\+Write\+Unknown}} = 10
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_acb67a62c0fa3bff880f894aca2560ab2}{LSS\+\_\+\+Status\+Unknown}} = 0
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a4d529232dd2845e158f4a22957e20ee4}{LSS\+\_\+\+Status\+Limp}} = 1
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a42d5414a0a99face56705c6c34b0e46d}{LSS\+\_\+\+Status\+Free\+Moving}} = 2
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a30b5d360a65789da7ad4d949adb96743}{LSS\+\_\+\+Status\+Accelerating}} = 3
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a232897b4ad64d767858159c5a4c89513}{LSS\+\_\+\+Status\+Travelling}} = 4
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a75b81a84c0df3b619b57cc186c94a9b9}{LSS\+\_\+\+Status\+Decelerating}} = 5
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_af11cd9d8516401f7b36a915a25904315}{LSS\+\_\+\+Status\+Holding}} = 6
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a2136e548d785c032a06eba7c335d46c2}{LSS\+\_\+\+Status\+Outside\+Limits}} = 7
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_aff73214f2983951646770640e628a2f7}{LSS\+\_\+\+Status\+Stuck}} = 8
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_aaa2a78e4a05f0389d659a5df1b312b78}{LSS\+\_\+\+Status\+Blocked}} = 9
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_aad89800b88c0ff2de44b7826cecb8e94}{LSS\+\_\+\+Status\+Safe\+Mode}} = 10
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a0ba824ea10091ecfe354fff7b16c8e74}{LSS\+\_\+\+Status\+Last}} = 11
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a9692ed68cdeaf186f1f145860bc626fc}{LSS\+\_\+\+Model\+High\+Torque}} = 0
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a573bef42e3cbbac70ecaa9dd1bdda0cd}{LSS\+\_\+\+Model\+Standard}} = 1
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_abcdf711ede6ba7f42fc64bf0bf7a6fd4}{LSS\+\_\+\+Model\+High\+Speed}} = 2
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a5dffed40c0f3da4b1653d9695aece3fa}{LSS\+\_\+\+Model\+Unknown}} = 3
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_ae167061245829126ed19ec80ee784fec}{LSS\+\_\+\+Model\+HT1}} = \char`\"{}LSS-\/HT1\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a1289d537ee3098ee21327a042a30fa58}{LSS\+\_\+\+Model\+ST1}} = \char`\"{}LSS-\/ST1\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a2abbc79738129650d8e05104afc6a591}{LSS\+\_\+\+Model\+HS1}} = \char`\"{}LSS-\/HS1\char`\"{}
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a8428b1db0991b0165394f807b8c53bf3}{LSS\+\_\+\+Query\+Session}} = 0
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_acfd320b02210ebd9cd367135b7c1ecad}{LSS\+\_\+\+Query\+Config}} = 1
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_afb15a7cad4eb4294822cc59dd208e471}{LSS\+\_\+\+Query\+Instantaneous\+Speed}} = 2
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a7e3d7df6ccf09c139ebe404d6bc047fd}{LSS\+\_\+\+Query\+Target\+Travel\+Speed}} = 3
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a1a9935f35a6310b554f0145919c40e0d}{LSS\+\_\+\+Set\+Session}} = 0
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a1d6ef43f66c060dbaf760b696bc9d496}{LSS\+\_\+\+Set\+Config}} = 1
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a84d6874e2da504b24fd3e52844483998}{LSS\+\_\+\+Mode\+Serial}} = 0
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_abaa3a0fe18f39c56b2071126773959af}{LSS\+\_\+\+Mode\+Position\+RC}} = 1
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a97fa416f195741b0fd56aedb8e05b641}{LSS\+\_\+\+Mode\+Wheel\+RC}} = 2
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a36a7ce8233118efb78ae87cd50a2d001}{LSS\+\_\+\+Gyre\+Clockwise}} = 1
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a2bba6f4313ce2e286788fc2c9984a8d4}{LSS\+\_\+\+Gyre\+Counter\+Clockwise}} = -\/1
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_afecae1d92fe326637d915504a33d21bf}{LSS\+\_\+\+LED\+\_\+\+Black}} = 0
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_ae05bef511a4bea8b6182e992d66256ef}{LSS\+\_\+\+LED\+\_\+\+Red}} = 1
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a5746b66ff6db9cd00d7778bf4148fd31}{LSS\+\_\+\+LED\+\_\+\+Green}} = 2
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a09f6696e747bcf5196ff92385ee9b834}{LSS\+\_\+\+LED\+\_\+\+Blue}} = 3
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a6246e39e19266e1add62d534e9fcb54f}{LSS\+\_\+\+LED\+\_\+\+Yellow}} = 4
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a47d060fe80bfa4db02724f12467c053c}{LSS\+\_\+\+LED\+\_\+\+Cyan}} = 5
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_ad53ee190c756c120a033d8203bbe24bc}{LSS\+\_\+\+LED\+\_\+\+Magenta}} = 6
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_aaf611f9b04de489dfe6349445c3fff92}{LSS\+\_\+\+LED\+\_\+\+White}} = 7
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_ab69faf69cbfe549b4f7f3713cea9ec2f}{LSS\+\_\+\+Action\+Reset}} = \char`\"{}RESET\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_aaf8082d7a49b1c02116eac1c170e943c}{LSS\+\_\+\+Action\+Limp}} = \char`\"{}L\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a253d98ef9f8b33ff63fc48fd63bc77c3}{LSS\+\_\+\+Action\+Hold}} = \char`\"{}H\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_af2f5dda249aa5dbdb6947f88a8306a4d}{LSS\+\_\+\+Action\+Parameter\+Time}} = \char`\"{}T\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a8c8456ff4cf721d1d46c9fb5a7e38e2f}{LSS\+\_\+\+Action\+Parameter\+Speed}} = \char`\"{}S\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a3ebc7024770698f3c24ed78488feeb80}{LSS\+\_\+\+Action\+Move}} = \char`\"{}D\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_ad91afa04f6bc59afb959ad705e941846}{LSS\+\_\+\+Action\+Move\+Relative}} = \char`\"{}MD\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a5cdfc6502bda6dce0e38dc47a0f337ac}{LSS\+\_\+\+Action\+Wheel}} = \char`\"{}WD\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a1a5d25ea1f037b4f9330381bb52deaf4}{LSS\+\_\+\+Action\+Wheel\+RPM}} = \char`\"{}WR\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_ae38447f5b72ec39934ed0e42250dc737}{LSS\+\_\+\+Action\+Origin\+Offset}} = \char`\"{}O\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a1bb65adb360975b4cedf92ef061973d3}{LSS\+\_\+\+Action\+Angular\+Range}} = \char`\"{}AR\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_ac463ab5efba7a277c3444043dcbbc74e}{LSS\+\_\+\+Action\+Max\+Speed}} = \char`\"{}SD\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_ae3393d6896768e7919d065608fbc78b1}{LSS\+\_\+\+Action\+Max\+Speed\+RPM}} = \char`\"{}SR\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_ac7ebfb270519f44059acd36770fcf53e}{LSS\+\_\+\+Action\+Color\+LED}} = \char`\"{}LED\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a16df6a2c2cf3d830a521058c8d7d8f8e}{LSS\+\_\+\+Action\+Gyre\+Direction}} = \char`\"{}G\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_afa744e38899c126f38d713a170d7de64}{LSS\+\_\+\+Action\+Angular\+Stiffness}} = \char`\"{}AS\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a643733c521c717c8dc2220714a184ab9}{LSS\+\_\+\+Action\+Angular\+Holding\+Stiffness}} = \char`\"{}AH\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_aa7980ec8da3c98685532f14c526caf6b}{LSS\+\_\+\+Action\+Angular\+Acceleration}} = \char`\"{}AA\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_aa9f6342cbcc89a5f81454ca1eebf4d8f}{LSS\+\_\+\+Action\+Angular\+Deceleration}} = \char`\"{}AD\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a25322cf1d7f1325784b5b2ad6e243024}{LSS\+\_\+\+Action\+Enable\+Motion\+Control}} = \char`\"{}EM\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a9d7a4c1fdb8c46ee6dca0686d80ad304}{LSS\+\_\+\+Query\+Status}} = \char`\"{}Q\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_aeb7fecaac93dbf48587e3f1f181f6814}{LSS\+\_\+\+Query\+Origin\+Offset}} = \char`\"{}QO\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a82f5eb6566060948f7aea57db18eba72}{LSS\+\_\+\+Query\+Angular\+Range}} = \char`\"{}QAR\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a1c9cfb4cdd4045ccbd75c68638e07893}{LSS\+\_\+\+Query\+Position\+Pulse}} = \char`\"{}QP\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a0778b052434e43ad72504703558d2b13}{LSS\+\_\+\+Query\+Position}} = \char`\"{}QD\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a451a54f6e1c080b673210ae0b8eaf065}{LSS\+\_\+\+Query\+Speed}} = \char`\"{}QWD\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a99c649da8de897829f688c16c286ffd5}{LSS\+\_\+\+Query\+Speed\+RPM}} = \char`\"{}QWR\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_ac79900a1e397764016f7e4bea13fdad1}{LSS\+\_\+\+Query\+Speed\+Pulse}} = \char`\"{}QS\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_aba372031677f3125b6f024c01e98015b}{LSS\+\_\+\+Query\+Max\+Speed}} = \char`\"{}QSD\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a07befb3c547a01f2faa9a4e3e73c80b3}{LSS\+\_\+\+Query\+Max\+Speed\+RPM}} = \char`\"{}QSR\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a64b2b50aa19d0ca09fa2a6e2c86c3472}{LSS\+\_\+\+Query\+Color\+LED}} = \char`\"{}QLED\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_ab509a87b8fde75836f604e7cd18a20f8}{LSS\+\_\+\+Query\+Gyre}} = \char`\"{}QG\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_ae66fa1418b40d5ab84df9c9f0a9e6f44}{LSS\+\_\+\+Query\+ID}} = \char`\"{}QID\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_aaba8e15d23a968a58daee9391ebbe167}{LSS\+\_\+\+Query\+Baud}} = \char`\"{}QB\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a3b51bcde3b794d2e8ffacad7a644ff82}{LSS\+\_\+\+Query\+First\+Position}} = \char`\"{}QFD\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a656243ffef38969c3bedefc61caf80e9}{LSS\+\_\+\+Query\+Model\+String}} = \char`\"{}QMS\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a5476e577a429bdfa7c8e63066963014a}{LSS\+\_\+\+Query\+Serial\+Number}} = \char`\"{}QN\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a00f5efc7457f854c1991a361f455dde9}{LSS\+\_\+\+Query\+Firmware\+Version}} = \char`\"{}QF\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a512f3f5bd33eac1c98aea41f6e0ffdac}{LSS\+\_\+\+Query\+Voltage}} = \char`\"{}QV\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_aa832e4c33917030ecb04d357fdcf48ec}{LSS\+\_\+\+Query\+Temperature}} = \char`\"{}QT\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_ada38300038f86789a26bf05436aa66e0}{LSS\+\_\+\+Query\+Current}} = \char`\"{}QC\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a3373eb88e9c9050883ef342d352da806}{LSS\+\_\+\+Query\+Angular\+Stiffness}} = \char`\"{}QAS\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a9c90855907133b5d393eed83a378ad3b}{LSS\+\_\+\+Query\+Angular\+Holding\+Stiffness}} = \char`\"{}QAH\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a2bb0a754b1e6f02e0afae381efee09ff}{LSS\+\_\+\+Query\+Angular\+Acceleration}} = \char`\"{}QAA\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a39dacfad3b000e31949afc5fda7e63f7}{LSS\+\_\+\+Query\+Angular\+Deceleration}} = \char`\"{}QAD\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a830b0783ed904150b373c4c9d853a14b}{LSS\+\_\+\+Query\+Enable\+Motion\+Control}} = \char`\"{}QEM\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a13e4a5cac56b650243c6ff205b3199a9}{LSS\+\_\+\+Query\+Blinking\+LED}} = \char`\"{}QLB\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a96db53347af9beae92f07d324931683a}{LSS\+\_\+\+Config\+ID}} = \char`\"{}CID\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_af6fbbc3bbb60a054ba50b5463055f68d}{LSS\+\_\+\+Config\+Baud}} = \char`\"{}CB\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a71e0dff86b7fbec8ea40b62fc58c013a}{LSS\+\_\+\+Config\+Origin\+Offset}} = \char`\"{}CO\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a219adce02425e0c48b69551c8458378f}{LSS\+\_\+\+Config\+Angular\+Range}} = \char`\"{}CAR\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a4b7f4e7efc6eaf2be5c92358e7810ace}{LSS\+\_\+\+Config\+Max\+Speed}} = \char`\"{}CSD\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a1f2c47f6d57a36939d7626cc0cc4e344}{LSS\+\_\+\+Config\+Max\+Speed\+RPM}} = \char`\"{}CSR\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a57385dbd46468c723c0e5c75a2b6d35f}{LSS\+\_\+\+Config\+Color\+LED}} = \char`\"{}CLED\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a7a1a9d0f3514e040d589f7b6c1c695c4}{LSS\+\_\+\+Config\+Gyre\+Direction}} = \char`\"{}CG\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_abd242294c5a1d679830ddb0923ccfdc4}{LSS\+\_\+\+Config\+First\+Position}} = \char`\"{}CFD\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_ae57f4a5cd382125f39508216f4c229c4}{LSS\+\_\+\+Config\+Mode}} = \char`\"{}CRC\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a5c3ee7a5d66bd5f16736e49f3006a309}{LSS\+\_\+\+Config\+Angular\+Stiffness}} = \char`\"{}CAS\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_ab4fc62918359c251be2fd689605dc0e0}{LSS\+\_\+\+Config\+Angular\+Holding\+Stiffness}} = \char`\"{}CAH\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a1e77347e8b9ba026404b7a6f67ebad8e}{LSS\+\_\+\+Config\+Angular\+Acceleration}} = \char`\"{}CAA\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a46db959571fb55dbeaca7c4a22c7e347}{LSS\+\_\+\+Config\+Angular\+Deceleration}} = \char`\"{}CAD\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a59fb26b01b2b8f15fea1d5ec8c98cfdd}{LSS\+\_\+\+Config\+Blinking\+LED}} = \char`\"{}CLB\char`\"{}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a28d194d9d480ac935a87b696fc8ec679}\label{namespacehardware__center_1_1lss_a28d194d9d480ac935a87b696fc8ec679}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!closeBus@{closeBus}}
+\index{closeBus@{closeBus}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{closeBus()}{closeBus()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+lss.\+close\+Bus (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 180 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a259c73318a62e57427757d3e71c53ccd}\label{namespacehardware__center_1_1lss_a259c73318a62e57427757d3e71c53ccd}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!genericRead\_Blocking\_int@{genericRead\_Blocking\_int}}
+\index{genericRead\_Blocking\_int@{genericRead\_Blocking\_int}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{genericRead\_Blocking\_int()}{genericRead\_Blocking\_int()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+lss.\+generic\+Read\+\_\+\+Blocking\+\_\+int (\begin{DoxyParamCaption}\item[{}]{id,  }\item[{}]{cmd }\end{DoxyParamCaption})}
+
+
+
+Definition at line 196 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a535b9e6c754bbc4e178176f9be18d248}\label{namespacehardware__center_1_1lss_a535b9e6c754bbc4e178176f9be18d248}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!genericRead\_Blocking\_str@{genericRead\_Blocking\_str}}
+\index{genericRead\_Blocking\_str@{genericRead\_Blocking\_str}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{genericRead\_Blocking\_str()}{genericRead\_Blocking\_str()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+lss.\+generic\+Read\+\_\+\+Blocking\+\_\+str (\begin{DoxyParamCaption}\item[{}]{id,  }\item[{}]{cmd,  }\item[{}]{num\+Chars }\end{DoxyParamCaption})}
+
+
+
+Definition at line 232 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_aa4bef367d063480de6f0f907bbf35e25}\label{namespacehardware__center_1_1lss_aa4bef367d063480de6f0f907bbf35e25}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!genericWrite@{genericWrite}}
+\index{genericWrite@{genericWrite}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{genericWrite()}{genericWrite()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+lss.\+generic\+Write (\begin{DoxyParamCaption}\item[{}]{id,  }\item[{}]{cmd,  }\item[{}]{param = {\ttfamily None} }\end{DoxyParamCaption})}
+
+
+
+Definition at line 186 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_ad8244a7a59beb5fb5ca63cdb4a9bb2f2}\label{namespacehardware__center_1_1lss_ad8244a7a59beb5fb5ca63cdb4a9bb2f2}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!initBus@{initBus}}
+\index{initBus@{initBus}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{initBus()}{initBus()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+lss.\+init\+Bus (\begin{DoxyParamCaption}\item[{}]{port\+Name,  }\item[{}]{port\+Baud }\end{DoxyParamCaption})}
+
+
+
+Class functions. 
+
+
+
+Definition at line 176 of file lss.\+py.
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_aa7980ec8da3c98685532f14c526caf6b}\label{namespacehardware__center_1_1lss_aa7980ec8da3c98685532f14c526caf6b}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ActionAngularAcceleration@{LSS\_ActionAngularAcceleration}}
+\index{LSS\_ActionAngularAcceleration@{LSS\_ActionAngularAcceleration}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ActionAngularAcceleration}{LSS\_ActionAngularAcceleration}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Angular\+Acceleration = \char`\"{}AA\char`\"{}}
+
+
+
+Definition at line 121 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_aa9f6342cbcc89a5f81454ca1eebf4d8f}\label{namespacehardware__center_1_1lss_aa9f6342cbcc89a5f81454ca1eebf4d8f}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ActionAngularDeceleration@{LSS\_ActionAngularDeceleration}}
+\index{LSS\_ActionAngularDeceleration@{LSS\_ActionAngularDeceleration}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ActionAngularDeceleration}{LSS\_ActionAngularDeceleration}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Angular\+Deceleration = \char`\"{}AD\char`\"{}}
+
+
+
+Definition at line 122 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a643733c521c717c8dc2220714a184ab9}\label{namespacehardware__center_1_1lss_a643733c521c717c8dc2220714a184ab9}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ActionAngularHoldingStiffness@{LSS\_ActionAngularHoldingStiffness}}
+\index{LSS\_ActionAngularHoldingStiffness@{LSS\_ActionAngularHoldingStiffness}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ActionAngularHoldingStiffness}{LSS\_ActionAngularHoldingStiffness}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Angular\+Holding\+Stiffness = \char`\"{}AH\char`\"{}}
+
+
+
+Definition at line 120 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a1bb65adb360975b4cedf92ef061973d3}\label{namespacehardware__center_1_1lss_a1bb65adb360975b4cedf92ef061973d3}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ActionAngularRange@{LSS\_ActionAngularRange}}
+\index{LSS\_ActionAngularRange@{LSS\_ActionAngularRange}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ActionAngularRange}{LSS\_ActionAngularRange}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Angular\+Range = \char`\"{}AR\char`\"{}}
+
+
+
+Definition at line 112 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_afa744e38899c126f38d713a170d7de64}\label{namespacehardware__center_1_1lss_afa744e38899c126f38d713a170d7de64}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ActionAngularStiffness@{LSS\_ActionAngularStiffness}}
+\index{LSS\_ActionAngularStiffness@{LSS\_ActionAngularStiffness}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ActionAngularStiffness}{LSS\_ActionAngularStiffness}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Angular\+Stiffness = \char`\"{}AS\char`\"{}}
+
+
+
+Definition at line 119 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_ac7ebfb270519f44059acd36770fcf53e}\label{namespacehardware__center_1_1lss_ac7ebfb270519f44059acd36770fcf53e}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ActionColorLED@{LSS\_ActionColorLED}}
+\index{LSS\_ActionColorLED@{LSS\_ActionColorLED}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ActionColorLED}{LSS\_ActionColorLED}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Color\+LED = \char`\"{}LED\char`\"{}}
+
+
+
+Definition at line 115 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a25322cf1d7f1325784b5b2ad6e243024}\label{namespacehardware__center_1_1lss_a25322cf1d7f1325784b5b2ad6e243024}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ActionEnableMotionControl@{LSS\_ActionEnableMotionControl}}
+\index{LSS\_ActionEnableMotionControl@{LSS\_ActionEnableMotionControl}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ActionEnableMotionControl}{LSS\_ActionEnableMotionControl}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Enable\+Motion\+Control = \char`\"{}EM\char`\"{}}
+
+
+
+Definition at line 123 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a16df6a2c2cf3d830a521058c8d7d8f8e}\label{namespacehardware__center_1_1lss_a16df6a2c2cf3d830a521058c8d7d8f8e}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ActionGyreDirection@{LSS\_ActionGyreDirection}}
+\index{LSS\_ActionGyreDirection@{LSS\_ActionGyreDirection}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ActionGyreDirection}{LSS\_ActionGyreDirection}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Gyre\+Direction = \char`\"{}G\char`\"{}}
+
+
+
+Definition at line 116 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a253d98ef9f8b33ff63fc48fd63bc77c3}\label{namespacehardware__center_1_1lss_a253d98ef9f8b33ff63fc48fd63bc77c3}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ActionHold@{LSS\_ActionHold}}
+\index{LSS\_ActionHold@{LSS\_ActionHold}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ActionHold}{LSS\_ActionHold}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Hold = \char`\"{}H\char`\"{}}
+
+
+
+Definition at line 102 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_aaf8082d7a49b1c02116eac1c170e943c}\label{namespacehardware__center_1_1lss_aaf8082d7a49b1c02116eac1c170e943c}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ActionLimp@{LSS\_ActionLimp}}
+\index{LSS\_ActionLimp@{LSS\_ActionLimp}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ActionLimp}{LSS\_ActionLimp}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Limp = \char`\"{}L\char`\"{}}
+
+
+
+Definition at line 101 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_ac463ab5efba7a277c3444043dcbbc74e}\label{namespacehardware__center_1_1lss_ac463ab5efba7a277c3444043dcbbc74e}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ActionMaxSpeed@{LSS\_ActionMaxSpeed}}
+\index{LSS\_ActionMaxSpeed@{LSS\_ActionMaxSpeed}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ActionMaxSpeed}{LSS\_ActionMaxSpeed}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Max\+Speed = \char`\"{}SD\char`\"{}}
+
+
+
+Definition at line 113 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_ae3393d6896768e7919d065608fbc78b1}\label{namespacehardware__center_1_1lss_ae3393d6896768e7919d065608fbc78b1}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ActionMaxSpeedRPM@{LSS\_ActionMaxSpeedRPM}}
+\index{LSS\_ActionMaxSpeedRPM@{LSS\_ActionMaxSpeedRPM}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ActionMaxSpeedRPM}{LSS\_ActionMaxSpeedRPM}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Max\+Speed\+RPM = \char`\"{}SR\char`\"{}}
+
+
+
+Definition at line 114 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a3ebc7024770698f3c24ed78488feeb80}\label{namespacehardware__center_1_1lss_a3ebc7024770698f3c24ed78488feeb80}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ActionMove@{LSS\_ActionMove}}
+\index{LSS\_ActionMove@{LSS\_ActionMove}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ActionMove}{LSS\_ActionMove}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Move = \char`\"{}D\char`\"{}}
+
+
+
+Definition at line 105 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_ad91afa04f6bc59afb959ad705e941846}\label{namespacehardware__center_1_1lss_ad91afa04f6bc59afb959ad705e941846}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ActionMoveRelative@{LSS\_ActionMoveRelative}}
+\index{LSS\_ActionMoveRelative@{LSS\_ActionMoveRelative}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ActionMoveRelative}{LSS\_ActionMoveRelative}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Move\+Relative = \char`\"{}MD\char`\"{}}
+
+
+
+Definition at line 106 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_ae38447f5b72ec39934ed0e42250dc737}\label{namespacehardware__center_1_1lss_ae38447f5b72ec39934ed0e42250dc737}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ActionOriginOffset@{LSS\_ActionOriginOffset}}
+\index{LSS\_ActionOriginOffset@{LSS\_ActionOriginOffset}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ActionOriginOffset}{LSS\_ActionOriginOffset}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Origin\+Offset = \char`\"{}O\char`\"{}}
+
+
+
+Definition at line 111 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a8c8456ff4cf721d1d46c9fb5a7e38e2f}\label{namespacehardware__center_1_1lss_a8c8456ff4cf721d1d46c9fb5a7e38e2f}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ActionParameterSpeed@{LSS\_ActionParameterSpeed}}
+\index{LSS\_ActionParameterSpeed@{LSS\_ActionParameterSpeed}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ActionParameterSpeed}{LSS\_ActionParameterSpeed}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Parameter\+Speed = \char`\"{}S\char`\"{}}
+
+
+
+Definition at line 104 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_af2f5dda249aa5dbdb6947f88a8306a4d}\label{namespacehardware__center_1_1lss_af2f5dda249aa5dbdb6947f88a8306a4d}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ActionParameterTime@{LSS\_ActionParameterTime}}
+\index{LSS\_ActionParameterTime@{LSS\_ActionParameterTime}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ActionParameterTime}{LSS\_ActionParameterTime}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Parameter\+Time = \char`\"{}T\char`\"{}}
+
+
+
+Definition at line 103 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_ab69faf69cbfe549b4f7f3713cea9ec2f}\label{namespacehardware__center_1_1lss_ab69faf69cbfe549b4f7f3713cea9ec2f}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ActionReset@{LSS\_ActionReset}}
+\index{LSS\_ActionReset@{LSS\_ActionReset}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ActionReset}{LSS\_ActionReset}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Reset = \char`\"{}RESET\char`\"{}}
+
+
+
+Definition at line 100 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a5cdfc6502bda6dce0e38dc47a0f337ac}\label{namespacehardware__center_1_1lss_a5cdfc6502bda6dce0e38dc47a0f337ac}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ActionWheel@{LSS\_ActionWheel}}
+\index{LSS\_ActionWheel@{LSS\_ActionWheel}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ActionWheel}{LSS\_ActionWheel}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Wheel = \char`\"{}WD\char`\"{}}
+
+
+
+Definition at line 107 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a1a5d25ea1f037b4f9330381bb52deaf4}\label{namespacehardware__center_1_1lss_a1a5d25ea1f037b4f9330381bb52deaf4}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ActionWheelRPM@{LSS\_ActionWheelRPM}}
+\index{LSS\_ActionWheelRPM@{LSS\_ActionWheelRPM}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ActionWheelRPM}{LSS\_ActionWheelRPM}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Wheel\+RPM = \char`\"{}WR\char`\"{}}
+
+
+
+Definition at line 108 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a597fc9c1135fa6901bdb1e05d3ab899a}\label{namespacehardware__center_1_1lss_a597fc9c1135fa6901bdb1e05d3ab899a}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_BroadcastID@{LSS\_BroadcastID}}
+\index{LSS\_BroadcastID@{LSS\_BroadcastID}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_BroadcastID}{LSS\_BroadcastID}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Broadcast\+ID = 254}
+
+
+
+Definition at line 31 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a72845619ad361d4776b3eb2f0e9b9caf}\label{namespacehardware__center_1_1lss_a72845619ad361d4776b3eb2f0e9b9caf}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_CommandEnd@{LSS\_CommandEnd}}
+\index{LSS\_CommandEnd@{LSS\_CommandEnd}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_CommandEnd}{LSS\_CommandEnd}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Command\+End = \char`\"{}\textbackslash{}r\char`\"{}}
+
+
+
+Definition at line 23 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a02b4e9cac200f84c5d09e0eb0db07950}\label{namespacehardware__center_1_1lss_a02b4e9cac200f84c5d09e0eb0db07950}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_CommandReplyStart@{LSS\_CommandReplyStart}}
+\index{LSS\_CommandReplyStart@{LSS\_CommandReplyStart}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_CommandReplyStart}{LSS\_CommandReplyStart}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Command\+Reply\+Start = \char`\"{}$\ast$\char`\"{}}
+
+
+
+Definition at line 22 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_abbc0f1222f727b2359fa0a713e7acfbb}\label{namespacehardware__center_1_1lss_abbc0f1222f727b2359fa0a713e7acfbb}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_CommandStart@{LSS\_CommandStart}}
+\index{LSS\_CommandStart@{LSS\_CommandStart}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_CommandStart}{LSS\_CommandStart}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Command\+Start = \char`\"{}\#\char`\"{}}
+
+
+
+Definition at line 21 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a308c2bee1f08382a560268454cdcccce}\label{namespacehardware__center_1_1lss_a308c2bee1f08382a560268454cdcccce}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_CommStatus\_Idle@{LSS\_CommStatus\_Idle}}
+\index{LSS\_CommStatus\_Idle@{LSS\_CommStatus\_Idle}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_CommStatus\_Idle}{LSS\_CommStatus\_Idle}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Comm\+Status\+\_\+\+Idle = 0}
+
+
+
+Definition at line 34 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_aae1c45d8515d130635847213fdc220d5}\label{namespacehardware__center_1_1lss_aae1c45d8515d130635847213fdc220d5}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_CommStatus\_ReadNoBus@{LSS\_CommStatus\_ReadNoBus}}
+\index{LSS\_CommStatus\_ReadNoBus@{LSS\_CommStatus\_ReadNoBus}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_CommStatus\_ReadNoBus}{LSS\_CommStatus\_ReadNoBus}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Comm\+Status\+\_\+\+Read\+No\+Bus = 6}
+
+
+
+Definition at line 40 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_aaad2e44da15cc053a0a8a1aa40888657}\label{namespacehardware__center_1_1lss_aaad2e44da15cc053a0a8a1aa40888657}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_CommStatus\_ReadSuccess@{LSS\_CommStatus\_ReadSuccess}}
+\index{LSS\_CommStatus\_ReadSuccess@{LSS\_CommStatus\_ReadSuccess}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_CommStatus\_ReadSuccess}{LSS\_CommStatus\_ReadSuccess}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Comm\+Status\+\_\+\+Read\+Success = 1}
+
+
+
+Definition at line 35 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_acb39aaef95335e81b8cbe08cc5513d32}\label{namespacehardware__center_1_1lss_acb39aaef95335e81b8cbe08cc5513d32}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_CommStatus\_ReadTimeout@{LSS\_CommStatus\_ReadTimeout}}
+\index{LSS\_CommStatus\_ReadTimeout@{LSS\_CommStatus\_ReadTimeout}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_CommStatus\_ReadTimeout}{LSS\_CommStatus\_ReadTimeout}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Comm\+Status\+\_\+\+Read\+Timeout = 2}
+
+
+
+Definition at line 36 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a74d54fd0fe47a8761d8cbcbcce7645ce}\label{namespacehardware__center_1_1lss_a74d54fd0fe47a8761d8cbcbcce7645ce}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_CommStatus\_ReadUnknown@{LSS\_CommStatus\_ReadUnknown}}
+\index{LSS\_CommStatus\_ReadUnknown@{LSS\_CommStatus\_ReadUnknown}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_CommStatus\_ReadUnknown}{LSS\_CommStatus\_ReadUnknown}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Comm\+Status\+\_\+\+Read\+Unknown = 7}
+
+
+
+Definition at line 41 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a399320ec0b21a5506f8bf34909f0b041}\label{namespacehardware__center_1_1lss_a399320ec0b21a5506f8bf34909f0b041}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_CommStatus\_ReadWrongFormat@{LSS\_CommStatus\_ReadWrongFormat}}
+\index{LSS\_CommStatus\_ReadWrongFormat@{LSS\_CommStatus\_ReadWrongFormat}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_CommStatus\_ReadWrongFormat}{LSS\_CommStatus\_ReadWrongFormat}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Comm\+Status\+\_\+\+Read\+Wrong\+Format = 5}
+
+
+
+Definition at line 39 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a26e41ce22b98d3e605f64a1637456fac}\label{namespacehardware__center_1_1lss_a26e41ce22b98d3e605f64a1637456fac}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_CommStatus\_ReadWrongID@{LSS\_CommStatus\_ReadWrongID}}
+\index{LSS\_CommStatus\_ReadWrongID@{LSS\_CommStatus\_ReadWrongID}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_CommStatus\_ReadWrongID}{LSS\_CommStatus\_ReadWrongID}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Comm\+Status\+\_\+\+Read\+Wrong\+ID = 3}
+
+
+
+Definition at line 37 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_aca64299531c44305cf59f596a41d95b3}\label{namespacehardware__center_1_1lss_aca64299531c44305cf59f596a41d95b3}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_CommStatus\_ReadWrongIdentifier@{LSS\_CommStatus\_ReadWrongIdentifier}}
+\index{LSS\_CommStatus\_ReadWrongIdentifier@{LSS\_CommStatus\_ReadWrongIdentifier}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_CommStatus\_ReadWrongIdentifier}{LSS\_CommStatus\_ReadWrongIdentifier}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Comm\+Status\+\_\+\+Read\+Wrong\+Identifier = 4}
+
+
+
+Definition at line 38 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a55000209b3a9a7278770e0f1e364dd36}\label{namespacehardware__center_1_1lss_a55000209b3a9a7278770e0f1e364dd36}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_CommStatus\_WriteNoBus@{LSS\_CommStatus\_WriteNoBus}}
+\index{LSS\_CommStatus\_WriteNoBus@{LSS\_CommStatus\_WriteNoBus}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_CommStatus\_WriteNoBus}{LSS\_CommStatus\_WriteNoBus}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Comm\+Status\+\_\+\+Write\+No\+Bus = 9}
+
+
+
+Definition at line 43 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a9647dc093cd92972bd5fc6de6edf74b1}\label{namespacehardware__center_1_1lss_a9647dc093cd92972bd5fc6de6edf74b1}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_CommStatus\_WriteSuccess@{LSS\_CommStatus\_WriteSuccess}}
+\index{LSS\_CommStatus\_WriteSuccess@{LSS\_CommStatus\_WriteSuccess}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_CommStatus\_WriteSuccess}{LSS\_CommStatus\_WriteSuccess}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Comm\+Status\+\_\+\+Write\+Success = 8}
+
+
+
+Definition at line 42 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a7ae1ac8aa5721e5c386c119e60171c0b}\label{namespacehardware__center_1_1lss_a7ae1ac8aa5721e5c386c119e60171c0b}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_CommStatus\_WriteUnknown@{LSS\_CommStatus\_WriteUnknown}}
+\index{LSS\_CommStatus\_WriteUnknown@{LSS\_CommStatus\_WriteUnknown}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_CommStatus\_WriteUnknown}{LSS\_CommStatus\_WriteUnknown}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Comm\+Status\+\_\+\+Write\+Unknown = 10}
+
+
+
+Definition at line 44 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a1e77347e8b9ba026404b7a6f67ebad8e}\label{namespacehardware__center_1_1lss_a1e77347e8b9ba026404b7a6f67ebad8e}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ConfigAngularAcceleration@{LSS\_ConfigAngularAcceleration}}
+\index{LSS\_ConfigAngularAcceleration@{LSS\_ConfigAngularAcceleration}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ConfigAngularAcceleration}{LSS\_ConfigAngularAcceleration}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+Angular\+Acceleration = \char`\"{}CAA\char`\"{}}
+
+
+
+Definition at line 171 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a46db959571fb55dbeaca7c4a22c7e347}\label{namespacehardware__center_1_1lss_a46db959571fb55dbeaca7c4a22c7e347}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ConfigAngularDeceleration@{LSS\_ConfigAngularDeceleration}}
+\index{LSS\_ConfigAngularDeceleration@{LSS\_ConfigAngularDeceleration}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ConfigAngularDeceleration}{LSS\_ConfigAngularDeceleration}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+Angular\+Deceleration = \char`\"{}CAD\char`\"{}}
+
+
+
+Definition at line 172 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_ab4fc62918359c251be2fd689605dc0e0}\label{namespacehardware__center_1_1lss_ab4fc62918359c251be2fd689605dc0e0}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ConfigAngularHoldingStiffness@{LSS\_ConfigAngularHoldingStiffness}}
+\index{LSS\_ConfigAngularHoldingStiffness@{LSS\_ConfigAngularHoldingStiffness}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ConfigAngularHoldingStiffness}{LSS\_ConfigAngularHoldingStiffness}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+Angular\+Holding\+Stiffness = \char`\"{}CAH\char`\"{}}
+
+
+
+Definition at line 170 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a219adce02425e0c48b69551c8458378f}\label{namespacehardware__center_1_1lss_a219adce02425e0c48b69551c8458378f}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ConfigAngularRange@{LSS\_ConfigAngularRange}}
+\index{LSS\_ConfigAngularRange@{LSS\_ConfigAngularRange}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ConfigAngularRange}{LSS\_ConfigAngularRange}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+Angular\+Range = \char`\"{}CAR\char`\"{}}
+
+
+
+Definition at line 160 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a5c3ee7a5d66bd5f16736e49f3006a309}\label{namespacehardware__center_1_1lss_a5c3ee7a5d66bd5f16736e49f3006a309}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ConfigAngularStiffness@{LSS\_ConfigAngularStiffness}}
+\index{LSS\_ConfigAngularStiffness@{LSS\_ConfigAngularStiffness}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ConfigAngularStiffness}{LSS\_ConfigAngularStiffness}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+Angular\+Stiffness = \char`\"{}CAS\char`\"{}}
+
+
+
+Definition at line 169 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_af6fbbc3bbb60a054ba50b5463055f68d}\label{namespacehardware__center_1_1lss_af6fbbc3bbb60a054ba50b5463055f68d}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ConfigBaud@{LSS\_ConfigBaud}}
+\index{LSS\_ConfigBaud@{LSS\_ConfigBaud}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ConfigBaud}{LSS\_ConfigBaud}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+Baud = \char`\"{}CB\char`\"{}}
+
+
+
+Definition at line 158 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a59fb26b01b2b8f15fea1d5ec8c98cfdd}\label{namespacehardware__center_1_1lss_a59fb26b01b2b8f15fea1d5ec8c98cfdd}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ConfigBlinkingLED@{LSS\_ConfigBlinkingLED}}
+\index{LSS\_ConfigBlinkingLED@{LSS\_ConfigBlinkingLED}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ConfigBlinkingLED}{LSS\_ConfigBlinkingLED}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+Blinking\+LED = \char`\"{}CLB\char`\"{}}
+
+
+
+Definition at line 173 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a57385dbd46468c723c0e5c75a2b6d35f}\label{namespacehardware__center_1_1lss_a57385dbd46468c723c0e5c75a2b6d35f}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ConfigColorLED@{LSS\_ConfigColorLED}}
+\index{LSS\_ConfigColorLED@{LSS\_ConfigColorLED}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ConfigColorLED}{LSS\_ConfigColorLED}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+Color\+LED = \char`\"{}CLED\char`\"{}}
+
+
+
+Definition at line 163 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_abd242294c5a1d679830ddb0923ccfdc4}\label{namespacehardware__center_1_1lss_abd242294c5a1d679830ddb0923ccfdc4}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ConfigFirstPosition@{LSS\_ConfigFirstPosition}}
+\index{LSS\_ConfigFirstPosition@{LSS\_ConfigFirstPosition}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ConfigFirstPosition}{LSS\_ConfigFirstPosition}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+First\+Position = \char`\"{}CFD\char`\"{}}
+
+
+
+Definition at line 165 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a7a1a9d0f3514e040d589f7b6c1c695c4}\label{namespacehardware__center_1_1lss_a7a1a9d0f3514e040d589f7b6c1c695c4}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ConfigGyreDirection@{LSS\_ConfigGyreDirection}}
+\index{LSS\_ConfigGyreDirection@{LSS\_ConfigGyreDirection}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ConfigGyreDirection}{LSS\_ConfigGyreDirection}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+Gyre\+Direction = \char`\"{}CG\char`\"{}}
+
+
+
+Definition at line 164 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a96db53347af9beae92f07d324931683a}\label{namespacehardware__center_1_1lss_a96db53347af9beae92f07d324931683a}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ConfigID@{LSS\_ConfigID}}
+\index{LSS\_ConfigID@{LSS\_ConfigID}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ConfigID}{LSS\_ConfigID}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+ID = \char`\"{}CID\char`\"{}}
+
+
+
+Definition at line 157 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a4b7f4e7efc6eaf2be5c92358e7810ace}\label{namespacehardware__center_1_1lss_a4b7f4e7efc6eaf2be5c92358e7810ace}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ConfigMaxSpeed@{LSS\_ConfigMaxSpeed}}
+\index{LSS\_ConfigMaxSpeed@{LSS\_ConfigMaxSpeed}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ConfigMaxSpeed}{LSS\_ConfigMaxSpeed}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+Max\+Speed = \char`\"{}CSD\char`\"{}}
+
+
+
+Definition at line 161 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a1f2c47f6d57a36939d7626cc0cc4e344}\label{namespacehardware__center_1_1lss_a1f2c47f6d57a36939d7626cc0cc4e344}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ConfigMaxSpeedRPM@{LSS\_ConfigMaxSpeedRPM}}
+\index{LSS\_ConfigMaxSpeedRPM@{LSS\_ConfigMaxSpeedRPM}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ConfigMaxSpeedRPM}{LSS\_ConfigMaxSpeedRPM}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+Max\+Speed\+RPM = \char`\"{}CSR\char`\"{}}
+
+
+
+Definition at line 162 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_ae57f4a5cd382125f39508216f4c229c4}\label{namespacehardware__center_1_1lss_ae57f4a5cd382125f39508216f4c229c4}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ConfigMode@{LSS\_ConfigMode}}
+\index{LSS\_ConfigMode@{LSS\_ConfigMode}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ConfigMode}{LSS\_ConfigMode}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+Mode = \char`\"{}CRC\char`\"{}}
+
+
+
+Definition at line 166 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a71e0dff86b7fbec8ea40b62fc58c013a}\label{namespacehardware__center_1_1lss_a71e0dff86b7fbec8ea40b62fc58c013a}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ConfigOriginOffset@{LSS\_ConfigOriginOffset}}
+\index{LSS\_ConfigOriginOffset@{LSS\_ConfigOriginOffset}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ConfigOriginOffset}{LSS\_ConfigOriginOffset}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+Origin\+Offset = \char`\"{}CO\char`\"{}}
+
+
+
+Definition at line 159 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_abbe2a8ec97cfe2873aaca1b9456e15b2}\label{namespacehardware__center_1_1lss_abbe2a8ec97cfe2873aaca1b9456e15b2}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_DefaultBaud@{LSS\_DefaultBaud}}
+\index{LSS\_DefaultBaud@{LSS\_DefaultBaud}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_DefaultBaud}{LSS\_DefaultBaud}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Default\+Baud = 115200}
+
+
+
+Bus communication constants. 
+
+
+
+Definition at line 17 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a8a98dea250d3050d1f03a17d07c6f231}\label{namespacehardware__center_1_1lss_a8a98dea250d3050d1f03a17d07c6f231}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_FirstPositionDisabled@{LSS\_FirstPositionDisabled}}
+\index{LSS\_FirstPositionDisabled@{LSS\_FirstPositionDisabled}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_FirstPositionDisabled}{LSS\_FirstPositionDisabled}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+First\+Position\+Disabled = \char`\"{}DIS\char`\"{}}
+
+
+
+Definition at line 24 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a36a7ce8233118efb78ae87cd50a2d001}\label{namespacehardware__center_1_1lss_a36a7ce8233118efb78ae87cd50a2d001}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_GyreClockwise@{LSS\_GyreClockwise}}
+\index{LSS\_GyreClockwise@{LSS\_GyreClockwise}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_GyreClockwise}{LSS\_GyreClockwise}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Gyre\+Clockwise = 1}
+
+
+
+Definition at line 86 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a2bba6f4313ce2e286788fc2c9984a8d4}\label{namespacehardware__center_1_1lss_a2bba6f4313ce2e286788fc2c9984a8d4}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_GyreCounterClockwise@{LSS\_GyreCounterClockwise}}
+\index{LSS\_GyreCounterClockwise@{LSS\_GyreCounterClockwise}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_GyreCounterClockwise}{LSS\_GyreCounterClockwise}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Gyre\+Counter\+Clockwise = -\/1}
+
+
+
+Definition at line 87 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_af5ba8c49e74a59438226157f294d87f4}\label{namespacehardware__center_1_1lss_af5ba8c49e74a59438226157f294d87f4}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ID\_Default@{LSS\_ID\_Default}}
+\index{LSS\_ID\_Default@{LSS\_ID\_Default}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ID\_Default}{LSS\_ID\_Default}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+ID\+\_\+\+Default = 0}
+
+
+
+Definition at line 27 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a29c07b0b0c5090b5d8894a6bc4d9f130}\label{namespacehardware__center_1_1lss_a29c07b0b0c5090b5d8894a6bc4d9f130}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ID\_Max@{LSS\_ID\_Max}}
+\index{LSS\_ID\_Max@{LSS\_ID\_Max}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ID\_Max}{LSS\_ID\_Max}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+ID\+\_\+\+Max = 250}
+
+
+
+Definition at line 29 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a9feb7d9b0f6255c982d618b62387759c}\label{namespacehardware__center_1_1lss_a9feb7d9b0f6255c982d618b62387759c}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ID\_Min@{LSS\_ID\_Min}}
+\index{LSS\_ID\_Min@{LSS\_ID\_Min}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ID\_Min}{LSS\_ID\_Min}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+ID\+\_\+\+Min = 0}
+
+
+
+Definition at line 28 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_afecae1d92fe326637d915504a33d21bf}\label{namespacehardware__center_1_1lss_afecae1d92fe326637d915504a33d21bf}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_LED\_Black@{LSS\_LED\_Black}}
+\index{LSS\_LED\_Black@{LSS\_LED\_Black}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_LED\_Black}{LSS\_LED\_Black}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+LED\+\_\+\+Black = 0}
+
+
+
+Definition at line 90 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a09f6696e747bcf5196ff92385ee9b834}\label{namespacehardware__center_1_1lss_a09f6696e747bcf5196ff92385ee9b834}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_LED\_Blue@{LSS\_LED\_Blue}}
+\index{LSS\_LED\_Blue@{LSS\_LED\_Blue}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_LED\_Blue}{LSS\_LED\_Blue}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+LED\+\_\+\+Blue = 3}
+
+
+
+Definition at line 93 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a47d060fe80bfa4db02724f12467c053c}\label{namespacehardware__center_1_1lss_a47d060fe80bfa4db02724f12467c053c}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_LED\_Cyan@{LSS\_LED\_Cyan}}
+\index{LSS\_LED\_Cyan@{LSS\_LED\_Cyan}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_LED\_Cyan}{LSS\_LED\_Cyan}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+LED\+\_\+\+Cyan = 5}
+
+
+
+Definition at line 95 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a5746b66ff6db9cd00d7778bf4148fd31}\label{namespacehardware__center_1_1lss_a5746b66ff6db9cd00d7778bf4148fd31}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_LED\_Green@{LSS\_LED\_Green}}
+\index{LSS\_LED\_Green@{LSS\_LED\_Green}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_LED\_Green}{LSS\_LED\_Green}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+LED\+\_\+\+Green = 2}
+
+
+
+Definition at line 92 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_ad53ee190c756c120a033d8203bbe24bc}\label{namespacehardware__center_1_1lss_ad53ee190c756c120a033d8203bbe24bc}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_LED\_Magenta@{LSS\_LED\_Magenta}}
+\index{LSS\_LED\_Magenta@{LSS\_LED\_Magenta}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_LED\_Magenta}{LSS\_LED\_Magenta}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+LED\+\_\+\+Magenta = 6}
+
+
+
+Definition at line 96 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_ae05bef511a4bea8b6182e992d66256ef}\label{namespacehardware__center_1_1lss_ae05bef511a4bea8b6182e992d66256ef}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_LED\_Red@{LSS\_LED\_Red}}
+\index{LSS\_LED\_Red@{LSS\_LED\_Red}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_LED\_Red}{LSS\_LED\_Red}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+LED\+\_\+\+Red = 1}
+
+
+
+Definition at line 91 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_aaf611f9b04de489dfe6349445c3fff92}\label{namespacehardware__center_1_1lss_aaf611f9b04de489dfe6349445c3fff92}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_LED\_White@{LSS\_LED\_White}}
+\index{LSS\_LED\_White@{LSS\_LED\_White}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_LED\_White}{LSS\_LED\_White}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+LED\+\_\+\+White = 7}
+
+
+
+Definition at line 97 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a6246e39e19266e1add62d534e9fcb54f}\label{namespacehardware__center_1_1lss_a6246e39e19266e1add62d534e9fcb54f}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_LED\_Yellow@{LSS\_LED\_Yellow}}
+\index{LSS\_LED\_Yellow@{LSS\_LED\_Yellow}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_LED\_Yellow}{LSS\_LED\_Yellow}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+LED\+\_\+\+Yellow = 4}
+
+
+
+Definition at line 94 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a21c19e9c1834cf444597de249f9cf121}\label{namespacehardware__center_1_1lss_a21c19e9c1834cf444597de249f9cf121}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_MaxTotalCommandLength@{LSS\_MaxTotalCommandLength}}
+\index{LSS\_MaxTotalCommandLength@{LSS\_MaxTotalCommandLength}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_MaxTotalCommandLength}{LSS\_MaxTotalCommandLength}}
+{\footnotesize\ttfamily tuple hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Max\+Total\+Command\+Length = (30 + 1)}
+
+
+
+Definition at line 18 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_aafddb3aa640f2079a11606d0d65f6151}\label{namespacehardware__center_1_1lss_aafddb3aa640f2079a11606d0d65f6151}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_Mode255ID@{LSS\_Mode255ID}}
+\index{LSS\_Mode255ID@{LSS\_Mode255ID}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_Mode255ID}{LSS\_Mode255ID}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Mode255\+ID = 255}
+
+
+
+Definition at line 30 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_abcdf711ede6ba7f42fc64bf0bf7a6fd4}\label{namespacehardware__center_1_1lss_abcdf711ede6ba7f42fc64bf0bf7a6fd4}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ModelHighSpeed@{LSS\_ModelHighSpeed}}
+\index{LSS\_ModelHighSpeed@{LSS\_ModelHighSpeed}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ModelHighSpeed}{LSS\_ModelHighSpeed}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Model\+High\+Speed = 2}
+
+
+
+Definition at line 63 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a9692ed68cdeaf186f1f145860bc626fc}\label{namespacehardware__center_1_1lss_a9692ed68cdeaf186f1f145860bc626fc}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ModelHighTorque@{LSS\_ModelHighTorque}}
+\index{LSS\_ModelHighTorque@{LSS\_ModelHighTorque}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ModelHighTorque}{LSS\_ModelHighTorque}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Model\+High\+Torque = 0}
+
+
+
+Definition at line 61 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a2abbc79738129650d8e05104afc6a591}\label{namespacehardware__center_1_1lss_a2abbc79738129650d8e05104afc6a591}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ModelHS1@{LSS\_ModelHS1}}
+\index{LSS\_ModelHS1@{LSS\_ModelHS1}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ModelHS1}{LSS\_ModelHS1}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Model\+HS1 = \char`\"{}LSS-\/HS1\char`\"{}}
+
+
+
+Definition at line 68 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_ae167061245829126ed19ec80ee784fec}\label{namespacehardware__center_1_1lss_ae167061245829126ed19ec80ee784fec}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ModelHT1@{LSS\_ModelHT1}}
+\index{LSS\_ModelHT1@{LSS\_ModelHT1}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ModelHT1}{LSS\_ModelHT1}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Model\+HT1 = \char`\"{}LSS-\/HT1\char`\"{}}
+
+
+
+Definition at line 66 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a1289d537ee3098ee21327a042a30fa58}\label{namespacehardware__center_1_1lss_a1289d537ee3098ee21327a042a30fa58}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ModelST1@{LSS\_ModelST1}}
+\index{LSS\_ModelST1@{LSS\_ModelST1}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ModelST1}{LSS\_ModelST1}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Model\+ST1 = \char`\"{}LSS-\/ST1\char`\"{}}
+
+
+
+Definition at line 67 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a573bef42e3cbbac70ecaa9dd1bdda0cd}\label{namespacehardware__center_1_1lss_a573bef42e3cbbac70ecaa9dd1bdda0cd}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ModelStandard@{LSS\_ModelStandard}}
+\index{LSS\_ModelStandard@{LSS\_ModelStandard}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ModelStandard}{LSS\_ModelStandard}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Model\+Standard = 1}
+
+
+
+Definition at line 62 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a5dffed40c0f3da4b1653d9695aece3fa}\label{namespacehardware__center_1_1lss_a5dffed40c0f3da4b1653d9695aece3fa}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ModelUnknown@{LSS\_ModelUnknown}}
+\index{LSS\_ModelUnknown@{LSS\_ModelUnknown}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ModelUnknown}{LSS\_ModelUnknown}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Model\+Unknown = 3}
+
+
+
+Definition at line 64 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_abaa3a0fe18f39c56b2071126773959af}\label{namespacehardware__center_1_1lss_abaa3a0fe18f39c56b2071126773959af}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ModePositionRC@{LSS\_ModePositionRC}}
+\index{LSS\_ModePositionRC@{LSS\_ModePositionRC}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ModePositionRC}{LSS\_ModePositionRC}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Mode\+Position\+RC = 1}
+
+
+
+Definition at line 82 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a84d6874e2da504b24fd3e52844483998}\label{namespacehardware__center_1_1lss_a84d6874e2da504b24fd3e52844483998}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ModeSerial@{LSS\_ModeSerial}}
+\index{LSS\_ModeSerial@{LSS\_ModeSerial}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ModeSerial}{LSS\_ModeSerial}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Mode\+Serial = 0}
+
+
+
+Definition at line 81 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a97fa416f195741b0fd56aedb8e05b641}\label{namespacehardware__center_1_1lss_a97fa416f195741b0fd56aedb8e05b641}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_ModeWheelRC@{LSS\_ModeWheelRC}}
+\index{LSS\_ModeWheelRC@{LSS\_ModeWheelRC}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_ModeWheelRC}{LSS\_ModeWheelRC}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Mode\+Wheel\+RC = 2}
+
+
+
+Definition at line 83 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a2bb0a754b1e6f02e0afae381efee09ff}\label{namespacehardware__center_1_1lss_a2bb0a754b1e6f02e0afae381efee09ff}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QueryAngularAcceleration@{LSS\_QueryAngularAcceleration}}
+\index{LSS\_QueryAngularAcceleration@{LSS\_QueryAngularAcceleration}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QueryAngularAcceleration}{LSS\_QueryAngularAcceleration}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Angular\+Acceleration = \char`\"{}QAA\char`\"{}}
+
+
+
+Definition at line 151 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a39dacfad3b000e31949afc5fda7e63f7}\label{namespacehardware__center_1_1lss_a39dacfad3b000e31949afc5fda7e63f7}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QueryAngularDeceleration@{LSS\_QueryAngularDeceleration}}
+\index{LSS\_QueryAngularDeceleration@{LSS\_QueryAngularDeceleration}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QueryAngularDeceleration}{LSS\_QueryAngularDeceleration}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Angular\+Deceleration = \char`\"{}QAD\char`\"{}}
+
+
+
+Definition at line 152 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a9c90855907133b5d393eed83a378ad3b}\label{namespacehardware__center_1_1lss_a9c90855907133b5d393eed83a378ad3b}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QueryAngularHoldingStiffness@{LSS\_QueryAngularHoldingStiffness}}
+\index{LSS\_QueryAngularHoldingStiffness@{LSS\_QueryAngularHoldingStiffness}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QueryAngularHoldingStiffness}{LSS\_QueryAngularHoldingStiffness}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Angular\+Holding\+Stiffness = \char`\"{}QAH\char`\"{}}
+
+
+
+Definition at line 150 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a82f5eb6566060948f7aea57db18eba72}\label{namespacehardware__center_1_1lss_a82f5eb6566060948f7aea57db18eba72}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QueryAngularRange@{LSS\_QueryAngularRange}}
+\index{LSS\_QueryAngularRange@{LSS\_QueryAngularRange}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QueryAngularRange}{LSS\_QueryAngularRange}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Angular\+Range = \char`\"{}QAR\char`\"{}}
+
+
+
+Definition at line 128 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a3373eb88e9c9050883ef342d352da806}\label{namespacehardware__center_1_1lss_a3373eb88e9c9050883ef342d352da806}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QueryAngularStiffness@{LSS\_QueryAngularStiffness}}
+\index{LSS\_QueryAngularStiffness@{LSS\_QueryAngularStiffness}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QueryAngularStiffness}{LSS\_QueryAngularStiffness}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Angular\+Stiffness = \char`\"{}QAS\char`\"{}}
+
+
+
+Definition at line 149 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_aaba8e15d23a968a58daee9391ebbe167}\label{namespacehardware__center_1_1lss_aaba8e15d23a968a58daee9391ebbe167}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QueryBaud@{LSS\_QueryBaud}}
+\index{LSS\_QueryBaud@{LSS\_QueryBaud}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QueryBaud}{LSS\_QueryBaud}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Baud = \char`\"{}QB\char`\"{}}
+
+
+
+Definition at line 139 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a13e4a5cac56b650243c6ff205b3199a9}\label{namespacehardware__center_1_1lss_a13e4a5cac56b650243c6ff205b3199a9}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QueryBlinkingLED@{LSS\_QueryBlinkingLED}}
+\index{LSS\_QueryBlinkingLED@{LSS\_QueryBlinkingLED}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QueryBlinkingLED}{LSS\_QueryBlinkingLED}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Blinking\+LED = \char`\"{}QLB\char`\"{}}
+
+
+
+Definition at line 154 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a64b2b50aa19d0ca09fa2a6e2c86c3472}\label{namespacehardware__center_1_1lss_a64b2b50aa19d0ca09fa2a6e2c86c3472}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QueryColorLED@{LSS\_QueryColorLED}}
+\index{LSS\_QueryColorLED@{LSS\_QueryColorLED}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QueryColorLED}{LSS\_QueryColorLED}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Color\+LED = \char`\"{}QLED\char`\"{}}
+
+
+
+Definition at line 136 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_acfd320b02210ebd9cd367135b7c1ecad}\label{namespacehardware__center_1_1lss_acfd320b02210ebd9cd367135b7c1ecad}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QueryConfig@{LSS\_QueryConfig}}
+\index{LSS\_QueryConfig@{LSS\_QueryConfig}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QueryConfig}{LSS\_QueryConfig}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Config = 1}
+
+
+
+Definition at line 72 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_ada38300038f86789a26bf05436aa66e0}\label{namespacehardware__center_1_1lss_ada38300038f86789a26bf05436aa66e0}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QueryCurrent@{LSS\_QueryCurrent}}
+\index{LSS\_QueryCurrent@{LSS\_QueryCurrent}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QueryCurrent}{LSS\_QueryCurrent}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Current = \char`\"{}QC\char`\"{}}
+
+
+
+Definition at line 146 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a830b0783ed904150b373c4c9d853a14b}\label{namespacehardware__center_1_1lss_a830b0783ed904150b373c4c9d853a14b}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QueryEnableMotionControl@{LSS\_QueryEnableMotionControl}}
+\index{LSS\_QueryEnableMotionControl@{LSS\_QueryEnableMotionControl}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QueryEnableMotionControl}{LSS\_QueryEnableMotionControl}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Enable\+Motion\+Control = \char`\"{}QEM\char`\"{}}
+
+
+
+Definition at line 153 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a00f5efc7457f854c1991a361f455dde9}\label{namespacehardware__center_1_1lss_a00f5efc7457f854c1991a361f455dde9}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QueryFirmwareVersion@{LSS\_QueryFirmwareVersion}}
+\index{LSS\_QueryFirmwareVersion@{LSS\_QueryFirmwareVersion}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QueryFirmwareVersion}{LSS\_QueryFirmwareVersion}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Firmware\+Version = \char`\"{}QF\char`\"{}}
+
+
+
+Definition at line 143 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a3b51bcde3b794d2e8ffacad7a644ff82}\label{namespacehardware__center_1_1lss_a3b51bcde3b794d2e8ffacad7a644ff82}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QueryFirstPosition@{LSS\_QueryFirstPosition}}
+\index{LSS\_QueryFirstPosition@{LSS\_QueryFirstPosition}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QueryFirstPosition}{LSS\_QueryFirstPosition}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+First\+Position = \char`\"{}QFD\char`\"{}}
+
+
+
+Definition at line 140 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_ab509a87b8fde75836f604e7cd18a20f8}\label{namespacehardware__center_1_1lss_ab509a87b8fde75836f604e7cd18a20f8}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QueryGyre@{LSS\_QueryGyre}}
+\index{LSS\_QueryGyre@{LSS\_QueryGyre}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QueryGyre}{LSS\_QueryGyre}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Gyre = \char`\"{}QG\char`\"{}}
+
+
+
+Definition at line 137 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_ae66fa1418b40d5ab84df9c9f0a9e6f44}\label{namespacehardware__center_1_1lss_ae66fa1418b40d5ab84df9c9f0a9e6f44}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QueryID@{LSS\_QueryID}}
+\index{LSS\_QueryID@{LSS\_QueryID}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QueryID}{LSS\_QueryID}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+ID = \char`\"{}QID\char`\"{}}
+
+
+
+Definition at line 138 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_afb15a7cad4eb4294822cc59dd208e471}\label{namespacehardware__center_1_1lss_afb15a7cad4eb4294822cc59dd208e471}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QueryInstantaneousSpeed@{LSS\_QueryInstantaneousSpeed}}
+\index{LSS\_QueryInstantaneousSpeed@{LSS\_QueryInstantaneousSpeed}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QueryInstantaneousSpeed}{LSS\_QueryInstantaneousSpeed}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Instantaneous\+Speed = 2}
+
+
+
+Definition at line 73 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_aba372031677f3125b6f024c01e98015b}\label{namespacehardware__center_1_1lss_aba372031677f3125b6f024c01e98015b}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QueryMaxSpeed@{LSS\_QueryMaxSpeed}}
+\index{LSS\_QueryMaxSpeed@{LSS\_QueryMaxSpeed}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QueryMaxSpeed}{LSS\_QueryMaxSpeed}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Max\+Speed = \char`\"{}QSD\char`\"{}}
+
+
+
+Definition at line 134 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a07befb3c547a01f2faa9a4e3e73c80b3}\label{namespacehardware__center_1_1lss_a07befb3c547a01f2faa9a4e3e73c80b3}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QueryMaxSpeedRPM@{LSS\_QueryMaxSpeedRPM}}
+\index{LSS\_QueryMaxSpeedRPM@{LSS\_QueryMaxSpeedRPM}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QueryMaxSpeedRPM}{LSS\_QueryMaxSpeedRPM}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Max\+Speed\+RPM = \char`\"{}QSR\char`\"{}}
+
+
+
+Definition at line 135 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a656243ffef38969c3bedefc61caf80e9}\label{namespacehardware__center_1_1lss_a656243ffef38969c3bedefc61caf80e9}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QueryModelString@{LSS\_QueryModelString}}
+\index{LSS\_QueryModelString@{LSS\_QueryModelString}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QueryModelString}{LSS\_QueryModelString}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Model\+String = \char`\"{}QMS\char`\"{}}
+
+
+
+Definition at line 141 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_aeb7fecaac93dbf48587e3f1f181f6814}\label{namespacehardware__center_1_1lss_aeb7fecaac93dbf48587e3f1f181f6814}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QueryOriginOffset@{LSS\_QueryOriginOffset}}
+\index{LSS\_QueryOriginOffset@{LSS\_QueryOriginOffset}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QueryOriginOffset}{LSS\_QueryOriginOffset}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Origin\+Offset = \char`\"{}QO\char`\"{}}
+
+
+
+Definition at line 127 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a0778b052434e43ad72504703558d2b13}\label{namespacehardware__center_1_1lss_a0778b052434e43ad72504703558d2b13}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QueryPosition@{LSS\_QueryPosition}}
+\index{LSS\_QueryPosition@{LSS\_QueryPosition}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QueryPosition}{LSS\_QueryPosition}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Position = \char`\"{}QD\char`\"{}}
+
+
+
+Definition at line 130 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a1c9cfb4cdd4045ccbd75c68638e07893}\label{namespacehardware__center_1_1lss_a1c9cfb4cdd4045ccbd75c68638e07893}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QueryPositionPulse@{LSS\_QueryPositionPulse}}
+\index{LSS\_QueryPositionPulse@{LSS\_QueryPositionPulse}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QueryPositionPulse}{LSS\_QueryPositionPulse}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Position\+Pulse = \char`\"{}QP\char`\"{}}
+
+
+
+Definition at line 129 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a5476e577a429bdfa7c8e63066963014a}\label{namespacehardware__center_1_1lss_a5476e577a429bdfa7c8e63066963014a}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QuerySerialNumber@{LSS\_QuerySerialNumber}}
+\index{LSS\_QuerySerialNumber@{LSS\_QuerySerialNumber}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QuerySerialNumber}{LSS\_QuerySerialNumber}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Serial\+Number = \char`\"{}QN\char`\"{}}
+
+
+
+Definition at line 142 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a8428b1db0991b0165394f807b8c53bf3}\label{namespacehardware__center_1_1lss_a8428b1db0991b0165394f807b8c53bf3}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QuerySession@{LSS\_QuerySession}}
+\index{LSS\_QuerySession@{LSS\_QuerySession}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QuerySession}{LSS\_QuerySession}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Session = 0}
+
+
+
+Definition at line 71 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a451a54f6e1c080b673210ae0b8eaf065}\label{namespacehardware__center_1_1lss_a451a54f6e1c080b673210ae0b8eaf065}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QuerySpeed@{LSS\_QuerySpeed}}
+\index{LSS\_QuerySpeed@{LSS\_QuerySpeed}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QuerySpeed}{LSS\_QuerySpeed}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Speed = \char`\"{}QWD\char`\"{}}
+
+
+
+Definition at line 131 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_ac79900a1e397764016f7e4bea13fdad1}\label{namespacehardware__center_1_1lss_ac79900a1e397764016f7e4bea13fdad1}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QuerySpeedPulse@{LSS\_QuerySpeedPulse}}
+\index{LSS\_QuerySpeedPulse@{LSS\_QuerySpeedPulse}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QuerySpeedPulse}{LSS\_QuerySpeedPulse}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Speed\+Pulse = \char`\"{}QS\char`\"{}}
+
+
+
+Definition at line 133 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a99c649da8de897829f688c16c286ffd5}\label{namespacehardware__center_1_1lss_a99c649da8de897829f688c16c286ffd5}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QuerySpeedRPM@{LSS\_QuerySpeedRPM}}
+\index{LSS\_QuerySpeedRPM@{LSS\_QuerySpeedRPM}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QuerySpeedRPM}{LSS\_QuerySpeedRPM}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Speed\+RPM = \char`\"{}QWR\char`\"{}}
+
+
+
+Definition at line 132 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a9d7a4c1fdb8c46ee6dca0686d80ad304}\label{namespacehardware__center_1_1lss_a9d7a4c1fdb8c46ee6dca0686d80ad304}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QueryStatus@{LSS\_QueryStatus}}
+\index{LSS\_QueryStatus@{LSS\_QueryStatus}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QueryStatus}{LSS\_QueryStatus}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Status = \char`\"{}Q\char`\"{}}
+
+
+
+Definition at line 126 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a7e3d7df6ccf09c139ebe404d6bc047fd}\label{namespacehardware__center_1_1lss_a7e3d7df6ccf09c139ebe404d6bc047fd}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QueryTargetTravelSpeed@{LSS\_QueryTargetTravelSpeed}}
+\index{LSS\_QueryTargetTravelSpeed@{LSS\_QueryTargetTravelSpeed}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QueryTargetTravelSpeed}{LSS\_QueryTargetTravelSpeed}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Target\+Travel\+Speed = 3}
+
+
+
+Definition at line 74 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_aa832e4c33917030ecb04d357fdcf48ec}\label{namespacehardware__center_1_1lss_aa832e4c33917030ecb04d357fdcf48ec}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QueryTemperature@{LSS\_QueryTemperature}}
+\index{LSS\_QueryTemperature@{LSS\_QueryTemperature}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QueryTemperature}{LSS\_QueryTemperature}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Temperature = \char`\"{}QT\char`\"{}}
+
+
+
+Definition at line 145 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a512f3f5bd33eac1c98aea41f6e0ffdac}\label{namespacehardware__center_1_1lss_a512f3f5bd33eac1c98aea41f6e0ffdac}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_QueryVoltage@{LSS\_QueryVoltage}}
+\index{LSS\_QueryVoltage@{LSS\_QueryVoltage}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_QueryVoltage}{LSS\_QueryVoltage}}
+{\footnotesize\ttfamily string hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Voltage = \char`\"{}QV\char`\"{}}
+
+
+
+Definition at line 144 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a1d6ef43f66c060dbaf760b696bc9d496}\label{namespacehardware__center_1_1lss_a1d6ef43f66c060dbaf760b696bc9d496}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_SetConfig@{LSS\_SetConfig}}
+\index{LSS\_SetConfig@{LSS\_SetConfig}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_SetConfig}{LSS\_SetConfig}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Set\+Config = 1}
+
+
+
+Definition at line 78 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a1a9935f35a6310b554f0145919c40e0d}\label{namespacehardware__center_1_1lss_a1a9935f35a6310b554f0145919c40e0d}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_SetSession@{LSS\_SetSession}}
+\index{LSS\_SetSession@{LSS\_SetSession}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_SetSession}{LSS\_SetSession}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Set\+Session = 0}
+
+
+
+Definition at line 77 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a30b5d360a65789da7ad4d949adb96743}\label{namespacehardware__center_1_1lss_a30b5d360a65789da7ad4d949adb96743}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_StatusAccelerating@{LSS\_StatusAccelerating}}
+\index{LSS\_StatusAccelerating@{LSS\_StatusAccelerating}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_StatusAccelerating}{LSS\_StatusAccelerating}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Status\+Accelerating = 3}
+
+
+
+Definition at line 50 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_aaa2a78e4a05f0389d659a5df1b312b78}\label{namespacehardware__center_1_1lss_aaa2a78e4a05f0389d659a5df1b312b78}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_StatusBlocked@{LSS\_StatusBlocked}}
+\index{LSS\_StatusBlocked@{LSS\_StatusBlocked}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_StatusBlocked}{LSS\_StatusBlocked}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Status\+Blocked = 9}
+
+
+
+Definition at line 56 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a75b81a84c0df3b619b57cc186c94a9b9}\label{namespacehardware__center_1_1lss_a75b81a84c0df3b619b57cc186c94a9b9}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_StatusDecelerating@{LSS\_StatusDecelerating}}
+\index{LSS\_StatusDecelerating@{LSS\_StatusDecelerating}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_StatusDecelerating}{LSS\_StatusDecelerating}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Status\+Decelerating = 5}
+
+
+
+Definition at line 52 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a42d5414a0a99face56705c6c34b0e46d}\label{namespacehardware__center_1_1lss_a42d5414a0a99face56705c6c34b0e46d}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_StatusFreeMoving@{LSS\_StatusFreeMoving}}
+\index{LSS\_StatusFreeMoving@{LSS\_StatusFreeMoving}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_StatusFreeMoving}{LSS\_StatusFreeMoving}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Status\+Free\+Moving = 2}
+
+
+
+Definition at line 49 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_af11cd9d8516401f7b36a915a25904315}\label{namespacehardware__center_1_1lss_af11cd9d8516401f7b36a915a25904315}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_StatusHolding@{LSS\_StatusHolding}}
+\index{LSS\_StatusHolding@{LSS\_StatusHolding}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_StatusHolding}{LSS\_StatusHolding}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Status\+Holding = 6}
+
+
+
+Definition at line 53 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a0ba824ea10091ecfe354fff7b16c8e74}\label{namespacehardware__center_1_1lss_a0ba824ea10091ecfe354fff7b16c8e74}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_StatusLast@{LSS\_StatusLast}}
+\index{LSS\_StatusLast@{LSS\_StatusLast}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_StatusLast}{LSS\_StatusLast}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Status\+Last = 11}
+
+
+
+Definition at line 58 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a4d529232dd2845e158f4a22957e20ee4}\label{namespacehardware__center_1_1lss_a4d529232dd2845e158f4a22957e20ee4}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_StatusLimp@{LSS\_StatusLimp}}
+\index{LSS\_StatusLimp@{LSS\_StatusLimp}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_StatusLimp}{LSS\_StatusLimp}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Status\+Limp = 1}
+
+
+
+Definition at line 48 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a2136e548d785c032a06eba7c335d46c2}\label{namespacehardware__center_1_1lss_a2136e548d785c032a06eba7c335d46c2}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_StatusOutsideLimits@{LSS\_StatusOutsideLimits}}
+\index{LSS\_StatusOutsideLimits@{LSS\_StatusOutsideLimits}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_StatusOutsideLimits}{LSS\_StatusOutsideLimits}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Status\+Outside\+Limits = 7}
+
+
+
+Definition at line 54 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_aad89800b88c0ff2de44b7826cecb8e94}\label{namespacehardware__center_1_1lss_aad89800b88c0ff2de44b7826cecb8e94}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_StatusSafeMode@{LSS\_StatusSafeMode}}
+\index{LSS\_StatusSafeMode@{LSS\_StatusSafeMode}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_StatusSafeMode}{LSS\_StatusSafeMode}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Status\+Safe\+Mode = 10}
+
+
+
+Definition at line 57 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_aff73214f2983951646770640e628a2f7}\label{namespacehardware__center_1_1lss_aff73214f2983951646770640e628a2f7}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_StatusStuck@{LSS\_StatusStuck}}
+\index{LSS\_StatusStuck@{LSS\_StatusStuck}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_StatusStuck}{LSS\_StatusStuck}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Status\+Stuck = 8}
+
+
+
+Definition at line 55 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a232897b4ad64d767858159c5a4c89513}\label{namespacehardware__center_1_1lss_a232897b4ad64d767858159c5a4c89513}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_StatusTravelling@{LSS\_StatusTravelling}}
+\index{LSS\_StatusTravelling@{LSS\_StatusTravelling}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_StatusTravelling}{LSS\_StatusTravelling}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Status\+Travelling = 4}
+
+
+
+Definition at line 51 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_acb67a62c0fa3bff880f894aca2560ab2}\label{namespacehardware__center_1_1lss_acb67a62c0fa3bff880f894aca2560ab2}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_StatusUnknown@{LSS\_StatusUnknown}}
+\index{LSS\_StatusUnknown@{LSS\_StatusUnknown}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_StatusUnknown}{LSS\_StatusUnknown}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Status\+Unknown = 0}
+
+
+
+Definition at line 47 of file lss.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1lss_a44affc9d20fa4e63058689019fb11af5}\label{namespacehardware__center_1_1lss_a44affc9d20fa4e63058689019fb11af5}} 
+\index{hardware\_center.lss@{hardware\_center.lss}!LSS\_Timeout@{LSS\_Timeout}}
+\index{LSS\_Timeout@{LSS\_Timeout}!hardware\_center.lss@{hardware\_center.lss}}
+\doxysubsubsection{\texorpdfstring{LSS\_Timeout}{LSS\_Timeout}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Timeout = 100}
+
+
+
+Definition at line 20 of file lss.\+py.
+

@@ -1,0 +1,128 @@
+\hypertarget{namespacehardware__center_1_1gpiopintest}{}\doxysection{hardware\+\_\+center.\+gpiopintest Namespace Reference}
+\label{namespacehardware__center_1_1gpiopintest}\index{hardware\_center.gpiopintest@{hardware\_center.gpiopintest}}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1gpiopintest_adcfcbe556835a14e07c16ae7ab088561}{joystick\+\_\+button\+\_\+pin}} = 23
+\item 
+bool \mbox{\hyperlink{namespacehardware__center_1_1gpiopintest_ad494a679dc26289a14c409029cfe28cb}{button\+\_\+pressed}} = False
+\item 
+\mbox{\hyperlink{namespacehardware__center_1_1gpiopintest_a7f0b291d937d0650ffc15045e9edaccb}{IN}}
+\item 
+\mbox{\hyperlink{namespacehardware__center_1_1gpiopintest_afe35d8110cfd6d9dc3933b2ee096fc17}{pull\+\_\+up\+\_\+down}}
+\item 
+\mbox{\hyperlink{namespacehardware__center_1_1gpiopintest_a9ae14e3ed0a42bd00feec652f5d36b4c}{prev\+\_\+button\+\_\+state}} = GPIO.\+LOW
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1gpiopintest_a5ef70cc05ceda8b1a9ee1683fa7304a7}{count}} = 0
+\item 
+float \mbox{\hyperlink{namespacehardware__center_1_1gpiopintest_a64c2f834c980777deee1e71282795cd1}{debounce\+\_\+duration}} = 0.\+5
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1gpiopintest_ab13f206f24e31f1b89cf051d0e1c7e9b}{last\+\_\+button\+\_\+press\+\_\+time}} = 0
+\item 
+\mbox{\hyperlink{namespacehardware__center_1_1gpiopintest_a950a3c77c05912bdaad610ed09e73250}{current\+\_\+time}} = time.\+time()
+\item 
+\mbox{\hyperlink{namespacehardware__center_1_1gpiopintest_a99b696ca33dbdac99b6a0d7ee5671fd6}{current\+\_\+button\+\_\+state}} = GPIO.\+input(\mbox{\hyperlink{namespacehardware__center_1_1gpiopintest_adcfcbe556835a14e07c16ae7ab088561}{joystick\+\_\+button\+\_\+pin}})
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespacehardware__center_1_1gpiopintest_ad494a679dc26289a14c409029cfe28cb}\label{namespacehardware__center_1_1gpiopintest_ad494a679dc26289a14c409029cfe28cb}} 
+\index{hardware\_center.gpiopintest@{hardware\_center.gpiopintest}!button\_pressed@{button\_pressed}}
+\index{button\_pressed@{button\_pressed}!hardware\_center.gpiopintest@{hardware\_center.gpiopintest}}
+\doxysubsubsection{\texorpdfstring{button\_pressed}{button\_pressed}}
+{\footnotesize\ttfamily bool hardware\+\_\+center.\+gpiopintest.\+button\+\_\+pressed = False}
+
+
+
+Definition at line 6 of file gpiopintest.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1gpiopintest_a5ef70cc05ceda8b1a9ee1683fa7304a7}\label{namespacehardware__center_1_1gpiopintest_a5ef70cc05ceda8b1a9ee1683fa7304a7}} 
+\index{hardware\_center.gpiopintest@{hardware\_center.gpiopintest}!count@{count}}
+\index{count@{count}!hardware\_center.gpiopintest@{hardware\_center.gpiopintest}}
+\doxysubsubsection{\texorpdfstring{count}{count}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+gpiopintest.\+count = 0}
+
+
+
+Definition at line 11 of file gpiopintest.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1gpiopintest_a99b696ca33dbdac99b6a0d7ee5671fd6}\label{namespacehardware__center_1_1gpiopintest_a99b696ca33dbdac99b6a0d7ee5671fd6}} 
+\index{hardware\_center.gpiopintest@{hardware\_center.gpiopintest}!current\_button\_state@{current\_button\_state}}
+\index{current\_button\_state@{current\_button\_state}!hardware\_center.gpiopintest@{hardware\_center.gpiopintest}}
+\doxysubsubsection{\texorpdfstring{current\_button\_state}{current\_button\_state}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+gpiopintest.\+current\+\_\+button\+\_\+state = GPIO.\+input(\mbox{\hyperlink{namespacehardware__center_1_1gpiopintest_adcfcbe556835a14e07c16ae7ab088561}{joystick\+\_\+button\+\_\+pin}})}
+
+
+
+Definition at line 19 of file gpiopintest.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1gpiopintest_a950a3c77c05912bdaad610ed09e73250}\label{namespacehardware__center_1_1gpiopintest_a950a3c77c05912bdaad610ed09e73250}} 
+\index{hardware\_center.gpiopintest@{hardware\_center.gpiopintest}!current\_time@{current\_time}}
+\index{current\_time@{current\_time}!hardware\_center.gpiopintest@{hardware\_center.gpiopintest}}
+\doxysubsubsection{\texorpdfstring{current\_time}{current\_time}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+gpiopintest.\+current\+\_\+time = time.\+time()}
+
+
+
+Definition at line 14 of file gpiopintest.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1gpiopintest_a64c2f834c980777deee1e71282795cd1}\label{namespacehardware__center_1_1gpiopintest_a64c2f834c980777deee1e71282795cd1}} 
+\index{hardware\_center.gpiopintest@{hardware\_center.gpiopintest}!debounce\_duration@{debounce\_duration}}
+\index{debounce\_duration@{debounce\_duration}!hardware\_center.gpiopintest@{hardware\_center.gpiopintest}}
+\doxysubsubsection{\texorpdfstring{debounce\_duration}{debounce\_duration}}
+{\footnotesize\ttfamily float hardware\+\_\+center.\+gpiopintest.\+debounce\+\_\+duration = 0.\+5}
+
+
+
+Definition at line 12 of file gpiopintest.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1gpiopintest_a7f0b291d937d0650ffc15045e9edaccb}\label{namespacehardware__center_1_1gpiopintest_a7f0b291d937d0650ffc15045e9edaccb}} 
+\index{hardware\_center.gpiopintest@{hardware\_center.gpiopintest}!IN@{IN}}
+\index{IN@{IN}!hardware\_center.gpiopintest@{hardware\_center.gpiopintest}}
+\doxysubsubsection{\texorpdfstring{IN}{IN}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+gpiopintest.\+IN}
+
+
+
+Definition at line 8 of file gpiopintest.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1gpiopintest_adcfcbe556835a14e07c16ae7ab088561}\label{namespacehardware__center_1_1gpiopintest_adcfcbe556835a14e07c16ae7ab088561}} 
+\index{hardware\_center.gpiopintest@{hardware\_center.gpiopintest}!joystick\_button\_pin@{joystick\_button\_pin}}
+\index{joystick\_button\_pin@{joystick\_button\_pin}!hardware\_center.gpiopintest@{hardware\_center.gpiopintest}}
+\doxysubsubsection{\texorpdfstring{joystick\_button\_pin}{joystick\_button\_pin}}
+{\footnotesize\ttfamily int hardware\+\_\+center.\+gpiopintest.\+joystick\+\_\+button\+\_\+pin = 23}
+
+
+
+Definition at line 5 of file gpiopintest.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1gpiopintest_ab13f206f24e31f1b89cf051d0e1c7e9b}\label{namespacehardware__center_1_1gpiopintest_ab13f206f24e31f1b89cf051d0e1c7e9b}} 
+\index{hardware\_center.gpiopintest@{hardware\_center.gpiopintest}!last\_button\_press\_time@{last\_button\_press\_time}}
+\index{last\_button\_press\_time@{last\_button\_press\_time}!hardware\_center.gpiopintest@{hardware\_center.gpiopintest}}
+\doxysubsubsection{\texorpdfstring{last\_button\_press\_time}{last\_button\_press\_time}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+gpiopintest.\+last\+\_\+button\+\_\+press\+\_\+time = 0}
+
+
+
+Definition at line 13 of file gpiopintest.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1gpiopintest_a9ae14e3ed0a42bd00feec652f5d36b4c}\label{namespacehardware__center_1_1gpiopintest_a9ae14e3ed0a42bd00feec652f5d36b4c}} 
+\index{hardware\_center.gpiopintest@{hardware\_center.gpiopintest}!prev\_button\_state@{prev\_button\_state}}
+\index{prev\_button\_state@{prev\_button\_state}!hardware\_center.gpiopintest@{hardware\_center.gpiopintest}}
+\doxysubsubsection{\texorpdfstring{prev\_button\_state}{prev\_button\_state}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+gpiopintest.\+prev\+\_\+button\+\_\+state = GPIO.\+LOW}
+
+
+
+Definition at line 10 of file gpiopintest.\+py.
+
+\mbox{\Hypertarget{namespacehardware__center_1_1gpiopintest_afe35d8110cfd6d9dc3933b2ee096fc17}\label{namespacehardware__center_1_1gpiopintest_afe35d8110cfd6d9dc3933b2ee096fc17}} 
+\index{hardware\_center.gpiopintest@{hardware\_center.gpiopintest}!pull\_up\_down@{pull\_up\_down}}
+\index{pull\_up\_down@{pull\_up\_down}!hardware\_center.gpiopintest@{hardware\_center.gpiopintest}}
+\doxysubsubsection{\texorpdfstring{pull\_up\_down}{pull\_up\_down}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+gpiopintest.\+pull\+\_\+up\+\_\+down}
+
+
+
+Definition at line 8 of file gpiopintest.\+py.
+

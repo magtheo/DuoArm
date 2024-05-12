@@ -1,0 +1,632 @@
+\hypertarget{classhardware__center_1_1motor__control_1_1motorControl}{}\doxysection{hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control Class Reference}
+\label{classhardware__center_1_1motor__control_1_1motorControl}\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+
+
+This class encapsulates methods to control motor behavior based on received commands.  
+
+
+
+
+Inheritance diagram for hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=210pt]{classhardware__center_1_1motor__control_1_1motorControl__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=210pt]{classhardware__center_1_1motor__control_1_1motorControl__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_af9f27beca20721a0fdae0df239efb709}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self)
+\item 
+def \mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_a62a5484d82ccc568344856061406e296}{load\+\_\+and\+\_\+set\+\_\+boundaries}} (self)
+\begin{DoxyCompactList}\small\item\em Loads and sets boundaries from a configuration file. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_a1ae275cdb1aa82522e8f408c2019d34d}{setup\+\_\+servos\+\_\+and\+\_\+queues}} (self)
+\begin{DoxyCompactList}\small\item\em Sets up servo motors and initializes queues for handling angles. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_a33458933800777927dc2e52775384926}{init\+\_\+servo\+\_\+threads}} (self)
+\begin{DoxyCompactList}\small\item\em Initializes threads for controlling servos. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_a678d76cbd6cb01bc3426c660e78719b2}{servo\+\_\+control\+\_\+loop}} (self, servo\+\_\+key)
+\begin{DoxyCompactList}\small\item\em Thread loop for servo control. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_af60c0c9bdd33192f36d24c5829d7f73f}{control\+\_\+servo\+\_\+speed}} (self, servo\+\_\+key, target\+\_\+angle)
+\begin{DoxyCompactList}\small\item\em Controls the speed of the servo based on target angle using a PID controller. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_ac5d13b8f5b8cb97d9c320ac93c4776e7}{iterate\+\_\+and\+\_\+move\+\_\+servos\+\_\+callback}} (self, msg)
+\begin{DoxyCompactList}\small\item\em Callback function for handling an array of joint angles and moving servos accordingly. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_a35b28ad0ed40f02952f33dac2b23c3df}{follow\+\_\+path}} (self, angles, num\+\_\+cycles)
+\begin{DoxyCompactList}\small\item\em Follows a predefined path of angles. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_a85a476250b3a7767526364ad380e92c0}{limp\+\_\+and\+\_\+set\+\_\+origin}} (self)
+\begin{DoxyCompactList}\small\item\em Sets the servos to limp mode and resets the origin. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_a211102d47b5d2ea03f20af9a6997a45c}{publish\+\_\+joint\+\_\+angles}} (self, servo\+\_\+key, angle)
+\begin{DoxyCompactList}\small\item\em Publishes the current joint angles. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_af40520e1526eac487423eb9fd1d22ddb}{calc\+\_\+position}} (self, angle)
+\begin{DoxyCompactList}\small\item\em Calculates the position used by LSS servos based on an angle. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_a82c7732f8fe0817b98e2d845e1ac9413}{calc\+\_\+angle}} (self, position)
+\begin{DoxyCompactList}\small\item\em Calculates the angle based on a position. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_aea397166325b0e30b4cbe60bf792e042}{read\+\_\+angles\+\_\+callback}} (self)
+\begin{DoxyCompactList}\small\item\em Callback for reading angles from servos. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_af259ca02363bc295828fba630bd9a4e6}{manualy\+\_\+callback}} (self)
+\begin{DoxyCompactList}\small\item\em Manual callback used during testing to set servos to limp mode and read positions. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_a4564489ac571dcd72924518eceffd83c}{start\+\_\+read\+\_\+callback}} (self, msg)
+\begin{DoxyCompactList}\small\item\em Callback for starting the read angles test. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_a3d63e44352b9bbf6a3f721dbf4a9dbd7}{check\+\_\+state\+\_\+and\+\_\+stop}} (self)
+\begin{DoxyCompactList}\small\item\em Checks the current state and stops movements if necessary. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_a0ffeee734b3edaa6ca93c69cec86b000}{state\+\_\+callback}} (self, msg)
+\begin{DoxyCompactList}\small\item\em Callback for updating the state based on received message. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_af8101c8814e4489f2155118de89f3847}{real\+\_\+time\+\_\+qos}}
+\begin{DoxyCompactList}\small\item\em Define a QoS profile for real-\/time updates, this is only used when sending angles to display node, which we sadly didnt manage to work properly. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_a7e91d96dc97e652808cead9b68961197}{boundaries}}
+\begin{DoxyCompactList}\small\item\em Initialize servos, threads and subscriptions. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_ac27fe94e68c035e40dde3eda3875db7e}{threads}}
+\item 
+\mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_a21e77a9a90e7807279280b781c19fc2f}{lock}}
+\item 
+\mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_a55010d634a04d99101eaebc8c08497e6}{current\+\_\+target}}
+\item 
+\mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_a869bbfa166926993b08882655af8acb3}{state}}
+\item 
+\mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_adfab4e01997c1297f7332ccea3989dc0}{total\+\_\+movements}}
+\item 
+\mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_a9e437e59baaf0059f4a479884a2a09ad}{completed\+\_\+movements}}
+\item 
+\mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_abcf9396d896b10df8cfd31df132095b6}{current\+\_\+movement\+\_\+nr}}
+\item 
+\mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_af632f1bc3c71fc0c21f1f66f607e14c9}{actual\+\_\+joint\+\_\+angles\+\_\+publisher}}
+\begin{DoxyCompactList}\small\item\em Publishers and subscribers setup. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_a43d625f08031b4d83f1c632073d718b9}{joint\+\_\+angles\+\_\+publisher}}
+\item 
+\mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_ab697151f877b01011c472149f7d44bce}{start\+\_\+read\+\_\+sub}}
+\begin{DoxyCompactList}\small\item\em Subscriber for receiving start test command. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_a01bd468b0c105be5b1e0961a34dfedd8}{manual\+\_\+readings\+\_\+pub}}
+\item 
+\mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_ab6735db9d166306199b0b26222349d29}{limp\+\_\+and\+\_\+reset\+\_\+origin\+\_\+sub}}
+\item 
+\mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_a52d75b441a4440ba232f0acfa38857c0}{read\+\_\+angels\+\_\+sub}}
+\item 
+\mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_a3242422bebcb10718056994cb995e40a}{joint\+\_\+angles\+\_\+subscription}}
+\item 
+\mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_a8958095b40f79ace31d2e31246035e90}{path\+\_\+done\+\_\+pub}}
+\item 
+\mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_a8f4547b34e053cc952093659c49bc7c2}{state\+\_\+subscription}}
+\item 
+\mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_a644fc6e3579184bd6f7dafd9494475c0}{servos}}
+\item 
+\mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl_a6c14240c54aec87fd1816e260aaf0046}{angles\+\_\+queues}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This class encapsulates methods to control motor behavior based on received commands. 
+
+Definition at line 45 of file motor\+\_\+control.\+py.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_af9f27beca20721a0fdae0df239efb709}\label{classhardware__center_1_1motor__control_1_1motorControl_af9f27beca20721a0fdae0df239efb709}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Definition at line 46 of file motor\+\_\+control.\+py.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_a82c7732f8fe0817b98e2d845e1ac9413}\label{classhardware__center_1_1motor__control_1_1motorControl_a82c7732f8fe0817b98e2d845e1ac9413}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!calc\_angle@{calc\_angle}}
+\index{calc\_angle@{calc\_angle}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{calc\_angle()}{calc\_angle()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+calc\+\_\+angle (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{position }\end{DoxyParamCaption})}
+
+
+
+Calculates the angle based on a position. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em position} & The position to calculate the angle for. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The calculated angle or None if an error occurs. 
+\end{DoxyReturn}
+
+
+Definition at line 298 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_af40520e1526eac487423eb9fd1d22ddb}\label{classhardware__center_1_1motor__control_1_1motorControl_af40520e1526eac487423eb9fd1d22ddb}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!calc\_position@{calc\_position}}
+\index{calc\_position@{calc\_position}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{calc\_position()}{calc\_position()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+calc\+\_\+position (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{angle }\end{DoxyParamCaption})}
+
+
+
+Calculates the position used by LSS servos based on an angle. 
+
+This position is angle$\ast$10 (ex\+: 14,5 deg = 145 position) 
+\begin{DoxyParams}{Parameters}
+{\em angle} & The angle to calculate the position for. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The calculated position. 
+\end{DoxyReturn}
+
+
+Definition at line 292 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_a3d63e44352b9bbf6a3f721dbf4a9dbd7}\label{classhardware__center_1_1motor__control_1_1motorControl_a3d63e44352b9bbf6a3f721dbf4a9dbd7}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!check\_state\_and\_stop@{check\_state\_and\_stop}}
+\index{check\_state\_and\_stop@{check\_state\_and\_stop}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{check\_state\_and\_stop()}{check\_state\_and\_stop()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+check\+\_\+state\+\_\+and\+\_\+stop (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Checks the current state and stops movements if necessary. 
+
+We did not get this to work as the local state could not be updated whilst the servos where moving. 
+
+Definition at line 348 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_af60c0c9bdd33192f36d24c5829d7f73f}\label{classhardware__center_1_1motor__control_1_1motorControl_af60c0c9bdd33192f36d24c5829d7f73f}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!control\_servo\_speed@{control\_servo\_speed}}
+\index{control\_servo\_speed@{control\_servo\_speed}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{control\_servo\_speed()}{control\_servo\_speed()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+control\+\_\+servo\+\_\+speed (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{servo\+\_\+key,  }\item[{}]{target\+\_\+angle }\end{DoxyParamCaption})}
+
+
+
+Controls the speed of the servo based on target angle using a PID controller. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em servo\+\_\+key} & Key identifier for the servo. \\
+\hline
+{\em target\+\_\+angle} & Desired angle to reach. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 156 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_a35b28ad0ed40f02952f33dac2b23c3df}\label{classhardware__center_1_1motor__control_1_1motorControl_a35b28ad0ed40f02952f33dac2b23c3df}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!follow\_path@{follow\_path}}
+\index{follow\_path@{follow\_path}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{follow\_path()}{follow\_path()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+follow\+\_\+path (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{angles,  }\item[{}]{num\+\_\+cycles }\end{DoxyParamCaption})}
+
+
+
+Follows a predefined path of angles. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em angles} & Array of angles to follow. \\
+\hline
+{\em num\+\_\+cycles} & Number of cycles to repeat the path. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 201 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_a33458933800777927dc2e52775384926}\label{classhardware__center_1_1motor__control_1_1motorControl_a33458933800777927dc2e52775384926}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!init\_servo\_threads@{init\_servo\_threads}}
+\index{init\_servo\_threads@{init\_servo\_threads}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{init\_servo\_threads()}{init\_servo\_threads()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+init\+\_\+servo\+\_\+threads (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Initializes threads for controlling servos. 
+
+
+
+Definition at line 139 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_ac5d13b8f5b8cb97d9c320ac93c4776e7}\label{classhardware__center_1_1motor__control_1_1motorControl_ac5d13b8f5b8cb97d9c320ac93c4776e7}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!iterate\_and\_move\_servos\_callback@{iterate\_and\_move\_servos\_callback}}
+\index{iterate\_and\_move\_servos\_callback@{iterate\_and\_move\_servos\_callback}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{iterate\_and\_move\_servos\_callback()}{iterate\_and\_move\_servos\_callback()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+iterate\+\_\+and\+\_\+move\+\_\+servos\+\_\+callback (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{msg }\end{DoxyParamCaption})}
+
+
+
+Callback function for handling an array of joint angles and moving servos accordingly. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em msg} & Message containing joint angles. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 192 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_a85a476250b3a7767526364ad380e92c0}\label{classhardware__center_1_1motor__control_1_1motorControl_a85a476250b3a7767526364ad380e92c0}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!limp\_and\_set\_origin@{limp\_and\_set\_origin}}
+\index{limp\_and\_set\_origin@{limp\_and\_set\_origin}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{limp\_and\_set\_origin()}{limp\_and\_set\_origin()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+limp\+\_\+and\+\_\+set\+\_\+origin (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Sets the servos to limp mode and resets the origin. 
+
+\begin{DoxyVerb}Makes the servos go limp, waits for X seconds, and then sets a new origin offset.
+
+:param new_origin_offset: The new origin offset to be set for the servos.
+\end{DoxyVerb}
+ 
+
+Definition at line 238 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_a62a5484d82ccc568344856061406e296}\label{classhardware__center_1_1motor__control_1_1motorControl_a62a5484d82ccc568344856061406e296}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!load\_and\_set\_boundaries@{load\_and\_set\_boundaries}}
+\index{load\_and\_set\_boundaries@{load\_and\_set\_boundaries}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{load\_and\_set\_boundaries()}{load\_and\_set\_boundaries()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+load\+\_\+and\+\_\+set\+\_\+boundaries (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Loads and sets boundaries from a configuration file. 
+
+
+
+Definition at line 118 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_af259ca02363bc295828fba630bd9a4e6}\label{classhardware__center_1_1motor__control_1_1motorControl_af259ca02363bc295828fba630bd9a4e6}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!manualy\_callback@{manualy\_callback}}
+\index{manualy\_callback@{manualy\_callback}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{manualy\_callback()}{manualy\_callback()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+manualy\+\_\+callback (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Manual callback used during testing to set servos to limp mode and read positions. 
+
+
+
+Definition at line 327 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_a211102d47b5d2ea03f20af9a6997a45c}\label{classhardware__center_1_1motor__control_1_1motorControl_a211102d47b5d2ea03f20af9a6997a45c}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!publish\_joint\_angles@{publish\_joint\_angles}}
+\index{publish\_joint\_angles@{publish\_joint\_angles}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{publish\_joint\_angles()}{publish\_joint\_angles()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+publish\+\_\+joint\+\_\+angles (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{servo\+\_\+key,  }\item[{}]{angle }\end{DoxyParamCaption})}
+
+
+
+Publishes the current joint angles. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em servo\+\_\+key} & Key identifier for the servo. \\
+\hline
+{\em angle} & Current angle of the servo. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 281 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_aea397166325b0e30b4cbe60bf792e042}\label{classhardware__center_1_1motor__control_1_1motorControl_aea397166325b0e30b4cbe60bf792e042}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!read\_angles\_callback@{read\_angles\_callback}}
+\index{read\_angles\_callback@{read\_angles\_callback}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{read\_angles\_callback()}{read\_angles\_callback()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+read\+\_\+angles\+\_\+callback (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Callback for reading angles from servos. 
+
+
+
+Definition at line 311 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_a678d76cbd6cb01bc3426c660e78719b2}\label{classhardware__center_1_1motor__control_1_1motorControl_a678d76cbd6cb01bc3426c660e78719b2}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!servo\_control\_loop@{servo\_control\_loop}}
+\index{servo\_control\_loop@{servo\_control\_loop}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{servo\_control\_loop()}{servo\_control\_loop()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+servo\+\_\+control\+\_\+loop (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{servo\+\_\+key }\end{DoxyParamCaption})}
+
+
+
+Thread loop for servo control. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em servo\+\_\+key} & The key identifier for the servo. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 146 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_a1ae275cdb1aa82522e8f408c2019d34d}\label{classhardware__center_1_1motor__control_1_1motorControl_a1ae275cdb1aa82522e8f408c2019d34d}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!setup\_servos\_and\_queues@{setup\_servos\_and\_queues}}
+\index{setup\_servos\_and\_queues@{setup\_servos\_and\_queues}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{setup\_servos\_and\_queues()}{setup\_servos\_and\_queues()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+setup\+\_\+servos\+\_\+and\+\_\+queues (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Sets up servo motors and initializes queues for handling angles. 
+
+
+
+Definition at line 134 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_a4564489ac571dcd72924518eceffd83c}\label{classhardware__center_1_1motor__control_1_1motorControl_a4564489ac571dcd72924518eceffd83c}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!start\_read\_callback@{start\_read\_callback}}
+\index{start\_read\_callback@{start\_read\_callback}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{start\_read\_callback()}{start\_read\_callback()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+start\+\_\+read\+\_\+callback (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{msg }\end{DoxyParamCaption})}
+
+
+
+Callback for starting the read angles test. 
+
+
+
+Definition at line 341 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_a0ffeee734b3edaa6ca93c69cec86b000}\label{classhardware__center_1_1motor__control_1_1motorControl_a0ffeee734b3edaa6ca93c69cec86b000}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!state\_callback@{state\_callback}}
+\index{state\_callback@{state\_callback}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{state\_callback()}{state\_callback()}}
+{\footnotesize\ttfamily def hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+state\+\_\+callback (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{msg }\end{DoxyParamCaption})}
+
+
+
+Callback for updating the state based on received message. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em msg} & Message containing the new state. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 362 of file motor\+\_\+control.\+py.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_af632f1bc3c71fc0c21f1f66f607e14c9}\label{classhardware__center_1_1motor__control_1_1motorControl_af632f1bc3c71fc0c21f1f66f607e14c9}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!actual\_joint\_angles\_publisher@{actual\_joint\_angles\_publisher}}
+\index{actual\_joint\_angles\_publisher@{actual\_joint\_angles\_publisher}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{actual\_joint\_angles\_publisher}{actual\_joint\_angles\_publisher}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+actual\+\_\+joint\+\_\+angles\+\_\+publisher}
+
+
+
+Publishers and subscribers setup. 
+
+
+
+Definition at line 72 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_a6c14240c54aec87fd1816e260aaf0046}\label{classhardware__center_1_1motor__control_1_1motorControl_a6c14240c54aec87fd1816e260aaf0046}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!angles\_queues@{angles\_queues}}
+\index{angles\_queues@{angles\_queues}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{angles\_queues}{angles\_queues}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+angles\+\_\+queues}
+
+
+
+Definition at line 136 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_a7e91d96dc97e652808cead9b68961197}\label{classhardware__center_1_1motor__control_1_1motorControl_a7e91d96dc97e652808cead9b68961197}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!boundaries@{boundaries}}
+\index{boundaries@{boundaries}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{boundaries}{boundaries}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+boundaries}
+
+
+
+Initialize servos, threads and subscriptions. 
+
+
+
+Definition at line 53 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_a9e437e59baaf0059f4a479884a2a09ad}\label{classhardware__center_1_1motor__control_1_1motorControl_a9e437e59baaf0059f4a479884a2a09ad}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!completed\_movements@{completed\_movements}}
+\index{completed\_movements@{completed\_movements}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{completed\_movements}{completed\_movements}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+completed\+\_\+movements}
+
+
+
+Definition at line 67 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_abcf9396d896b10df8cfd31df132095b6}\label{classhardware__center_1_1motor__control_1_1motorControl_abcf9396d896b10df8cfd31df132095b6}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!current\_movement\_nr@{current\_movement\_nr}}
+\index{current\_movement\_nr@{current\_movement\_nr}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{current\_movement\_nr}{current\_movement\_nr}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+current\+\_\+movement\+\_\+nr}
+
+
+
+Definition at line 68 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_a55010d634a04d99101eaebc8c08497e6}\label{classhardware__center_1_1motor__control_1_1motorControl_a55010d634a04d99101eaebc8c08497e6}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!current\_target@{current\_target}}
+\index{current\_target@{current\_target}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{current\_target}{current\_target}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+current\+\_\+target}
+
+
+
+Definition at line 62 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_a43d625f08031b4d83f1c632073d718b9}\label{classhardware__center_1_1motor__control_1_1motorControl_a43d625f08031b4d83f1c632073d718b9}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!joint\_angles\_publisher@{joint\_angles\_publisher}}
+\index{joint\_angles\_publisher@{joint\_angles\_publisher}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{joint\_angles\_publisher}{joint\_angles\_publisher}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+joint\+\_\+angles\+\_\+publisher}
+
+
+
+Definition at line 78 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_a3242422bebcb10718056994cb995e40a}\label{classhardware__center_1_1motor__control_1_1motorControl_a3242422bebcb10718056994cb995e40a}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!joint\_angles\_subscription@{joint\_angles\_subscription}}
+\index{joint\_angles\_subscription@{joint\_angles\_subscription}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{joint\_angles\_subscription}{joint\_angles\_subscription}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+joint\+\_\+angles\+\_\+subscription}
+
+
+
+Definition at line 107 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_ab6735db9d166306199b0b26222349d29}\label{classhardware__center_1_1motor__control_1_1motorControl_ab6735db9d166306199b0b26222349d29}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!limp\_and\_reset\_origin\_sub@{limp\_and\_reset\_origin\_sub}}
+\index{limp\_and\_reset\_origin\_sub@{limp\_and\_reset\_origin\_sub}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{limp\_and\_reset\_origin\_sub}{limp\_and\_reset\_origin\_sub}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+limp\+\_\+and\+\_\+reset\+\_\+origin\+\_\+sub}
+
+
+
+Definition at line 98 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_a21e77a9a90e7807279280b781c19fc2f}\label{classhardware__center_1_1motor__control_1_1motorControl_a21e77a9a90e7807279280b781c19fc2f}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!lock@{lock}}
+\index{lock@{lock}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{lock}{lock}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+lock}
+
+
+
+Definition at line 61 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_a01bd468b0c105be5b1e0961a34dfedd8}\label{classhardware__center_1_1motor__control_1_1motorControl_a01bd468b0c105be5b1e0961a34dfedd8}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!manual\_readings\_pub@{manual\_readings\_pub}}
+\index{manual\_readings\_pub@{manual\_readings\_pub}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{manual\_readings\_pub}{manual\_readings\_pub}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+manual\+\_\+readings\+\_\+pub}
+
+
+
+Definition at line 92 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_a8958095b40f79ace31d2e31246035e90}\label{classhardware__center_1_1motor__control_1_1motorControl_a8958095b40f79ace31d2e31246035e90}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!path\_done\_pub@{path\_done\_pub}}
+\index{path\_done\_pub@{path\_done\_pub}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{path\_done\_pub}{path\_done\_pub}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+path\+\_\+done\+\_\+pub}
+
+
+
+Definition at line 110 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_a52d75b441a4440ba232f0acfa38857c0}\label{classhardware__center_1_1motor__control_1_1motorControl_a52d75b441a4440ba232f0acfa38857c0}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!read\_angels\_sub@{read\_angels\_sub}}
+\index{read\_angels\_sub@{read\_angels\_sub}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{read\_angels\_sub}{read\_angels\_sub}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+read\+\_\+angels\+\_\+sub}
+
+
+
+Definition at line 104 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_af8101c8814e4489f2155118de89f3847}\label{classhardware__center_1_1motor__control_1_1motorControl_af8101c8814e4489f2155118de89f3847}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!real\_time\_qos@{real\_time\_qos}}
+\index{real\_time\_qos@{real\_time\_qos}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{real\_time\_qos}{real\_time\_qos}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+real\+\_\+time\+\_\+qos}
+
+
+
+Define a QoS profile for real-\/time updates, this is only used when sending angles to display node, which we sadly didnt manage to work properly. 
+
+
+
+Definition at line 50 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_a644fc6e3579184bd6f7dafd9494475c0}\label{classhardware__center_1_1motor__control_1_1motorControl_a644fc6e3579184bd6f7dafd9494475c0}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!servos@{servos}}
+\index{servos@{servos}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{servos}{servos}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+servos}
+
+
+
+Definition at line 135 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_ab697151f877b01011c472149f7d44bce}\label{classhardware__center_1_1motor__control_1_1motorControl_ab697151f877b01011c472149f7d44bce}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!start\_read\_sub@{start\_read\_sub}}
+\index{start\_read\_sub@{start\_read\_sub}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{start\_read\_sub}{start\_read\_sub}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+start\+\_\+read\+\_\+sub}
+
+
+
+Subscriber for receiving start test command. 
+
+
+
+Definition at line 85 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_a869bbfa166926993b08882655af8acb3}\label{classhardware__center_1_1motor__control_1_1motorControl_a869bbfa166926993b08882655af8acb3}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!state@{state}}
+\index{state@{state}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{state}{state}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+state}
+
+
+
+Definition at line 64 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_a8f4547b34e053cc952093659c49bc7c2}\label{classhardware__center_1_1motor__control_1_1motorControl_a8f4547b34e053cc952093659c49bc7c2}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!state\_subscription@{state\_subscription}}
+\index{state\_subscription@{state\_subscription}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{state\_subscription}{state\_subscription}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+state\+\_\+subscription}
+
+
+
+Definition at line 113 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_ac27fe94e68c035e40dde3eda3875db7e}\label{classhardware__center_1_1motor__control_1_1motorControl_ac27fe94e68c035e40dde3eda3875db7e}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!threads@{threads}}
+\index{threads@{threads}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{threads}{threads}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+threads}
+
+
+
+Definition at line 58 of file motor\+\_\+control.\+py.
+
+\mbox{\Hypertarget{classhardware__center_1_1motor__control_1_1motorControl_adfab4e01997c1297f7332ccea3989dc0}\label{classhardware__center_1_1motor__control_1_1motorControl_adfab4e01997c1297f7332ccea3989dc0}} 
+\index{hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}!total\_movements@{total\_movements}}
+\index{total\_movements@{total\_movements}!hardware\_center.motor\_control.motorControl@{hardware\_center.motor\_control.motorControl}}
+\doxysubsubsection{\texorpdfstring{total\_movements}{total\_movements}}
+{\footnotesize\ttfamily hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control.\+total\+\_\+movements}
+
+
+
+Definition at line 66 of file motor\+\_\+control.\+py.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/hardware\+\_\+center/hardware\+\_\+center/\mbox{\hyperlink{motor__control_8py}{motor\+\_\+control.\+py}}\end{DoxyCompactItemize}

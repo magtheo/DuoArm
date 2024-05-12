@@ -1,0 +1,274 @@
+\hypertarget{lss_8py}{}\doxysection{src/hardware\+\_\+center/hardware\+\_\+center/lss.py File Reference}
+\label{lss_8py}\index{src/hardware\_center/hardware\_center/lss.py@{src/hardware\_center/hardware\_center/lss.py}}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classhardware__center_1_1lss_1_1LSS}{hardware\+\_\+center.\+lss.\+LSS}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespacehardware__center_1_1lss}{hardware\+\_\+center.\+lss}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespacehardware__center_1_1lss_ad8244a7a59beb5fb5ca63cdb4a9bb2f2}{hardware\+\_\+center.\+lss.\+init\+Bus}} (port\+Name, port\+Baud)
+\begin{DoxyCompactList}\small\item\em Class functions. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{namespacehardware__center_1_1lss_a28d194d9d480ac935a87b696fc8ec679}{hardware\+\_\+center.\+lss.\+close\+Bus}} ()
+\item 
+def \mbox{\hyperlink{namespacehardware__center_1_1lss_aa4bef367d063480de6f0f907bbf35e25}{hardware\+\_\+center.\+lss.\+generic\+Write}} (id, cmd, param=None)
+\item 
+def \mbox{\hyperlink{namespacehardware__center_1_1lss_a259c73318a62e57427757d3e71c53ccd}{hardware\+\_\+center.\+lss.\+generic\+Read\+\_\+\+Blocking\+\_\+int}} (id, cmd)
+\item 
+def \mbox{\hyperlink{namespacehardware__center_1_1lss_a535b9e6c754bbc4e178176f9be18d248}{hardware\+\_\+center.\+lss.\+generic\+Read\+\_\+\+Blocking\+\_\+str}} (id, cmd, num\+Chars)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_abbe2a8ec97cfe2873aaca1b9456e15b2}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Default\+Baud}} = 115200
+\begin{DoxyCompactList}\small\item\em Bus communication constants. \end{DoxyCompactList}\item 
+tuple \mbox{\hyperlink{namespacehardware__center_1_1lss_a21c19e9c1834cf444597de249f9cf121}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Max\+Total\+Command\+Length}} = (30 + 1)
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a44affc9d20fa4e63058689019fb11af5}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Timeout}} = 100
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_abbc0f1222f727b2359fa0a713e7acfbb}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Command\+Start}} = \char`\"{}\#\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a02b4e9cac200f84c5d09e0eb0db07950}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Command\+Reply\+Start}} = \char`\"{}$\ast$\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a72845619ad361d4776b3eb2f0e9b9caf}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Command\+End}} = \char`\"{}\textbackslash{}r\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a8a98dea250d3050d1f03a17d07c6f231}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+First\+Position\+Disabled}} = \char`\"{}DIS\char`\"{}
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_af5ba8c49e74a59438226157f294d87f4}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+ID\+\_\+\+Default}} = 0
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a9feb7d9b0f6255c982d618b62387759c}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+ID\+\_\+\+Min}} = 0
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a29c07b0b0c5090b5d8894a6bc4d9f130}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+ID\+\_\+\+Max}} = 250
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_aafddb3aa640f2079a11606d0d65f6151}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Mode255\+ID}} = 255
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a597fc9c1135fa6901bdb1e05d3ab899a}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Broadcast\+ID}} = 254
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a308c2bee1f08382a560268454cdcccce}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Comm\+Status\+\_\+\+Idle}} = 0
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_aaad2e44da15cc053a0a8a1aa40888657}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Comm\+Status\+\_\+\+Read\+Success}} = 1
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_acb39aaef95335e81b8cbe08cc5513d32}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Comm\+Status\+\_\+\+Read\+Timeout}} = 2
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a26e41ce22b98d3e605f64a1637456fac}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Comm\+Status\+\_\+\+Read\+Wrong\+ID}} = 3
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_aca64299531c44305cf59f596a41d95b3}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Comm\+Status\+\_\+\+Read\+Wrong\+Identifier}} = 4
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a399320ec0b21a5506f8bf34909f0b041}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Comm\+Status\+\_\+\+Read\+Wrong\+Format}} = 5
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_aae1c45d8515d130635847213fdc220d5}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Comm\+Status\+\_\+\+Read\+No\+Bus}} = 6
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a74d54fd0fe47a8761d8cbcbcce7645ce}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Comm\+Status\+\_\+\+Read\+Unknown}} = 7
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a9647dc093cd92972bd5fc6de6edf74b1}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Comm\+Status\+\_\+\+Write\+Success}} = 8
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a55000209b3a9a7278770e0f1e364dd36}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Comm\+Status\+\_\+\+Write\+No\+Bus}} = 9
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a7ae1ac8aa5721e5c386c119e60171c0b}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Comm\+Status\+\_\+\+Write\+Unknown}} = 10
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_acb67a62c0fa3bff880f894aca2560ab2}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Status\+Unknown}} = 0
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a4d529232dd2845e158f4a22957e20ee4}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Status\+Limp}} = 1
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a42d5414a0a99face56705c6c34b0e46d}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Status\+Free\+Moving}} = 2
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a30b5d360a65789da7ad4d949adb96743}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Status\+Accelerating}} = 3
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a232897b4ad64d767858159c5a4c89513}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Status\+Travelling}} = 4
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a75b81a84c0df3b619b57cc186c94a9b9}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Status\+Decelerating}} = 5
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_af11cd9d8516401f7b36a915a25904315}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Status\+Holding}} = 6
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a2136e548d785c032a06eba7c335d46c2}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Status\+Outside\+Limits}} = 7
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_aff73214f2983951646770640e628a2f7}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Status\+Stuck}} = 8
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_aaa2a78e4a05f0389d659a5df1b312b78}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Status\+Blocked}} = 9
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_aad89800b88c0ff2de44b7826cecb8e94}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Status\+Safe\+Mode}} = 10
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a0ba824ea10091ecfe354fff7b16c8e74}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Status\+Last}} = 11
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a9692ed68cdeaf186f1f145860bc626fc}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Model\+High\+Torque}} = 0
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a573bef42e3cbbac70ecaa9dd1bdda0cd}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Model\+Standard}} = 1
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_abcdf711ede6ba7f42fc64bf0bf7a6fd4}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Model\+High\+Speed}} = 2
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a5dffed40c0f3da4b1653d9695aece3fa}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Model\+Unknown}} = 3
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_ae167061245829126ed19ec80ee784fec}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Model\+HT1}} = \char`\"{}LSS-\/HT1\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a1289d537ee3098ee21327a042a30fa58}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Model\+ST1}} = \char`\"{}LSS-\/ST1\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a2abbc79738129650d8e05104afc6a591}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Model\+HS1}} = \char`\"{}LSS-\/HS1\char`\"{}
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a8428b1db0991b0165394f807b8c53bf3}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Session}} = 0
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_acfd320b02210ebd9cd367135b7c1ecad}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Config}} = 1
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_afb15a7cad4eb4294822cc59dd208e471}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Instantaneous\+Speed}} = 2
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a7e3d7df6ccf09c139ebe404d6bc047fd}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Target\+Travel\+Speed}} = 3
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a1a9935f35a6310b554f0145919c40e0d}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Set\+Session}} = 0
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a1d6ef43f66c060dbaf760b696bc9d496}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Set\+Config}} = 1
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a84d6874e2da504b24fd3e52844483998}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Mode\+Serial}} = 0
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_abaa3a0fe18f39c56b2071126773959af}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Mode\+Position\+RC}} = 1
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a97fa416f195741b0fd56aedb8e05b641}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Mode\+Wheel\+RC}} = 2
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a36a7ce8233118efb78ae87cd50a2d001}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Gyre\+Clockwise}} = 1
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a2bba6f4313ce2e286788fc2c9984a8d4}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Gyre\+Counter\+Clockwise}} = -\/1
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_afecae1d92fe326637d915504a33d21bf}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+LED\+\_\+\+Black}} = 0
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_ae05bef511a4bea8b6182e992d66256ef}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+LED\+\_\+\+Red}} = 1
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a5746b66ff6db9cd00d7778bf4148fd31}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+LED\+\_\+\+Green}} = 2
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a09f6696e747bcf5196ff92385ee9b834}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+LED\+\_\+\+Blue}} = 3
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a6246e39e19266e1add62d534e9fcb54f}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+LED\+\_\+\+Yellow}} = 4
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_a47d060fe80bfa4db02724f12467c053c}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+LED\+\_\+\+Cyan}} = 5
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_ad53ee190c756c120a033d8203bbe24bc}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+LED\+\_\+\+Magenta}} = 6
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1lss_aaf611f9b04de489dfe6349445c3fff92}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+LED\+\_\+\+White}} = 7
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_ab69faf69cbfe549b4f7f3713cea9ec2f}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Reset}} = \char`\"{}RESET\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_aaf8082d7a49b1c02116eac1c170e943c}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Limp}} = \char`\"{}L\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a253d98ef9f8b33ff63fc48fd63bc77c3}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Hold}} = \char`\"{}H\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_af2f5dda249aa5dbdb6947f88a8306a4d}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Parameter\+Time}} = \char`\"{}T\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a8c8456ff4cf721d1d46c9fb5a7e38e2f}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Parameter\+Speed}} = \char`\"{}S\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a3ebc7024770698f3c24ed78488feeb80}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Move}} = \char`\"{}D\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_ad91afa04f6bc59afb959ad705e941846}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Move\+Relative}} = \char`\"{}MD\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a5cdfc6502bda6dce0e38dc47a0f337ac}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Wheel}} = \char`\"{}WD\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a1a5d25ea1f037b4f9330381bb52deaf4}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Wheel\+RPM}} = \char`\"{}WR\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_ae38447f5b72ec39934ed0e42250dc737}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Origin\+Offset}} = \char`\"{}O\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a1bb65adb360975b4cedf92ef061973d3}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Angular\+Range}} = \char`\"{}AR\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_ac463ab5efba7a277c3444043dcbbc74e}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Max\+Speed}} = \char`\"{}SD\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_ae3393d6896768e7919d065608fbc78b1}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Max\+Speed\+RPM}} = \char`\"{}SR\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_ac7ebfb270519f44059acd36770fcf53e}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Color\+LED}} = \char`\"{}LED\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a16df6a2c2cf3d830a521058c8d7d8f8e}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Gyre\+Direction}} = \char`\"{}G\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_afa744e38899c126f38d713a170d7de64}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Angular\+Stiffness}} = \char`\"{}AS\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a643733c521c717c8dc2220714a184ab9}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Angular\+Holding\+Stiffness}} = \char`\"{}AH\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_aa7980ec8da3c98685532f14c526caf6b}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Angular\+Acceleration}} = \char`\"{}AA\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_aa9f6342cbcc89a5f81454ca1eebf4d8f}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Angular\+Deceleration}} = \char`\"{}AD\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a25322cf1d7f1325784b5b2ad6e243024}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Action\+Enable\+Motion\+Control}} = \char`\"{}EM\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a9d7a4c1fdb8c46ee6dca0686d80ad304}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Status}} = \char`\"{}Q\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_aeb7fecaac93dbf48587e3f1f181f6814}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Origin\+Offset}} = \char`\"{}QO\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a82f5eb6566060948f7aea57db18eba72}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Angular\+Range}} = \char`\"{}QAR\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a1c9cfb4cdd4045ccbd75c68638e07893}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Position\+Pulse}} = \char`\"{}QP\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a0778b052434e43ad72504703558d2b13}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Position}} = \char`\"{}QD\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a451a54f6e1c080b673210ae0b8eaf065}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Speed}} = \char`\"{}QWD\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a99c649da8de897829f688c16c286ffd5}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Speed\+RPM}} = \char`\"{}QWR\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_ac79900a1e397764016f7e4bea13fdad1}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Speed\+Pulse}} = \char`\"{}QS\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_aba372031677f3125b6f024c01e98015b}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Max\+Speed}} = \char`\"{}QSD\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a07befb3c547a01f2faa9a4e3e73c80b3}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Max\+Speed\+RPM}} = \char`\"{}QSR\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a64b2b50aa19d0ca09fa2a6e2c86c3472}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Color\+LED}} = \char`\"{}QLED\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_ab509a87b8fde75836f604e7cd18a20f8}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Gyre}} = \char`\"{}QG\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_ae66fa1418b40d5ab84df9c9f0a9e6f44}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+ID}} = \char`\"{}QID\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_aaba8e15d23a968a58daee9391ebbe167}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Baud}} = \char`\"{}QB\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a3b51bcde3b794d2e8ffacad7a644ff82}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+First\+Position}} = \char`\"{}QFD\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a656243ffef38969c3bedefc61caf80e9}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Model\+String}} = \char`\"{}QMS\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a5476e577a429bdfa7c8e63066963014a}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Serial\+Number}} = \char`\"{}QN\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a00f5efc7457f854c1991a361f455dde9}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Firmware\+Version}} = \char`\"{}QF\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a512f3f5bd33eac1c98aea41f6e0ffdac}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Voltage}} = \char`\"{}QV\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_aa832e4c33917030ecb04d357fdcf48ec}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Temperature}} = \char`\"{}QT\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_ada38300038f86789a26bf05436aa66e0}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Current}} = \char`\"{}QC\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a3373eb88e9c9050883ef342d352da806}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Angular\+Stiffness}} = \char`\"{}QAS\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a9c90855907133b5d393eed83a378ad3b}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Angular\+Holding\+Stiffness}} = \char`\"{}QAH\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a2bb0a754b1e6f02e0afae381efee09ff}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Angular\+Acceleration}} = \char`\"{}QAA\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a39dacfad3b000e31949afc5fda7e63f7}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Angular\+Deceleration}} = \char`\"{}QAD\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a830b0783ed904150b373c4c9d853a14b}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Enable\+Motion\+Control}} = \char`\"{}QEM\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a13e4a5cac56b650243c6ff205b3199a9}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Query\+Blinking\+LED}} = \char`\"{}QLB\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a96db53347af9beae92f07d324931683a}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+ID}} = \char`\"{}CID\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_af6fbbc3bbb60a054ba50b5463055f68d}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+Baud}} = \char`\"{}CB\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a71e0dff86b7fbec8ea40b62fc58c013a}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+Origin\+Offset}} = \char`\"{}CO\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a219adce02425e0c48b69551c8458378f}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+Angular\+Range}} = \char`\"{}CAR\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a4b7f4e7efc6eaf2be5c92358e7810ace}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+Max\+Speed}} = \char`\"{}CSD\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a1f2c47f6d57a36939d7626cc0cc4e344}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+Max\+Speed\+RPM}} = \char`\"{}CSR\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a57385dbd46468c723c0e5c75a2b6d35f}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+Color\+LED}} = \char`\"{}CLED\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a7a1a9d0f3514e040d589f7b6c1c695c4}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+Gyre\+Direction}} = \char`\"{}CG\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_abd242294c5a1d679830ddb0923ccfdc4}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+First\+Position}} = \char`\"{}CFD\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_ae57f4a5cd382125f39508216f4c229c4}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+Mode}} = \char`\"{}CRC\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a5c3ee7a5d66bd5f16736e49f3006a309}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+Angular\+Stiffness}} = \char`\"{}CAS\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_ab4fc62918359c251be2fd689605dc0e0}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+Angular\+Holding\+Stiffness}} = \char`\"{}CAH\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a1e77347e8b9ba026404b7a6f67ebad8e}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+Angular\+Acceleration}} = \char`\"{}CAA\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a46db959571fb55dbeaca7c4a22c7e347}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+Angular\+Deceleration}} = \char`\"{}CAD\char`\"{}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1lss_a59fb26b01b2b8f15fea1d5ec8c98cfdd}{hardware\+\_\+center.\+lss.\+LSS\+\_\+\+Config\+Blinking\+LED}} = \char`\"{}CLB\char`\"{}
+\end{DoxyCompactItemize}

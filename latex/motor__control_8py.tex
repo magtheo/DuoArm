@@ -1,0 +1,50 @@
+\hypertarget{motor__control_8py}{}\doxysection{src/hardware\+\_\+center/hardware\+\_\+center/motor\+\_\+control.py File Reference}
+\label{motor__control_8py}\index{src/hardware\_center/hardware\_center/motor\_control.py@{src/hardware\_center/hardware\_center/motor\_control.py}}
+
+
+This script is used to control LSS servo motors during mapping and path execution.  
+
+
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classhardware__center_1_1motor__control_1_1motorControl}{hardware\+\_\+center.\+motor\+\_\+control.\+motor\+Control}}
+\begin{DoxyCompactList}\small\item\em This class encapsulates methods to control motor behavior based on received commands. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespacehardware__center_1_1motor__control}{hardware\+\_\+center.\+motor\+\_\+control}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespacehardware__center_1_1motor__control_aa430c835a7025b17bfdf625b49afd57e}{hardware\+\_\+center.\+motor\+\_\+control.\+main}} (args=None)
+\begin{DoxyCompactList}\small\item\em Main function to initialize the ROS node. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+string \mbox{\hyperlink{namespacehardware__center_1_1motor__control_a1dc548511fef11deaf9a0bcf2837b3a2}{hardware\+\_\+center.\+motor\+\_\+control.\+CST\+\_\+\+LSS\+\_\+\+Port}} = \textquotesingle{}/dev/lss\+Motor\+Controller\textquotesingle{}
+\begin{DoxyCompactList}\small\item\em Constants for LSS Port configuration, with udev tools we have created symlinks to the physical ports, make sure to always connect usb to the same port. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespacehardware__center_1_1motor__control_a3d3e15c5c8db9987a7ae5be48c0e6299}{hardware\+\_\+center.\+motor\+\_\+control.\+CST\+\_\+\+LSS\+\_\+\+Baud}} = LSS\+\_\+\+Default\+Baud
+\item 
+\mbox{\hyperlink{namespacehardware__center_1_1motor__control_a15cb0983ba414ddb7cbbeeb5da87a6f5}{hardware\+\_\+center.\+motor\+\_\+control.\+lss0}} = LSS(0)
+\begin{DoxyCompactList}\small\item\em Initialize and open a serial port for communication. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespacehardware__center_1_1motor__control_a718dff5e149fe09d04890daa8a7ef7a2}{hardware\+\_\+center.\+motor\+\_\+control.\+lss1}} = LSS(1)
+\item 
+\mbox{\hyperlink{namespacehardware__center_1_1motor__control_a41375b90688cd91391a073533be5d0a6}{hardware\+\_\+center.\+motor\+\_\+control.\+lss2}} = LSS(2)
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1motor__control_a15c2d86445eaf135c3bb84dddbf4548a}{hardware\+\_\+center.\+motor\+\_\+control.\+lss0\+\_\+act\+\_\+angle}} = 0
+\begin{DoxyCompactList}\small\item\em Initial motor angles and positions. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1motor__control_a6355d465ca7db82e6eb2ef99739c8c46}{hardware\+\_\+center.\+motor\+\_\+control.\+lss1\+\_\+act\+\_\+angle}} = 0
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1motor__control_acbba2ddbcc7d3260439e71b3159f0938}{hardware\+\_\+center.\+motor\+\_\+control.\+lss0\+\_\+act\+\_\+position}} = 0
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1motor__control_a165486b5f3fd0905f1f1710d9b455c5d}{hardware\+\_\+center.\+motor\+\_\+control.\+lss1\+\_\+act\+\_\+position}} = 0
+\item 
+int \mbox{\hyperlink{namespacehardware__center_1_1motor__control_a8b0e134a261df086cfff250758051b29}{hardware\+\_\+center.\+motor\+\_\+control.\+gear\+\_\+ratio}} = 2
+\begin{DoxyCompactList}\small\item\em Gear ratio used for calculations. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This script is used to control LSS servo motors during mapping and path execution. 
+

@@ -70,7 +70,7 @@ class Mapper(Node):
         try:
             angles = msg.data  # Assuming this is already an array of float64
 
-            # publish to display
+            # publish angles to display
             # float_array = Float64MultiArray()
             # dim = MultiArrayDimension()
             # dim.label = "joint_angles"
