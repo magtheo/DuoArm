@@ -12,7 +12,9 @@ setup.py
 launch/path_planning_launch.py
 path_planning/__init__.py
 path_planning/auto_mapper.py
+path_planning/eq_testing.py
 path_planning/equation.py
+path_planning/motor_controller_OLD.py
 path_planning/path_planner.py
 resource/path_planning
 test/test_copyright.py

@@ -1,11 +1,15 @@
 /home/theomagnor/DuoArm/install/path_planning/lib/python3.10/site-packages/path_planning/auto_mapper.py
+/home/theomagnor/DuoArm/install/path_planning/lib/python3.10/site-packages/path_planning/motor_controller_OLD.py
 /home/theomagnor/DuoArm/install/path_planning/lib/python3.10/site-packages/path_planning/equation.py
 /home/theomagnor/DuoArm/install/path_planning/lib/python3.10/site-packages/path_planning/path_planner.py
 /home/theomagnor/DuoArm/install/path_planning/lib/python3.10/site-packages/path_planning/__init__.py
+/home/theomagnor/DuoArm/install/path_planning/lib/python3.10/site-packages/path_planning/eq_testing.py
 /home/theomagnor/DuoArm/install/path_planning/lib/python3.10/site-packages/path_planning/__pycache__/auto_mapper.cpython-310.pyc
+/home/theomagnor/DuoArm/install/path_planning/lib/python3.10/site-packages/path_planning/__pycache__/motor_controller_OLD.cpython-310.pyc
 /home/theomagnor/DuoArm/install/path_planning/lib/python3.10/site-packages/path_planning/__pycache__/equation.cpython-310.pyc
 /home/theomagnor/DuoArm/install/path_planning/lib/python3.10/site-packages/path_planning/__pycache__/path_planner.cpython-310.pyc
 /home/theomagnor/DuoArm/install/path_planning/lib/python3.10/site-packages/path_planning/__pycache__/__init__.cpython-310.pyc
+/home/theomagnor/DuoArm/install/path_planning/lib/python3.10/site-packages/path_planning/__pycache__/eq_testing.cpython-310.pyc
 /home/theomagnor/DuoArm/install/path_planning/share/ament_index/resource_index/packages/path_planning
 /home/theomagnor/DuoArm/install/path_planning/share/path_planning/package.xml
 /home/theomagnor/DuoArm/install/path_planning/share/path_planning/launch/path_planning_launch.py

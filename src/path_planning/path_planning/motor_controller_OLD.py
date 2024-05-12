@@ -66,8 +66,13 @@ class motorControl(Node):
 
         self.total_movements = 0
         self.completed_movements = 0
-        self.current_movement_nr = 0
 
+        self.calc_joint_angles_subscription = self.create_subscription(
+            Float64MultiArray,
+            'calculated_joint_angles',
+            self.calc_joint_angles_callback,
+            10
+        )
 
         
         self.actual_joint_angles_publisher = self.create_publisher(
@@ -95,6 +100,13 @@ class motorControl(Node):
             'manual_angle_readings',
             10
         )
+        # Subscriber for receiving start test command
+        self.start_read_sub = self.create_subscription(
+            String,
+            'start_ref_read',
+            self.read_ref_point_callback,
+            10
+        )
 
         self.limp_and_reset_origin_sub = self.create_subscription(
             String,
@@ -102,131 +114,8 @@ class motorControl(Node):
             self.limp_and_set_origin,
             10)
         
-        self.read_angels_sub = self.create_subscription(
-            String, 'read_angles', self.read_angles_callback, 10)
-        
-        self.joint_angles_subscription = self.create_subscription(
-            Float64MultiArray, 'joint_angles_array', self.iterate_and_move_servos_callback, 10)
+       
 
-        self.path_done_pub = self.create_publisher(
-            String, 'system_state_request', 10)
-        
-        self.state_subscription = self.create_subscription(
-            String, 'action_controller_state', self.state_callback, 10)
-
-
-  
-    def load_and_set_boundaries(self):
-        try:
-            with open('boundary_path_and_rail_position.json', 'r') as file:
-                data = json.load(file)
-                
-                self.boundaries = {
-                    'lss0': {'min': data['boundaries'][0]['top_lss0'], 'max': data['boundaries'][1]['bottom_lss0']},
-                    'lss1': {'min': data['boundaries'][1]['bottom_lss1'], 'max': data['boundaries'][0]['top_lss1']}
-                }
-            self.get_logger().info(f"Boundaries loaded")
-        except FileNotFoundError:
-            self.get_logger().error("boundary_path_and_rail_position.json found.")
-        except KeyError as e:
-            self.get_logger().error(f"Error reading boundaries from file: {e}")
-
-    def setup_servos_and_queues(self):
-        self.servos = {'lss0': LSS(0), 'lss1': LSS(1)}
-        self.angles_queues = {key: queue.Queue() for key in self.servos}
-
-    def init_servo_threads(self):
-        for key in self.servos:
-            thread = threading.Thread(target=self.servo_control_loop, args=(key,))
-            thread.start()
-
-    def servo_control_loop(self, servo_key):
-        while True:
-            target_angle = self.angles_queues[servo_key].get()
-            with self.lock:
-                self.completed_movements += 1
-            self.control_servo_speed(servo_key, target_angle)
-
-
-    def control_servo_speed(self, servo_key, target_angle):
-        tolerance = 1.0  # degrees within which we consider the target reached
-        servo = self.servos[servo_key]
-        self.get_logger().info(f" servo{servo_key} is moving to new target angle{target_angle}")
-
-        kp = 0.2  # Proportional gain
-        ki = 0.02 # Integral gain
-        kd = 0.05  # Derivative gain
-        integral = 0
-        last_error = 0
-
-        while True:
-            with self.lock:
-                current_angle = self.calc_angle(servo.getPosition())
-                if current_angle is None:
-                    raise ValueError("Failed to read position from servo")
-                
-                self.publish_joint_angles(servo_key, current_angle)  # Publish the current angles
-                target_angle_minus_current_angle = target_angle - current_angle
-                integral += target_angle_minus_current_angle * 0.2  # Accumulate integral (error * time)
-                derivative = (target_angle_minus_current_angle - last_error) / 0.2  # Derivative (change in error / time)
-                last_error = target_angle_minus_current_angle
-
-                if np.isclose(current_angle, target_angle, atol=tolerance):
-                    servo.wheelRPM(0)  # Stop the servo
-                    self.get_logger().info(f"target angle {self.completed_movements}/{self.total_movements} reached for {servo_key}")
-                    break
-
-                speed = kp * target_angle_minus_current_angle + ki * integral + kd * derivative
-                servo.wheelRPM(speed)
-
-            # time.sleep(0.1)  # Adjust timing as necessary for more responsive control
-            self.get_logger().info(f"Servo: {servo_key}, speed: {np.round(speed)}, difference: {np.round(target_angle_minus_current_angle)}, target angle: {target_angle}, current angle: {current_angle}")
-
-
-    def iterate_and_move_servos_callback(self, msg):
-        self.get_logger().info("motor_controller received array of angles")
-        angles = np.array(msg.data)
-        num_cycles = 3  # Number of times to repeat the path back and forth
-        self.follow_path(angles, num_cycles)
-        
-
-    def follow_path(self, angles, num_cycles):
-        self.total_movements = len(angles)*2*num_cycles
-        for _ in range(num_cycles):
-            # Forward direction
-            self.get_logger().info("Moving forward")
-            for i in range(0, len(angles), 2):
-                self.angles_queues['lss0'].put(angles[i])
-                self.angles_queues['lss1'].put(angles[i + 1])
-                self.current_movement_nr += 2
-                time.sleep(2)  # Wait for some time between movements
-
-            # Wait for all movements to complete before reversing
-            while self.completed_movements < self.current_movement_nr:
-                time.sleep(0.5)
-
-            self.get_logger().info("Reversing direction")
-            # Reverse direction
-            for i in range(len(angles) - 2, -1, -2):
-
-                self.angles_queues['lss0'].put(angles[i])
-                self.angles_queues['lss1'].put(angles[i + 1])
-                self.current_movement_nr += 2
-                time.sleep(2)  # Wait for some time between movements
-            
-            # Wait for all movements to complete before next cycle
-            while self.completed_movements < self.current_movement_nr:
-                time.sleep(0.1)
-
-        # Reset movements counters after completion of all cycles
-        self.completed_movements = 0
-        self.total_movements = 0
-        self.current_movement_nr = 0
-        self.get_logger().info("All cycles completed")
-        self.path_done_pub.publish(String(data="path_done"))
-        self.get_logger().info(f"published done to action_controller")
-
-    
     def limp_and_set_origin(self, msg):
         """
         Makes the servos go limp, waits for X seconds, and then sets a new origin offset.
@@ -267,6 +156,15 @@ class motorControl(Node):
         if self.calc_angle(lss1.getPosition()) == -180.0:
             lss1.setOriginOffset(-1800, LSS_SetConfig)
 
+    def set_target_angles_callback(self, request, response):
+        target_angles = request.target_angles
+        # Code to move the motors to target_angles
+        self.move_servos_mapping(target_angles)
+        actual_angles = self._callback()
+        response.actual_angles = actual_angles
+        response.success = True  # Change based on actual movement success
+        response.message = 'Moved successfully'  # Change based on actual movement success
+        return response
 
     def publish_joint_angles(self, servo_key, angle):
         data = {'servo': servo_key, 'angle': angle}
@@ -275,6 +173,14 @@ class motorControl(Node):
         self.joint_angles_publisher.publish(msg)
         self.get_logger().info(f"Published current angles for {servo_key}")
         
+    def calc_joint_angles_callback(self, msg):
+        received_joint_angles = msg.data
+        self.get_logger().info(f'Received calculated joint angles: {received_joint_angles}')
+        self.move_servos_mapping(received_joint_angles)
+        # to ensure servos have reached their positions before reading
+        time.sleep(1)  # TODO adjust delay
+        self.read_and_pub_servo_angles()
+
     
     #def send_actual_joint_angles(self):
     def calc_position(self, angle):
@@ -293,23 +199,49 @@ class motorControl(Node):
             return None  # Or handle the error in a way that suits your application
 
 
-    def read_angles_callback(self, msg):
-        # Fetch current positions from servos
+    def move_servos_mapping(self, received_joint_angles):
+        deg0 = received_joint_angles[1] #/ gear_ratio
+        deg1 = received_joint_angles[0] #/ gear_ratio
+
+        # move servo if within limits
+        lss0_position = self.calc_position(deg0)
+        lss1_position = self.calc_position(deg1)
+        lss0.move(lss0_position)
+        lss1.move(lss1_position)
+        self.get_logger().info(f"lss0 tried moving to angle{deg0}")
+        self.get_logger().info(f"lss1 tried moving to angle{deg1}")
+        self.get_logger().info(f"lss0 tried moving to pos{lss0_position}")
+        self.get_logger().info(f"lss1 tried moving to pos{lss1_position}")
+
+
+    def read_and_pub_servo_angles(self): # USED during old mapping sequence
+        # Fetch current positions from servos, convert to angles, and publish
         lss0_act_position = float(lss0.getPosition())
         lss1_act_position = float(lss1.getPosition())
-
-        # Convert positions back to angles
         lss0_act_angle = self.calc_angle(lss0_act_position)
         lss1_act_angle = self.calc_angle(lss1_act_position)
         actual_joint_angles = [lss0_act_angle, lss1_act_angle]
         
         transmission_msg = Float64MultiArray()
         transmission_msg.data = actual_joint_angles
-        self.actual_joint_angles_publisher.publish(transmission_msg) # mapping
+        self.actual_joint_angles_publisher.publish(transmission_msg)
         self.get_logger().info(f"Published angle readings: LSS0:{lss0_act_angle}| LSS1:{lss1_act_angle}")
 
-    
-    def manualy_callback(self): # used during testing
+    def ref_point_read_and_pub_servo_angles(self):
+        # Fetch current positions from servos, convert to angles, and publish
+        lss0_act_position = float(lss0.getPosition())
+        lss1_act_position = float(lss1.getPosition())
+        lss0_act_angle = self.calc_angle(lss0_act_position)
+        lss1_act_angle = self.calc_angle(lss1_act_position)
+        actual_joint_angles = [lss0_act_angle, lss1_act_angle]
+        
+        transmission_msg = Float64MultiArray()
+        transmission_msg.data = actual_joint_angles
+        self.manual_readings_pub.publish(transmission_msg)
+        self.get_logger().info(f"Published angle readings: LSS0:{lss0_act_angle}| LSS1:{lss1_act_angle}")
+
+
+    def manualy_callback(self): # used to manualy read angles during testin
         self.get_logger().info( 'test ')
         lss0.limp()
         lss1.limp()
@@ -327,19 +259,12 @@ class motorControl(Node):
             self.get_logger().info('Starting to read motor angles')
             self.manualy_callback()    
 
+    def read_ref_point_callback(self, msg):
+        if msg.data == "start":
+            lss0.limp()
+            lss1.limp()
+            self.ref_point_read_and_pub_servo_angles()
 
-
-    def check_state_and_stop(self):            
-        self.get_logger().info('enterd check state and stop predefined path')
-        """Check the current state and stop movement if it's changed to standby."""
-        if self.state == 'standby':
-            # Stop the movement of servos
-            for servo_key in self.servos:
-                self.get_logger().info('stop path, for loop iteration')
-                self.angles_queues[servo_key].queue.clear()  # Clear the angles queue
-                self.servos[servo_key].wheelRPM(0)  # Stop the servo
-            self.completed_movements = 0
-            self.total_movements = 0
 
     def state_callback(self, msg):
         self.state = msg.data
