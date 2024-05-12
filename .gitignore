@@ -1,0 +1,12 @@
+#vscode
+.vscode
+*.log
+
+#python
+.venv
+__pycache__
+
+# ros
+/build/
+/log/
+/install/
