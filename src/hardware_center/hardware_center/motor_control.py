@@ -62,7 +62,7 @@ class motorControl(Node):
         self.threads = []
         self.init_servo_threads()
 
-        self.init_communication
+        self.init_communication()
 
         self.lock = threading.Lock()
         self.current_target = None
