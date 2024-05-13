@@ -18,7 +18,7 @@ class HardwareInterfaceController(Node):
         self.current_system_state = 'standby'
         self.previous_system_state = None
 
-        self.state_subscriber = self.create_subscription(String, 'action_controller_state', self.check_state_callback, 10)
+        self.state_subscriber = self.create_subscription(String, 'system_state', self.check_state_callback, 10)
         self.send_map_button_press_publisher = self.create_publisher(String, 'map_button_pressed', 10)
         self.set_system_state_by_request_publisher = self.create_publisher(String, 'system_state_request', 10)
 
@@ -39,10 +39,9 @@ class HardwareInterfaceController(Node):
         self.avail_serial_ports = None
         self.CST_LSS_Port = '/dev/lssMotorController'
         self.ser_obj_controller = serial.Serial('/dev/arduinoNano', 115200)
-        # self.set_usb_and_serial_port()
         self.CST_LSS_Baud = LSS_DefaultBaud
-        initBus(self.CST_LSS_Port, self.CST_LSS_Baud)
-        self.wait_to_read_serial_values = False
+        self.ser_obj_controller.reset_input_buffer()
+       
 
         """Attributes related to the received analog values:"""
         self.x_analog_value = 0
@@ -75,34 +74,6 @@ class HardwareInterfaceController(Node):
         """Attributes related to the standby state"""
         self.standby_logger_printed = False
 
-
-
-
-    # def set_usb_and_serial_port(self):
-
-    #     self.avail_usb_ports = glob.glob('/dev/ttyUSB*')
-    #     self.avail_serial_ports = glob.glob('/dev/ttyACM*')
-
-    #     if not self.avail_usb_ports and self.avail_serial_ports:
-    #         self.get_logger().info('No available USB ports found. Check connection between the Raspberry PI and LSS adapter board.')
-    #         self.ser_obj = serial.Serial(self.avail_serial_ports[0], 115200)
-    #         self.get_logger().info(f'Successfully set up the serial connection at {self.avail_serial_ports[0]}')
-
-        
-    #     elif not self.avail_serial_ports and self.avail_usb_ports:
-    #         self.get_logger().info('No available serial ports found. Check connection between the Raspberry PI and Arduino')
-    #         self.CST_LSS_Port = self.avail_usb_ports[0]
-    #         self.get_logger().info(f'Successfully assigned CST_LSS_port to {self.avail_usb_ports[0]}')
-        
-    #     elif not self.avail_serial_ports and not self.avail_usb_ports:
-    #         self.get_logger().info('No available serial or USB ports found. Check connection between the Raspberry PI, Arduino and the LSS adapter board')
-
-    #     else:
-    #         self.CST_LSS_Port = self.avail_usb_ports[0]
-    #         self.ser_obj = serial.Serial(self.avail_serial_ports[0], 115200)
-    #         self.get_logger().info(f'Successfully set up the serial connection at {self.avail_serial_ports[0]} and assigned CST_LSS_port to {self.avail_usb_ports[0]}')
-
-    
     def set_boundaries_and_last_rail_position_data(self):
         try:
             with open('boundary_path_and_rail_position.json', 'r') as file:
@@ -166,25 +137,19 @@ class HardwareInterfaceController(Node):
         ]
 
     def read_values_from_serial(self):
-
-        if (self.wait_to_read_serial_values == False):
-            time.sleep(1)
-            self.wait_to_read_serial_values = True
-
+        received_vals = self.ser_obj_controller.readline().decode().strip()
+        values = received_vals.split(',')
+        if (len(values) == 6):
+            self.x_analog_value = int(values[0])
+            self.z_analog_value = int(values[1])
+            self.joystick_button_pressed = int(values[2])
+            self.reset_button_pressed = int(values[3])
+            self.run_predefined_path_button_pressed = int(values[4])
+            self.map_button_pressed = int(values[5])
+            self.update_simultaneous_button_press_conditions()
         else:
-            received_vals = self.ser_obj_controller.readline().decode().strip()
-            values = received_vals.split(',')
-            if (len(values) == 6):
-                self.x_analog_value = int(values[0])
-                self.z_analog_value = int(values[1])
-                self.joystick_button_pressed = int(values[2])
-                self.reset_button_pressed = int(values[3])
-                self.run_predefined_path_button_pressed = int(values[4])
-                self.map_button_pressed = int(values[5])
-                self.update_simultaneous_button_press_conditions()
-            else:
-                self.x_analog_value = self.z_analog_value = self.joystick_button_pressed = self.reset_button_pressed = \
-                self.run_predefined_path_button_pressed = self.map_button_pressed = None
+            self.x_analog_value = self.z_analog_value = self.joystick_button_pressed = self.reset_button_pressed = \
+            self.run_predefined_path_button_pressed = self.map_button_pressed = None
     
     def move_arm_north(self):
 

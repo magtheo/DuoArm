@@ -10,21 +10,36 @@ import numpy as np
 class PathExecutor(Node):
     def __init__(self):
         super().__init__('path_executor')
+        
+        self.init_communication()
 
-        # Subscription to the state controller
+    def init_communication(self):
+        """
+        Initialize communication for the node.
+        Setup all necessary publishers and subscribers for sending and receiving commands
+        and data to and from other components of ROS system.
+        """
+        # Subscription to the state
         self.state_subscription = self.create_subscription(
-            String, 'action_controller_state', self.state_callback, 10)
+            String, 'system_state', self.state_callback, 10)
 
-        # Publisher to send joint angles
+        # Publisher to send joint angles to motorController for path execution
         self.joint_angles_publisher = self.create_publisher(
             Float64MultiArray, 'joint_angles_array', 10)
 
     def state_callback(self, msg):
+        """React to state changes by checking if the predefined path needs to be run and, if so, executing it."""
         if msg.data == 'run_predefined_path':
             self.get_logger().info("Path execution state activated.")
             self.execute_path()
 
     def execute_path(self):
+        """
+        Execute the path as per the predefined joint angles. This involves:
+        - Loading the path points from a JSON file.
+        - Sending the joint angles to the motor controller for execution.
+        If no angles are found, it logs the absence of data.
+        """
         # Load joint angles from the JSON file
         try:
             with open('boundary_path_and_rail_position.json', 'r') as file:
@@ -50,6 +65,7 @@ class PathExecutor(Node):
 
 
 def main(args=None):
+    """Main function to initialize the ROS node, spin the PathExecutor, and handle shutdown."""
     rclpy.init(args=args)
     executor = PathExecutor()
     rclpy.spin(executor)

@@ -8,12 +8,35 @@ import numpy as np
 import time
 
 class Mapper(Node):
+    """
+    @class Mapper
+    @brief Used to set nulpoints, boundarys and a path that the arm can follow. The Mapper works communicates with MotorController to achive this funcitonality, as the MotorController can read angels of servos
+
+    The data generated wil be stored in a JSON file that is used during joysitck controll and path execution.
+    """
     def __init__(self):
+        """Initialize the Mapper node with mapping settings."""
         super().__init__('mapper')
 
-        # Subscriptions and publishers
+        self.joints = {'left': 0, 'right': 0}
+        self.mapping_data = None
+        self.button_press_index = 0
+        self.number_of_points = 3
+        self.point_number = 0
+        self.set_mapping_data()
+        self.init_communication()
+
+        self.state = 'standby'
+
+    def init_communication(self):
+        """
+        Initialize communication for the node.
+        Setup all necessary publishers and subscribers for sending and receiving commands
+        and data to and from other components of ROS system.
+        """
+                # Subscriptions and publishers
         self.state_subscription = self.create_subscription(
-            String, 'action_controller_state', self.state_callback, 10)
+            String, 'system_state', self.state_callback, 10)
         
         self.button_press_sub = self.create_subscription(
             String, 'map_button_pressed', self.button_press_callback, 10)
@@ -36,17 +59,9 @@ class Mapper(Node):
         # Publishing mapping completion notification
         self.mapping_done_pub = self.create_publisher(
             String, 'system_state_request', 10)
-        
-        self.joints = {'left': 0, 'right': 0}
-        self.mapping_data = None
-        self.button_press_index = 0
-        self.number_of_points = 3
-        self.point_number = 0
-        self.set_mapping_data()
-
-        self.state = 'standby'
 
     def state_callback(self, msg):
+        """Handle updates to the state received from the system_state topic."""
         if msg.data == 'map':
             self.state = 'map'
             self.get_logger().info(f'mapper state set to {self.state}')
@@ -54,6 +69,10 @@ class Mapper(Node):
 
 
     def start_mapping(self):
+        """
+        Begin the mapping process by making the motors limp, this is done by sending a message to MotorController.
+        After 25 sec the MotorController has set nullpoints, and the operator is prompted to move the arm to first set of boundarys.
+        """
         # Make the motors limp
         self.set_null_points_pub.publish(String(data='start'))
         self.get_logger().info('start map')
@@ -61,12 +80,16 @@ class Mapper(Node):
         self.get_logger().info("--- move the arm to top position and press map button to record max angels. --- ") 
 
 
-    def button_press_callback(self, msg):
+    def button_press_callback(self):
+        """Respond to button press events for mapping.
+        Button press index is incresed by 1 and reading angles is requested.
+        """
         self.get_logger().info("Recieved button press in mapper node ") 
         self.button_press_index += 1
         self.read_angels_pub.publish(String(data='start'))
 
     def joint_angles_callback(self, msg):
+        """When the read joint angles are sendt back, this function runs, saving the angles as either boundaries or path points, depending on what button_press_index is."""
         try:
             angles = msg.data  # Assuming this is already an array of float64
 
@@ -118,12 +141,14 @@ class Mapper(Node):
 
         
     def pub_mapping_done(self):
+        """This wil publish to stateManager that the mapping is done"""
         msg = String()
         msg.data = "mapping_done"
         self.get_logger().info(f'Published a flag to the system state request topic: {msg.data}')
         self.mapping_done_pub.publish(msg)
 
     def set_mapping_data(self):
+        """Load existing mapping data from JSON file if it exist"""
         try:
             with open('boundary_path_and_rail_position.json', 'r') as file:
                 self.mapping_data = json.load(file)
@@ -134,6 +159,7 @@ class Mapper(Node):
                 return
 
     def save_to_file(self):
+        """Save the collected mapping data to a JSON file."""
         try:
             # Write updated data to file
             with open('boundary_path_and_rail_position.json', 'w') as file:
@@ -144,6 +170,7 @@ class Mapper(Node):
             self.get_logger().error(f"Failed to save mapping data: {e}")
 
 def main(args=None):
+    """Entry point for the Mapper node, handling ROS initialization, spinning, and shutdown."""
     rclpy.init(args=args)
     mapper = Mapper()
     rclpy.spin(mapper)

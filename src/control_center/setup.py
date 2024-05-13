@@ -25,7 +25,7 @@ setup(
             'command_window = control_center.command_window:main',
             'command_executor = control_center.command_executor:main',
             'display = control_center.display:main',
-            'action_controller = control_center.action_controller:main',
+            'state_manager = control_center.state_manager:main',
             'gui_buttons = control_center.gui_buttons:main',
         ],
     },

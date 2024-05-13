@@ -122,7 +122,7 @@ class motorControl(Node):
             String, 'system_state_request', 10)
         
         self.state_subscription = self.create_subscription(
-            String, 'action_controller_state', self.state_callback, 10)
+            String, 'system_state', self.state_callback, 10)
   
     def load_and_set_boundaries(self):
         """

@@ -11,7 +11,7 @@ class ROS2GUI(Node):
         self.master.title("ROS2 Control Panel")
 
         self.button_press_publisher = self.create_publisher(String, 'map_button_press', 10)
-        self.state_publisher = self.create_publisher(String, 'action_controller_state', 10)
+        self.state_publisher = self.create_publisher(String, 'system_state', 10)
 
         self.map_button = tk.Button(master, text="Map Button Press", command=self.simulate_map_button_press)
         self.map_button.pack(pady=10)

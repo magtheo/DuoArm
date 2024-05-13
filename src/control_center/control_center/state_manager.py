@@ -5,15 +5,15 @@ from rclpy.node import Node
 from std_msgs.msg import String
 import os
 
-class ActionController(Node):
+class StateManager(Node):
 
     def __init__(self):
-        super().__init__('action_controller')
+        super().__init__('state_manager')
         self.state = 'standby'
         
 
         # Publisher for the current state
-        self.state_publisher = self.create_publisher(String, 'action_controller_state', 10)
+        self.state_publisher = self.create_publisher(String, 'system_state', 10)
 
         # Subscriptions
         self.create_subscription(String, 'system_state_request', self.handle_state_change, 10)

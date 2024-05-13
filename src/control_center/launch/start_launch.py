@@ -16,10 +16,10 @@ def generate_launch_description():
         executable='command_executor',
         name='command_executor_node'
     )
-    action_controller = Node(
+    state_manager = Node(
         package='control_center',
-        executable='action_controller',
-        name='action_controller'
+        executable='state_manager',
+        name='state_manager'
     )
 
     # Display
@@ -78,7 +78,7 @@ def generate_launch_description():
 
     #ld.add_action(auto_mapper)
     #ld.add_action(path_planner)
-    ld.add_action(action_controller)
+    ld.add_action(state_manager)
     ld.add_action(motor_controller)
     ld.add_action(mapper)
     ld.add_action(path)    
