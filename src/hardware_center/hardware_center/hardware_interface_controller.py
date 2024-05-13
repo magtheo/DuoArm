@@ -38,7 +38,7 @@ class HardwareInterfaceController(Node):
         self.avail_usb_ports = None
         self.avail_serial_ports = None
         self.CST_LSS_Port = '/dev/lssMotorController'
-        self.ser_obj_controller = serial.Serial('/dev/arduinoNano', 115200)
+        self.ser_obj_controller = serial.Serial('/dev/ttyACM1', 115200)
         self.CST_LSS_Baud = LSS_DefaultBaud
         initBus(self.CST_LSS_Port, self.CST_LSS_Baud)
 
@@ -154,7 +154,7 @@ class HardwareInterfaceController(Node):
                 self.reset_button_pressed = int(values[3])
                 self.run_predefined_path_button_pressed = int(values[4])
                 self.map_button_pressed = int(values[5])
-                self.get_logger().info(f'read serial vals: {self.x_analog_value, self.z_analog_value, self.joystick_button_pressed, self.reset_button_pressed, self.run_predefined_path_button_pressed, self.map_button_pressed }')
+                # self.get_logger().info(f'read serial vals: {self.x_analog_value, self.z_analog_value, self.joystick_button_pressed, self.reset_button_pressed, self.run_predefined_path_button_pressed, self.map_button_pressed }')
 
                 self.update_simultaneous_button_press_conditions()
             else:
