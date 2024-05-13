@@ -26,7 +26,7 @@ class StateManager(Node):
         self.get_logger().info(f'Published the current system state: {msg.data}')
     
     def handle_state_change(self, msg):
-
+        self.get_logger().info(f'Handle state change request {msg.data}')
         if (msg.data == 'joystick_control'):
 
             if (self.state == 'standby'):
@@ -90,9 +90,9 @@ class StateManager(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    action_controller = ActionController()
+    state_manager = StateManager()
     try:
-        rclpy.spin(action_controller)
+        rclpy.spin(state_manager)
     except KeyboardInterrupt:
         pass
     finally:

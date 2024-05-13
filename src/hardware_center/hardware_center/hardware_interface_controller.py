@@ -40,7 +40,10 @@ class HardwareInterfaceController(Node):
         self.CST_LSS_Port = '/dev/lssMotorController'
         self.ser_obj_controller = serial.Serial('/dev/arduinoNano', 115200)
         self.CST_LSS_Baud = LSS_DefaultBaud
-        self.ser_obj_controller.reset_input_buffer()
+        initBus(self.CST_LSS_Port, self.CST_LSS_Baud)
+
+        #self.ser_obj_controller.reset_input_buffer()
+        self.wait_to_read_values_from_serial = False
        
 
         """Attributes related to the received analog values:"""
@@ -137,19 +140,26 @@ class HardwareInterfaceController(Node):
         ]
 
     def read_values_from_serial(self):
-        received_vals = self.ser_obj_controller.readline().decode().strip()
-        values = received_vals.split(',')
-        if (len(values) == 6):
-            self.x_analog_value = int(values[0])
-            self.z_analog_value = int(values[1])
-            self.joystick_button_pressed = int(values[2])
-            self.reset_button_pressed = int(values[3])
-            self.run_predefined_path_button_pressed = int(values[4])
-            self.map_button_pressed = int(values[5])
-            self.update_simultaneous_button_press_conditions()
+        if (not self.wait_to_read_values_from_serial):
+            time.sleep(1)
+            self.ser_obj_controller.flushInput()  # Flush incoming serial data
+            self.wait_to_read_values_from_serial = True
         else:
-            self.x_analog_value = self.z_analog_value = self.joystick_button_pressed = self.reset_button_pressed = \
-            self.run_predefined_path_button_pressed = self.map_button_pressed = None
+            received_vals = self.ser_obj_controller.readline().decode().strip()
+            values = received_vals.split(',')
+            if (len(values) == 6):
+                self.x_analog_value = int(values[0])
+                self.z_analog_value = int(values[1])
+                self.joystick_button_pressed = int(values[2])
+                self.reset_button_pressed = int(values[3])
+                self.run_predefined_path_button_pressed = int(values[4])
+                self.map_button_pressed = int(values[5])
+                self.get_logger().info(f'read serial vals: {self.x_analog_value, self.z_analog_value, self.joystick_button_pressed, self.reset_button_pressed, self.run_predefined_path_button_pressed, self.map_button_pressed }')
+
+                self.update_simultaneous_button_press_conditions()
+            else:
+                self.x_analog_value = self.z_analog_value = self.joystick_button_pressed = self.reset_button_pressed = \
+                self.run_predefined_path_button_pressed = self.map_button_pressed = None
     
     def move_arm_north(self):
 
@@ -410,7 +420,7 @@ class HardwareInterfaceController(Node):
     def send_system_state_request(self, request):
         msg = String()
         msg.data = request
-        self.get_logger().info(f'The following request was sent to the action_controller node: {request}, on the topic: system_state_request')
+        self.get_logger().info(f'The following request was sent to the state_manager node: {request}, on the topic: system_state_request')
         self.set_system_state_by_request_publisher.publish(msg)
 
     def calculate_time_to_run_rail_system(self, rpm):

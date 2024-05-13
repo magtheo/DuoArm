@@ -256,7 +256,7 @@ class motorControl(Node):
         self.current_movement_nr = 0
         self.get_logger().info("All cycles completed")
         self.path_done_pub.publish(String(data="path_done"))
-        self.get_logger().info(f"published done to action_controller")
+        self.get_logger().info(f"published done to state_manager")
 
     
     def limp_and_set_origin(self, msg):
