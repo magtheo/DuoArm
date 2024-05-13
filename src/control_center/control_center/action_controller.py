@@ -20,7 +20,6 @@ class ActionController(Node):
         
 
     def publish_state(self):
-        # This method publishes the state when it changes
         msg = String()
         msg.data = self.state
         self.state_publisher.publish(msg)
@@ -74,13 +73,14 @@ class ActionController(Node):
         
         elif (msg.data == 'standby'):
 
-            if (self.state == 'standby' or self.state == 'map'):
+            if (self.state == 'joystick_arm_control'):
+                self.state = msg.data
+                self.publish_state()
                 self.get_logger().info(f'The reset/"stop the active process" button press was ignored -> The system is in a state that cannot be changed: {self.state}')
                 return
 
             else:
-                self.state = msg.data
-                self.publish_state()
+                self.get_logger().info(f'The reset/"stop the active process" button press was ignored -> The system is in a state that cannot be changed: {self.state}')
                 return
         elif (msg.data == 'path_done' or msg.data == 'mapping_done'):
             self.state = 'standby'

@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 import os, glob
 
-package_name = 'motor_controller'
+package_name = 'hardware_center'
 
 setup(
     name=package_name,
@@ -22,8 +22,10 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'motor_control = motor_controller.motor_control:main',
-            'hardware_interface_controller = motor_controller.hardware_interface_controller:main'
+            'motor_control = hardware_center.motor_control:main',
+            'hardware_interface_controller = hardware_center.hardware_interface_controller:main',
+            'gpio_controller = hardware_center.gpio_controller:main',
+
         ],
     },
 )

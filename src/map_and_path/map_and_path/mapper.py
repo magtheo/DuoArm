@@ -57,7 +57,7 @@ class Mapper(Node):
         # Make the motors limp
         self.set_null_points_pub.publish(String(data='start'))
         self.get_logger().info('start map')
-        time.sleep(5) 
+        time.sleep(25) 
         self.get_logger().info("--- move the arm to top position and press map button to record max angels. --- ") 
 
 
@@ -70,15 +70,15 @@ class Mapper(Node):
         try:
             angles = msg.data  # Assuming this is already an array of float64
 
-            # Set layout
-            float_array = Float64MultiArray()
-            dim = MultiArrayDimension()
-            dim.label = "joint_angles"
-            dim.size = len(angles)
-            dim.stride = len(angles)
-            float_array.layout.dim.append(dim)
-            float_array.data = angles
-            self.joint_angles_pub.publish(float_array)
+            # publish to display
+            # float_array = Float64MultiArray()
+            # dim = MultiArrayDimension()
+            # dim.label = "joint_angles"
+            # dim.size = len(angles)
+            # dim.stride = len(angles)
+            # float_array.layout.dim.append(dim)
+            # float_array.data = angles
+            # self.joint_angles_pub.publish(float_array)
 
             self.get_logger().info("Published joint angles for mapping.")
             lss0_angle = angles[0]
