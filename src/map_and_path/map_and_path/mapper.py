@@ -112,7 +112,7 @@ class Mapper(Node):
                 self.mapping_data['boundaries'][self.button_press_index - 1]['top_lss0'] = lss0_angle
                 self.mapping_data['boundaries'][self.button_press_index - 1]['top_lss1'] = lss1_angle
                 self.get_logger().info(f'Received and mapped top boundaries, angles: {angles}')
-                self.get_logger().info('--- move arm to bottom position and press map button --- ')
+                self.get_logger().info('--- move arm to bottom boundary and press map button --- ')
             
             elif self.button_press_index == 2:  # Bottom position boundaries
                 self.mapping_data['boundaries'][self.button_press_index - 1]['bottom_lss0'] = lss0_angle

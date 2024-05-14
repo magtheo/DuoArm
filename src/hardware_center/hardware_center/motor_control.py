@@ -303,7 +303,7 @@ class motorControl(Node):
         self.get_logger().info(f'actual angles after new null point for lss0: {self.calc_angle(lss0.getPosition())}')
         self.get_logger().info(f'actual angles after new null point for lss1: {self.calc_angle(lss1.getPosition())}')
         time.sleep(2)
-        self.get_logger().info("--- move the arm to top position and press map button to record max angels. --- ") 
+        self.get_logger().info("--- Use joystick to move the arm to top boundaries and press map button to record max angels. --- ") 
         if self.calc_angle(lss1.getPosition()) == -180.0:
             lss1.setOriginOffset(-1800, LSS_SetConfig)
 
