@@ -82,7 +82,7 @@ class StateManager(Node):
             else:
                 self.get_logger().info(f'The reset/"stop the active process" button press was ignored -> The system is in a state that cannot be changed: {self.state}')
                 return
-        elif (msg.data == 'path_done' or msg.data == 'mapping_done'):
+        elif (msg.data == 'path_done' or msg.data == 'mapping_done' or msg.data == 'path_fail'):
             self.state = 'standby'
             self.publish_state()
             return

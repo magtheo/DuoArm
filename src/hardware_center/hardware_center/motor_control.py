@@ -222,6 +222,13 @@ class motorControl(Node):
         """
         Reads the target angles and puts them in the queue for independent servo threads to read
         Keeps track of movement iteration and correctly ending a path execution
+
+        - explination of reverse for loop - 
+        len(angles) - 2: This starts the index from the second-to-last element in the angles list. It adjusts for Python's zero-based indexing, ensuring the arm starts reversing from the correct position.
+
+        -1: This is the end parameter of the range, which is exclusive. In Python's range, when counting backwards, you need to go one past the first index you want to include, hence -1 is used to ensure it includes the index 0.
+
+        -2: This is the step parameter, which determines the increment between each step in the range. Here, -2 means the loop decrements the index by 2 each time, effectively moving backwards through the angles list two elements at a time. This allows the system to address pairs of angles (assuming each servo position in the pair is spaced by one index in the list) in reverse order
         """
         self.total_movements = len(angles)*2*num_cycles
         for _ in range(num_cycles):
