@@ -37,12 +37,13 @@ class HardwareInterfaceController(Node):
         """Attributes and method related to communication between the Arduino MEGA, Raspberry PI, LSS adapter board and LSS motors:"""
         self.avail_usb_ports = None
         self.avail_serial_ports = None
-        self.CST_LSS_Port = '/dev/lssMotorController'
-        self.ser_obj_controller = serial.Serial('/dev/arduinoNano', 115200)
+        self.CST_LSS_Port = '/dev/ttyUSB1'
+        self.ser_obj_controller = serial.Serial('/dev/ttyUSB0', 115200)
         # self.set_usb_and_serial_port()
         self.CST_LSS_Baud = LSS_DefaultBaud
         initBus(self.CST_LSS_Port, self.CST_LSS_Baud)
         self.wait_to_read_serial_values = False
+        self.ser_obj_controller.reset_input_buffer()
 
         """Attributes related to the received analog values:"""
         self.x_analog_value = 0
@@ -165,24 +166,23 @@ class HardwareInterfaceController(Node):
 
     def read_values_from_serial(self):
 
-        if (self.wait_to_read_serial_values == False):
-            time.sleep(1)
-            self.wait_to_read_serial_values = True
-
+        # if (self.wait_to_read_serial_values == False):
+        #     time.sleep(1)
+        #     self.wait_to_read_serial_values = True
+        # else:
+        received_vals = self.ser_obj_controller.readline().decode().strip()
+        values = received_vals.split(',')
+        if (len(values) == 6):
+            self.x_analog_value = int(values[0])
+            self.z_analog_value = int(values[1])
+            self.joystick_button_pressed = int(values[2])
+            self.reset_button_pressed = int(values[3])
+            self.run_predefined_path_button_pressed = int(values[4])
+            self.map_button_pressed = int(values[5])
+            self.update_simultaneous_button_press_conditions()
         else:
-            received_vals = self.ser_obj_controller.readline().decode().strip()
-            values = received_vals.split(',')
-            if (len(values) == 6):
-                self.x_analog_value = int(values[0])
-                self.z_analog_value = int(values[1])
-                self.joystick_button_pressed = int(values[2])
-                self.reset_button_pressed = int(values[3])
-                self.run_predefined_path_button_pressed = int(values[4])
-                self.map_button_pressed = int(values[5])
-                self.update_simultaneous_button_press_conditions()
-            else:
-                self.x_analog_value = self.z_analog_value = self.joystick_button_pressed = self.reset_button_pressed = \
-                self.run_predefined_path_button_pressed = self.map_button_pressed = None
+            self.x_analog_value = self.z_analog_value = self.joystick_button_pressed = self.reset_button_pressed = \
+            self.run_predefined_path_button_pressed = self.map_button_pressed = None
     
     def move_arm_north(self):
 
@@ -357,13 +357,16 @@ class HardwareInterfaceController(Node):
                   
     def control_arm_with_joystick(self):
 
-        if (self.reset_button_pressed and self.current_system_state == 'joystick_arm_control'):
+        if (self.reset_button_pressed and self.current_system_state == 'joystick_arm_control' \
+            or self.joystick_button_pressed and self.current_system_state == 'joystick_arm_control'):
+
             self.lss1.wheelRPM(0)
             self.lss0.wheelRPM(0)
             return
         
         if (self.map_button_pressed and self.current_system_state == 'map'):
             self.send_map_button_presses()
+            return
     
         if (self.x_analog_value is not None and self.z_analog_value is not None):
                 
@@ -510,6 +513,7 @@ def main():
             if (any(hic_obj.simultaneous_button_press_conditions)):
                 hic_obj.get_logger().info('Multiple buttons were pressed simultaneously -> Button presses was ignored')
                 hic_obj.clear_button_press_flags()
+                hic_obj.standby_logger_printed = False
 
             if(hic_obj.joystick_button_pressed and hic_obj.boundaries_and_last_rail_position_data is not None):
                 hic_obj.send_system_state_request('joystick_control')

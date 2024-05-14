@@ -49,7 +49,8 @@ class ActionController(Node):
                 self.publish_state()
                 return
             else:
-                pass
+                self.get_logger().info('This message should only be forwarded after the rail system was activated (Check the software)')
+                return
 
         elif (msg.data == 'run_predefined_path'):
 
@@ -73,14 +74,15 @@ class ActionController(Node):
         
         elif (msg.data == 'standby'):
 
-            if (self.state == 'standby' or self.state == 'map'):
-                self.get_logger().info(f'The reset/"stop the active process" button press was ignored -> The system is in a state that cannot be changed: {self.state}')
-                return
-
-            else:
+            if (self.state == 'joystick_arm_control'):
                 self.state = msg.data
                 self.publish_state()
                 return
+
+            else:
+                self.get_logger().info(f'The reset/"stop the active process" button press was ignored -> The system is in a state that cannot be changed: {self.state}')
+                return
+
         elif (msg.data == 'path_done' or msg.data == 'mapping_done'):
             self.state = 'standby'
             self.publish_state()
