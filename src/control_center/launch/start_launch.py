@@ -60,13 +60,13 @@ def generate_launch_description():
         name='motor_control'
     )
     mapper = Node(
-        package='map_and_path',
+        package='map_and_path_center',
         executable='mapper',
         name='mapper'
     )
 
     path = Node(
-        package='map_and_path',
+        package='map_and_path_center',
         executable='path',
         name='path'
     )

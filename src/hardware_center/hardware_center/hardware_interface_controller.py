@@ -13,36 +13,49 @@ import numpy as np
 
 class HardwareInterfaceController(Node):
     def __init__(self):
+        """
+        @class HardwareInterfaceController
+        @brief The HardwareInterfaceController node is designed to handle user inputs from the controller, 
+        publish state requests to the state_manager node based on button presses, 
+        along with map button presses to the mapper node, and move
+        every servos according to the received joystick inputs.
+
+        """
+
         super().__init__('hardware_interface_controller')
 
+        ## State variable
         self.current_system_state = 'standby'
+        ## State variable
         self.previous_system_state = None
 
+        ## Subscriber
         self.state_subscriber = self.create_subscription(String, 'system_state', self.check_state_callback, 10)
+        ## Publisher
         self.send_map_button_press_publisher = self.create_publisher(String, 'map_button_pressed', 10)
+        ## Publisher
         self.set_system_state_by_request_publisher = self.create_publisher(String, 'system_state_request', 10)
 
-        """Attribute related to joystick button pressing:"""
+        ## Attribute related to joystick button pressing
         self.joystick_button_pressed = 0
 
-        """Attribute related to reset/"stop the active process" button pressing:"""
+        ## Attribute related to reset/"stop the active process" button pressing
         self.reset_button_pressed = 0
 
-        """Attribute related to the "run a predefined path" button pressing:"""
+        ## Attribute related to the "run a predefined path" button pressing
         self.run_predefined_path_button_pressed = 0
 
-        """Attribute related to "mapping" button pressing:"""
+        ## Attribute related to "mapping" button pressing
         self.map_button_pressed = 0
 
         """Attributes and method related to communication between the Arduino MEGA, Raspberry PI, LSS adapter board and LSS motors:"""
         self.avail_usb_ports = None
         self.avail_serial_ports = None
-        self.CST_LSS_Port = '/dev/lssMotorController'
-        self.ser_obj_controller = serial.Serial('/dev/arduinoMegaController', 115200)
+        self.CST_LSS_Port = '/dev/ttyUSB1'
+        self.ser_obj_controller = serial.Serial('/dev/ttyUSB0', 115200)
         self.CST_LSS_Baud = LSS_DefaultBaud
         initBus(self.CST_LSS_Port, self.CST_LSS_Baud)
-
-        #self.ser_obj_controller.reset_input_buffer()
+        self.ser_obj_controller.reset_input_buffer()
         self.wait_to_read_values_from_serial = False
        
 
@@ -78,6 +91,12 @@ class HardwareInterfaceController(Node):
         self.standby_logger_printed = False
 
     def set_boundaries_and_last_rail_position_data(self):
+        """
+        Load the boundaries and last rail position data from the 
+        stored JSON file to a data variable.
+        Use this variable to store the boundaries 
+        and last rail position to their appropriate variables for further use. 
+        """
         try:
             with open('boundary_path_and_rail_position.json', 'r') as file:
                 self.boundaries_and_last_rail_position_data = json.load(file)
@@ -93,11 +112,18 @@ class HardwareInterfaceController(Node):
                 return
     
     def save_last_rail_position(self):
+        """
+        Save the last rail position to the correct field of the variable, 
+        in which the JSON file was originally stored, to ensure that no 
+        other field gets overwritten. Dump the new data variable 
+        to the original JSON file. 
+        """
         self.boundaries_and_last_rail_position_data['last_rail_position'][0]['last_rail_pos'] = self.rail_position
         with open('boundary_path_and_rail_position.json', 'w') as file:
             json.dump(self.boundaries_and_last_rail_position_data, file, indent=4)
         self.get_logger().info('Successfully stored the last rail position to the appropriate field in the JSON file')
-           
+
+    """Boundary methods""" 
     def lss1_beyond_bottom_limit(self):
         return int(self.lss1.getPosition()) < self.bottom_limit_lss1
 
@@ -140,25 +166,19 @@ class HardwareInterfaceController(Node):
         ]
 
     def read_values_from_serial(self):
-        if (self.wait_to_read_values_from_serial == False):
-            time.sleep(1)
-            self.wait_to_read_values_from_serial = True
+        received_vals = self.ser_obj_controller.readline().decode().strip()
+        values = received_vals.split(',')
+        if (len(values) == 6):
+            self.x_analog_value = int(values[0])
+            self.z_analog_value = int(values[1])
+            self.joystick_button_pressed = int(values[2])
+            self.reset_button_pressed = int(values[3])
+            self.run_predefined_path_button_pressed = int(values[4])
+            self.map_button_pressed = int(values[5])
+            self.update_simultaneous_button_press_conditions()
         else:
-            received_vals = self.ser_obj_controller.readline().decode().strip()
-            values = received_vals.split(',')
-            if (len(values) == 6):
-                self.x_analog_value = int(values[0])
-                self.z_analog_value = int(values[1])
-                self.joystick_button_pressed = int(values[2])
-                self.reset_button_pressed = int(values[3])
-                self.run_predefined_path_button_pressed = int(values[4])
-                self.map_button_pressed = int(values[5])
-                self.get_logger().info(f'read serial vals: {self.x_analog_value, self.z_analog_value, self.joystick_button_pressed, self.reset_button_pressed, self.run_predefined_path_button_pressed, self.map_button_pressed }')
-
-                self.update_simultaneous_button_press_conditions()
-            else:
-                self.x_analog_value = self.z_analog_value = self.joystick_button_pressed = self.reset_button_pressed = \
-                self.run_predefined_path_button_pressed = self.map_button_pressed = None
+            self.x_analog_value = self.z_analog_value = self.joystick_button_pressed = self.reset_button_pressed = \
+            self.run_predefined_path_button_pressed = self.map_button_pressed = None
     
     def move_arm_north(self):
 
@@ -333,7 +353,8 @@ class HardwareInterfaceController(Node):
                   
     def control_arm_with_joystick(self):
 
-        if (self.reset_button_pressed and self.current_system_state == 'joystick_arm_control'):
+        if (self.reset_button_pressed and self.current_system_state == 'joystick_arm_control' or \
+            self.joystick_button_pressed and self.current_system_state == 'joystick_arm_control'):
             self.lss1.wheelRPM(0)
             self.lss0.wheelRPM(0)
             return
@@ -486,6 +507,7 @@ def main():
             if (any(hic_obj.simultaneous_button_press_conditions)):
                 hic_obj.get_logger().info('Multiple buttons were pressed simultaneously -> Button presses was ignored')
                 hic_obj.clear_button_press_flags()
+                hic_obj.standby_logger_printed = False
 
             if(hic_obj.joystick_button_pressed and hic_obj.boundaries_and_last_rail_position_data is not None):
                 hic_obj.send_system_state_request('joystick_control')
@@ -518,8 +540,6 @@ def main():
 
             
     except KeyboardInterrupt:
-
-        GPIO.cleanup()
         hic_obj.cleanup_serial()
     
     finally:
@@ -530,24 +550,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

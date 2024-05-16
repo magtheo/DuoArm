@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'map_and_path'
+package_name = 'map_and_path_center'
 
 setup(
     name=package_name,
@@ -20,8 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'mapper = map_and_path.mapper:main',
-            'path = map_and_path.path:main',
+            'mapper = map_and_path_center.mapper:main',
+            'path = map_and_path_center.path:main',
         ],
     },
 )
