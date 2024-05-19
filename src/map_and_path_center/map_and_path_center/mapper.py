@@ -10,7 +10,7 @@ import time
 class Mapper(Node):
     """
     @class Mapper
-    @brief Used to set nulpoints, boundarys and a path that the arm can follow. The Mapper works communicates with MotorController to achive this funcitonality, as the MotorController can read angels of servos
+    @brief Used to set nullpoints, boundarys and a path that the arm can follow. The Mapper works communicates with MotorController to achive this funcitonality, as the MotorController can read angels of servos
 
     The data generated wil be stored in a JSON file that is used during joysitck controll and path execution.
     """

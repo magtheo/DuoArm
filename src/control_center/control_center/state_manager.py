@@ -3,30 +3,49 @@
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
-import os
 
 class StateManager(Node):
 
     def __init__(self):
+        """
+        @class StateManager
+        @brief The StateManager node is designed to handle 
+        state requests from the HardwareInterfaceController node 
+        and confirmation messages from the Mapper, motorControl 
+        and Path node, and publish the current system state on the 
+        ROS topic: system_state.
+
+        """
         super().__init__('state_manager')
+
+        ## Official state variable
         self.state = 'standby'
         
-
-        # Publisher for the current state
+        ## State publisher
         self.state_publisher = self.create_publisher(String, 'system_state', 10)
 
-        # Subscriptions
+        ## System state request subscriber
         self.create_subscription(String, 'system_state_request', self.handle_state_change, 10)
         
 
     def publish_state(self):
+        """
+        Adds the content of the state variable to a message, 
+        which is forwarded onto the ROS topic: system_state.
+        """
         msg = String()
         msg.data = self.state
         self.state_publisher.publish(msg)
         self.get_logger().info(f'Published the current system state: {msg.data}')
     
     def handle_state_change(self, msg):
-        self.get_logger().info(f'Handle state change request {msg.data}')
+        """
+        Handles the value of the messages received on the 
+        ROS topic: system_state_request, and performs the
+        appropriate actions according to our desired 
+        architecture. The publish_state() method is called
+        to notify other nodes of the current state change.
+        """
         if (msg.data == 'joystick_control'):
 
             if (self.state == 'standby'):
@@ -49,7 +68,8 @@ class StateManager(Node):
                 self.publish_state()
                 return
             else:
-                pass
+                self.get_logger().info('This message should only be forwarded after the rail system was activated (Check the software)')
+                return
 
         elif (msg.data == 'run_predefined_path'):
 

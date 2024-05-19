@@ -7,7 +7,6 @@ import threading
 from rclpy.node import Node
 from std_msgs.msg import String
 import json
-import glob
 import numpy as np
 
 
@@ -15,10 +14,11 @@ class HardwareInterfaceController(Node):
     def __init__(self):
         """
         @class HardwareInterfaceController
-        @brief The HardwareInterfaceController node is designed to handle user inputs from the controller, 
-        publish state requests to the state_manager node based on button presses, 
-        along with map button presses to the mapper node, and move
-        every servos according to the received joystick inputs.
+        @brief The HardwareInterfaceController node is designed to 
+        handle user inputs from the controller, publish state requests 
+        to the state_manager node and map 
+        button presses to the mapper node, activate the rail system servo, and move 
+        the others based on the received joystick inputs.
 
         """
 
@@ -26,13 +26,16 @@ class HardwareInterfaceController(Node):
 
         ## State variable
         self.current_system_state = 'standby'
+
         ## State variable
         self.previous_system_state = None
 
         ## Subscriber
         self.state_subscriber = self.create_subscription(String, 'system_state', self.check_state_callback, 10)
+
         ## Publisher
         self.send_map_button_press_publisher = self.create_publisher(String, 'map_button_pressed', 10)
+
         ## Publisher
         self.set_system_state_by_request_publisher = self.create_publisher(String, 'system_state_request', 10)
 
@@ -48,46 +51,66 @@ class HardwareInterfaceController(Node):
         ## Attribute related to "mapping" button pressing
         self.map_button_pressed = 0
 
-        """Attributes and method related to communication between the Arduino MEGA, Raspberry PI, LSS adapter board and LSS motors:"""
-        self.avail_usb_ports = None
-        self.avail_serial_ports = None
+        ## Port variable for the communication between the raspi, the LSS adapter board and the servo engines
         self.CST_LSS_Port = '/dev/ttyUSB1'
+
+        ## Serial object to establish communication with the controller
         self.ser_obj_controller = serial.Serial('/dev/ttyUSB0', 115200)
+
+        ## Baudrate for the communication between the raspi, the LSS adapter board and the servo engines
         self.CST_LSS_Baud = LSS_DefaultBaud
+
         initBus(self.CST_LSS_Port, self.CST_LSS_Baud)
         self.ser_obj_controller.reset_input_buffer()
-        self.wait_to_read_values_from_serial = False
        
-
-        """Attributes related to the received analog values:"""
         self.x_analog_value = 0
         self.z_analog_value = 0
-        self.diagonal_threshold = 255
-        self.zero_value_deadzone = 100
-        self.read_values_from_serial_clearance = True
 
-        """Attributes and method related to the LSS motors and the rail system:"""
+        ## Threshold to create ranges for the received analog values 
+        self.diagonal_threshold = 255
+
+        ## Deadzone to account for imprecise analog values, when they should hypothetically be 0  
+        self.zero_value_deadzone = 100
+
+        ## Diameter of the smart servo wheel, or the bigger gear with gearing, to be used in the calculation of the time to activate the rail system
         self.diameter_of_wheel = 2.4 # [cm]
         self.circumference_of_wheel = np.pi * self.diameter_of_wheel # [cm]
+
+        ## The distance to travel on the rail system
         self.distance_to_travel = 10 # [cm]
+
         self.top_limit_lss1 = 0
         self.bottom_limit_lss1 = 0
         self.top_limit_lss0 = 0
         self.bottom_limit_lss0 = 0
+
+        ## Variable to multiply with the angles in degrees stored in the mapping data of the JSON file
         self.position_multiplier = 10
+
+        ## Object for the LSS engine with ID: 0
         self.lss0 = LSS(0)
+
+        ## Object for the LSS engine with ID: 1
         self.lss1 = LSS(1)
+
+        ## Object for the LSS engine with ID: 2
         self.lss2 = LSS(2)
+
+        ## Variable to hold the last rail position
         self.rail_position = None
+
+        ## Variable to store the mapping and last rail position data from the JSON file
         self.boundaries_and_last_rail_position_data = None
         self.boundaries_and_last_rail_position_data_updated = False
         self.set_boundaries_and_last_rail_position_data()
 
-        """Attributes related to multiple button pressing cases:"""
-        self.num_simultaneous_button_press_conditions = 10
+        
+        self.num_simultaneous_button_press_conditions = 11
+        
+        ## Array that contain every simultaneous button press condition
         self.simultaneous_button_press_conditions = [0]*self.num_simultaneous_button_press_conditions
 
-        """Attributes related to the standby state"""
+        ## Variable to ensure the standby message is only printed once during the standby state
         self.standby_logger_printed = False
 
     def set_boundaries_and_last_rail_position_data(self):
@@ -123,11 +146,21 @@ class HardwareInterfaceController(Node):
             json.dump(self.boundaries_and_last_rail_position_data, file, indent=4)
         self.get_logger().info('Successfully stored the last rail position to the appropriate field in the JSON file')
 
-    """Boundary methods""" 
+    
     def lss1_beyond_bottom_limit(self):
+        """
+        Compares the smart servo's position with the assigned bottom limit.
+        If the active position is lower than the bottom limit it returns true,
+        else it returns false.
+        """
         return int(self.lss1.getPosition()) < self.bottom_limit_lss1
 
     def lss1_beyond_top_limit(self):
+        """
+        Compares the smart servo's position with the assigned top limit.
+        If the active position is greater than the bottom limit it returns true,
+        else it returns false.
+        """
         return int(self.lss1.getPosition()) > self.top_limit_lss1
 
     def lss0_beyond_bottom_limit(self):
@@ -146,10 +179,22 @@ class HardwareInterfaceController(Node):
         lss.wheelRPM(0)
     
     def clear_button_press_flags(self):
+        """
+        Resets button press flags.
+        Utilized as a safety check, after multiple buttons were pressed, to
+        ensure that no high signals are stored.
+        Used in favor of the reset input buffer to keep the 
+        analog value readings in the buffer.  
+        """
         self.joystick_button_pressed = self.reset_button_pressed = \
         self.run_predefined_path_button_pressed = self.map_button_pressed = 0 
 
     def update_simultaneous_button_press_conditions(self):
+        """
+        Updates the simultaneous button press conditions array with every 
+        possible button combination. Utilized in the read_values_from_serial(self)
+        function to updated each individual case according to the user inputs.
+        """
 
         self.simultaneous_button_press_conditions = [
             (self.run_predefined_path_button_pressed and self.map_button_pressed),
@@ -166,6 +211,10 @@ class HardwareInterfaceController(Node):
         ]
 
     def read_values_from_serial(self):
+        """
+        Reads values from the serial port connected to the controller.
+        Adds the appropriate values to their designated variables.
+        """
         received_vals = self.ser_obj_controller.readline().decode().strip()
         values = received_vals.split(',')
         if (len(values) == 6):
@@ -181,6 +230,11 @@ class HardwareInterfaceController(Node):
             self.run_predefined_path_button_pressed = self.map_button_pressed = None
     
     def move_arm_north(self):
+        """
+        Moves the robot towards the north.
+        Evaluates the current system state and performs
+        the appropriate actions accordingly. 
+        """
 
         if (self.current_system_state == 'joystick_arm_control'):
 
@@ -352,6 +406,11 @@ class HardwareInterfaceController(Node):
 
                   
     def control_arm_with_joystick(self):
+        """
+        Function utilized to receive analog values and call the correct 
+        directional functions, while handling various button presses
+        and perform the appropriate actions.
+        """
 
         if (self.reset_button_pressed and self.current_system_state == 'joystick_arm_control' or \
             self.joystick_button_pressed and self.current_system_state == 'joystick_arm_control'):
@@ -419,6 +478,12 @@ class HardwareInterfaceController(Node):
 
 
     def check_state_callback(self, msg):
+        """
+        Callback function of the state subscriber.
+        Assigns the value of the current_system_state to the 
+        previous_system_state variable before assigning the value
+        of the message to the current_system_state variable
+        """
         self.previous_system_state = self.current_system_state
         self.current_system_state = msg.data
         self.get_logger().info(f'Set the current system state variable to: {self.current_system_state} and the previous system state to: {self.previous_system_state}')
@@ -427,28 +492,52 @@ class HardwareInterfaceController(Node):
             return
         
     def cleanup_serial(self):
+        """
+        Closes the communication with the controller to clean
+        up resources. Called at the except of the try-except block.
+        """
         if self.ser_obj_controller.is_open:
             self.ser_obj_controller.close()
             self.get_logger().info('Serial connection closed')
     
     def send_map_button_presses(self):
+        """
+        Creates a message indicating that the map button was pressed,
+        and calls the publish() method of the send_map_button_press
+        publisher to forward the message onto the ROS topic: map_button_pressed
+        """
         msg = String()
         msg.data = "1"
         self.get_logger().info('Publishing a message to the map_button_pressed topic')
         self.send_map_button_press_publisher.publish(msg)
     
     def send_system_state_request(self, request):
+        """
+        Creates a message with the request parameter, and calls the
+        publish() method of the set_system_state_by_request_publisher to 
+        forward the message onto the ROS topic: system_state_request
+        """
         msg = String()
         msg.data = request
         self.get_logger().info(f'The following request was sent to the state_manager node: {request}, on the topic: system_state_request')
         self.set_system_state_by_request_publisher.publish(msg)
 
     def calculate_time_to_run_rail_system(self, rpm):
+        """
+        Calculates and returns the period in seconds to run the rail system, 
+        based on a given rpm and the values of the circumference_of_wheel 
+        and the distance_to_travel variable.
+        """
         revolutions = self.distance_to_travel/self.circumference_of_wheel
         time = (60/np.abs(rpm))*revolutions
         return time
 
     def move_rail_system(self, rpm, target_pos):
+        """
+        Utilizes a given rpm and a target position, and calls the 
+        calculate_time_to_run_rail_system() method and the wheelRPM() function 
+        to physically move the rail system for the correct period. 
+        """
 
         self.get_logger().info(f'Moving DuoArm to position {target_pos} on the y - axis')
         self.lss2.wheelRPM(rpm)
@@ -457,6 +546,15 @@ class HardwareInterfaceController(Node):
         self.rail_position = target_pos
 
     def activate_rail_system(self):
+        """
+        Activates the rail system and sets the appropriate parameters for 
+        the move_rail_system() function based on the value of the 
+        rail_position variable.
+        After reaching its target position, the function calls the
+        send_system_state_request() method with the string:
+        joystick_arm_control to set the system state back to 
+        joystick_arm_control.
+        """
 
         if (self.rail_position == "A"):
             self.move_rail_system(30, "B")
@@ -485,12 +583,19 @@ class HardwareInterfaceController(Node):
 
   
 def main():
+    """
+    Contains the try-except block with the while True loop containing
+    multiple if-conditions responsible for handling various cases based
+    on user inputs, system states and condition checks. 
+    """
     rclpy.init()
 
+    ## Object of the node class to be used to call member variables and methods within the loop
     hic_obj = HardwareInterfaceController()
 
     try:
 
+        ## Thread to run the rclpy.spin() method seperately. Necessary to allow compiling of the code in the while loop.
         hic_obj_node_spin_thread = threading.Thread(target=rclpy.spin, args=(hic_obj,))
         hic_obj_node_spin_thread.start()
         
