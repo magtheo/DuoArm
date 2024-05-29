@@ -80,7 +80,7 @@ class Mapper(Node):
         # self.get_logger().info("--- move the arm to top position and press map button to record max angels. --- ") 
 
 
-    def button_press_callback(self):
+    def button_press_callback(self, msg):
         """Respond to button press events for mapping.
         Button press index is incresed by 1 and reading angles is requested.
         """

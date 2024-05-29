@@ -11,9 +11,11 @@ import json
 import threading
 from .lss import *
 import queue
-import math
+import glob
 
-CST_LSS_Port = '/dev/ttyUSB1'	# For Linux/Unix platforms
+avail_usb_ports = glob.glob('/dev/ttyUSB*')
+
+CST_LSS_Port = avail_usb_ports[0]	# For Linux/Unix platforms
 #CST_LSS_Port = "COM230"				# For windows platforms
 CST_LSS_Baud = LSS_DefaultBaud
 
@@ -36,7 +38,6 @@ received_joint_angles = np.zeros(2)
 transmission_msg = Float64MultiArray()
 
 
-
 class motorControl(Node):
     """
     @class motorControl
@@ -49,9 +50,10 @@ class motorControl(Node):
     def __init__(self):
         """Initialize the motor control node, setting up publishers, subscribers, and servo control threads."""
         super().__init__("motor_control")
-
         # Define a QoS profile for real-time updates
         self.real_time_qos = QoSProfile(depth=10, reliability=ReliabilityPolicy.RELIABLE)
+
+        self.init_communication()
         
         # Initialize other attributes and subscriptions...
         self.boundaries = {}
@@ -62,12 +64,9 @@ class motorControl(Node):
         self.threads = []
         self.init_servo_threads()
 
-        self.init_communication()
-
         self.lock = threading.Lock()
         self.current_target = None
-
-
+        
         self.state = 'standby'
 
         self.total_movements = 0
@@ -123,7 +122,7 @@ class motorControl(Node):
         
         self.state_subscription = self.create_subscription(
             String, 'system_state', self.state_callback, 10)
-  
+
     def load_and_set_boundaries(self):
         """
         Load and set boundaries for servo movements from a JSON configuration file.
@@ -276,7 +275,6 @@ class motorControl(Node):
         lss0.limp()
         lss1.limp()
         lss2.limp()
-
         lss0.setGyre(-1, LSS_SetConfig)
         lss1.setGyre(-1, LSS_SetConfig)
 
@@ -343,7 +341,7 @@ class motorControl(Node):
             return None  # Or handle the error in a way that suits your application
 
 
-    def read_angles_callback(self):
+    def read_angles_callback(self, msg):
         """
         Read the servos when during mapping, is called when arm state='map' and map button is pressed
         """

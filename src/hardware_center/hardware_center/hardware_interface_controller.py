@@ -8,6 +8,7 @@ from rclpy.node import Node
 from std_msgs.msg import String
 import json
 import numpy as np
+import glob
 
 
 class HardwareInterfaceController(Node):
@@ -51,11 +52,15 @@ class HardwareInterfaceController(Node):
         ## Attribute related to "mapping" button pressing
         self.map_button_pressed = 0
 
+        self.avail_usb_port =  None
+        self.avail_acm_ports = None
+
         ## Port variable for the communication between the raspi, the LSS adapter board and the servo engines
-        self.CST_LSS_Port = '/dev/ttyUSB1'
+        self.CST_LSS_Port = None
 
         ## Serial object to establish communication with the controller
-        self.ser_obj_controller = serial.Serial('/dev/ttyUSB0', 115200)
+        self.ser_obj_controller = None
+        self.set_LSS_and_controller_port()
 
         ## Baudrate for the communication between the raspi, the LSS adapter board and the servo engines
         self.CST_LSS_Baud = LSS_DefaultBaud
@@ -87,6 +92,9 @@ class HardwareInterfaceController(Node):
         ## Variable to multiply with the angles in degrees stored in the mapping data of the JSON file
         self.position_multiplier = 10
 
+        ## Safety margin of (X degrees) * 10 to aid in the boundary checks.
+        self.boundary_position_margin = 30
+
         ## Object for the LSS engine with ID: 0
         self.lss0 = LSS(0)
 
@@ -104,7 +112,6 @@ class HardwareInterfaceController(Node):
         self.boundaries_and_last_rail_position_data_updated = False
         self.set_boundaries_and_last_rail_position_data()
 
-        
         self.num_simultaneous_button_press_conditions = 11
         
         ## Array that contain every simultaneous button press condition
@@ -112,6 +119,57 @@ class HardwareInterfaceController(Node):
 
         ## Variable to ensure the standby message is only printed once during the standby state
         self.standby_logger_printed = False
+
+        self.top_analog_value_margin = 15
+    
+    def set_LSS_and_controller_port(self):
+        """
+        Finds every available USB and ACM port. 
+        Since we only have one USB port, indicating the LSS ADA connection,
+        the CST_LSS_Port variable is assigned this value. Additionally, we
+        have two ACM ports, indicating the LED light microcontroller and
+        the controller Mega, so we need a way to differentiate between them. 
+        To differentiate the method initiates a for - loop that iterates through 
+        every port in the avail_acm_ports array. For every port a temporary serial 
+        object is created, in which data is attempted to be read. Since only the port 
+        connected to the controller forwards data, a simple if statement, 
+        to check if data was received, is enough to assign the correct port
+        to the serial controller object. 
+        """
+        self.find_usb_and_acm_ports()
+
+        if (not self.avail_acm_ports and not self.avail_usb_port):
+            self.get_logger().info('No valid USB and ACM ports were found, check the hardware connections')
+
+        else:
+            if (self.avail_usb_port):
+                self.CST_LSS_Port = self.avail_usb_port[0]
+                self.get_logger().info(f'Successfully set the CST_LSS_port to {self.avail_usb_port[0]}')
+            else:
+                self.get_logger().info('No valid USB port was found, check the hardware connection')
+
+            if (self.avail_acm_ports):
+                for port in self.avail_acm_ports:
+                    try:
+                        ser_obj = serial.Serial(port, 115200, timeout=3)
+                        line = ser_obj.readline().decode().strip()
+                        if line:
+                            self.ser_obj_controller = serial.Serial(port, 115200)
+                            self.get_logger().info(f'Successfully established the connection between the Raspberry PI and the controller at COM port: {port}')
+                            ser_obj.close()
+                            break
+                        else:
+                            ser_obj.close()
+                    except serial.SerialException as error:
+                        self.get_logger().info(f'Could not open port: {port}, due to error: {error} ')
+            else:
+                self.get_logger().info('No valid ACM ports were found, check the hardware connections')
+        
+
+    def find_usb_and_acm_ports(self):
+        self.avail_acm_ports = glob.glob('/dev/ttyACM*')
+        self.avail_usb_port = glob.glob('/dev/ttyUSB*')
+
 
     def set_boundaries_and_last_rail_position_data(self):
         """
@@ -123,10 +181,10 @@ class HardwareInterfaceController(Node):
         try:
             with open('boundary_path_and_rail_position.json', 'r') as file:
                 self.boundaries_and_last_rail_position_data = json.load(file)
-                self.top_limit_lss0 = self.boundaries_and_last_rail_position_data['boundaries'][0]['top_lss0']*self.position_multiplier
-                self.bottom_limit_lss0 = self.boundaries_and_last_rail_position_data['boundaries'][1]['bottom_lss0']*self.position_multiplier
-                self.top_limit_lss1 = self.boundaries_and_last_rail_position_data['boundaries'][0]['top_lss1']*self.position_multiplier
-                self.bottom_limit_lss1 = self.boundaries_and_last_rail_position_data['boundaries'][1]['bottom_lss1']*self.position_multiplier
+                self.top_limit_lss0 = self.boundaries_and_last_rail_position_data['boundaries'][0]['top_lss0']*self.position_multiplier + self.boundary_position_margin
+                self.bottom_limit_lss0 = self.boundaries_and_last_rail_position_data['boundaries'][1]['bottom_lss0']*self.position_multiplier - self.boundary_position_margin
+                self.top_limit_lss1 = self.boundaries_and_last_rail_position_data['boundaries'][0]['top_lss1']*self.position_multiplier - self.boundary_position_margin
+                self.bottom_limit_lss1 = self.boundaries_and_last_rail_position_data['boundaries'][1]['bottom_lss1']*self.position_multiplier + self.boundary_position_margin
                 self.rail_position = self.boundaries_and_last_rail_position_data['last_rail_position'][0]['last_rail_pos']
                 self.get_logger().info('Successfully set the boundaries for the LSS motors, and the last rail position in the rail_position variable')
                 self.boundaries_and_last_rail_position_data_updated = True
@@ -430,7 +488,7 @@ class HardwareInterfaceController(Node):
                     self.move_arm_north()
 
                 # Joystick at South (DOWN) placement 
-                elif ((self.x_analog_value == 1023) and \
+                elif ((1023 - self.top_analog_value_margin <= self.x_analog_value <= 1023) and \
                     (512 - self.diagonal_threshold < self.z_analog_value < 512 + self.diagonal_threshold)):
                 
                     self.move_arm_south()
@@ -443,7 +501,7 @@ class HardwareInterfaceController(Node):
 
                 # Joystick at West (LEFT) placement
                 elif ((512 - self.diagonal_threshold < self.x_analog_value < 512 + self.diagonal_threshold) and \
-                    (self.z_analog_value == 1023)):
+                    (1023 - self.top_analog_value_margin <= self.z_analog_value <= 1023)):
                     
                     self.move_arm_west()
 
