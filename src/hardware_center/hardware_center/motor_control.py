@@ -173,6 +173,7 @@ class motorControl(Node):
         Implements PID control to reach the target angle by comparing current and target angle.
         """
         tolerance = 1.0  # degrees within which we consider the target reached
+        max_speed = 10  # maximum speed limit for the servo
         servo = self.servos[servo_key]
         self.get_logger().info(f" servo{servo_key} is moving to new target angle{target_angle}")
 
@@ -200,6 +201,7 @@ class motorControl(Node):
                     break
 
                 speed = kp * target_angle_minus_current_angle + ki * integral + kd * derivative
+                speed = np.clip(speed, -max_speed, max_speed) # Limit the speed to the maximum speed
                 servo.wheelRPM(speed)
 
             # time.sleep(0.1)  # Adjust timing as necessary for more responsive control
@@ -278,8 +280,8 @@ class motorControl(Node):
         lss0.setGyre(-1, LSS_SetConfig)
         lss1.setGyre(-1, LSS_SetConfig)
 
-        self.get_logger().info(f'Motors are now limp, move arm for desired position, null points will be set in 25 sec')
-        time.sleep(25)
+        self.get_logger().info(f'Motors are now limp, move arm for desired position, null points will be set in 15 sec')
+        time.sleep(15)
 
         # Set new origin offset
         lss0.setOriginOffset(0, LSS_SetConfig)

@@ -77,13 +77,6 @@ class HardwareInterfaceController(Node):
         ## Deadzone to account for imprecise analog values, when they should hypothetically be 0  
         self.zero_value_deadzone = 100
 
-        ## Diameter of the smart servo wheel, or the bigger gear with gearing, to be used in the calculation of the time to activate the rail system
-        self.diameter_of_wheel = 2.4 # [cm]
-        self.circumference_of_wheel = np.pi * self.diameter_of_wheel # [cm]
-
-        ## The distance to travel on the rail system
-        self.distance_to_travel = 10 # [cm]
-
         self.top_limit_lss1 = 0
         self.bottom_limit_lss1 = 0
         self.top_limit_lss0 = 0
@@ -91,9 +84,6 @@ class HardwareInterfaceController(Node):
 
         ## Variable to multiply with the angles in degrees stored in the mapping data of the JSON file
         self.position_multiplier = 10
-
-        ## Safety margin of (X degrees) * 10 to aid in the boundary checks.
-        self.boundary_position_margin = 30
 
         ## Object for the LSS engine with ID: 0
         self.lss0 = LSS(0)
@@ -181,10 +171,10 @@ class HardwareInterfaceController(Node):
         try:
             with open('boundary_path_and_rail_position.json', 'r') as file:
                 self.boundaries_and_last_rail_position_data = json.load(file)
-                self.top_limit_lss0 = self.boundaries_and_last_rail_position_data['boundaries'][0]['top_lss0']*self.position_multiplier + self.boundary_position_margin
-                self.bottom_limit_lss0 = self.boundaries_and_last_rail_position_data['boundaries'][1]['bottom_lss0']*self.position_multiplier - self.boundary_position_margin
-                self.top_limit_lss1 = self.boundaries_and_last_rail_position_data['boundaries'][0]['top_lss1']*self.position_multiplier - self.boundary_position_margin
-                self.bottom_limit_lss1 = self.boundaries_and_last_rail_position_data['boundaries'][1]['bottom_lss1']*self.position_multiplier + self.boundary_position_margin
+                self.top_limit_lss0 = self.boundaries_and_last_rail_position_data['boundaries'][0]['top_lss0']*self.position_multiplier
+                self.bottom_limit_lss0 = self.boundaries_and_last_rail_position_data['boundaries'][1]['bottom_lss0']*self.position_multiplier
+                self.top_limit_lss1 = self.boundaries_and_last_rail_position_data['boundaries'][0]['top_lss1']*self.position_multiplier
+                self.bottom_limit_lss1 = self.boundaries_and_last_rail_position_data['boundaries'][1]['bottom_lss1']*self.position_multiplier
                 self.rail_position = self.boundaries_and_last_rail_position_data['last_rail_position'][0]['last_rail_pos']
                 self.get_logger().info('Successfully set the boundaries for the LSS motors, and the last rail position in the rail_position variable')
                 self.boundaries_and_last_rail_position_data_updated = True
@@ -212,6 +202,14 @@ class HardwareInterfaceController(Node):
         else it returns false.
         """
         return int(self.lss1.getPosition()) < self.bottom_limit_lss1
+    
+    def lss1_beyond_bottom_limit_southeast_motion(self):
+        return int(self.lss1.getPosition()) < self.bottom_limit_lss1 + 100
+    
+    def lss1_beyond_bottom_limit_eastward_motion(self):
+        return int(self.lss1.getPosition()) < self.bottom_limit_lss1 + 150
+
+
 
     def lss1_beyond_top_limit(self):
         """
@@ -275,7 +273,7 @@ class HardwareInterfaceController(Node):
         """
         received_vals = self.ser_obj_controller.readline().decode().strip()
         values = received_vals.split(',')
-        if (len(values) == 6):
+        if (len(values) == 6 and all(value != '' for value in values)):
             self.x_analog_value = int(values[0])
             self.z_analog_value = int(values[1])
             self.joystick_button_pressed = int(values[2])
@@ -341,7 +339,7 @@ class HardwareInterfaceController(Node):
 
         if (self.current_system_state == 'joystick_arm_control'):
 
-            if (not self.lss1_beyond_bottom_limit() and not self.lss0_beyond_top_limit()):
+            if (not self.lss1_beyond_bottom_limit_eastward_motion() and not self.lss0_beyond_top_limit()):
 
                 self.get_logger().info('Moving to the right (EAST)')
                 self.get_logger().info(f'(x_analog_value, z_analog_value) -> ({self.x_analog_value, self.z_analog_value})')
@@ -350,7 +348,7 @@ class HardwareInterfaceController(Node):
 
             else:
                 self.get_logger().info('Maximum positions in both or either of the servos has been reached: Eastward motion not allowed')
-                self.get_logger().info(f'LSS1 reached maximum bottom position: {self.lss1_beyond_bottom_limit()}')
+                self.get_logger().info(f'LSS1 reached maximum bottom position during eastward motion: {self.lss1_beyond_bottom_limit_eastward_motion()}')
                 self.get_logger().info(f'LSS0 reached maximum top position: {self.lss0_beyond_top_limit()}')
 
         elif (self.current_system_state == 'map'):
@@ -403,14 +401,14 @@ class HardwareInterfaceController(Node):
 
         if (self.current_system_state == 'joystick_arm_control'):
 
-            if (not self.lss1_beyond_bottom_limit()):
+            if (not self.lss1_beyond_bottom_limit_southeast_motion()):
 
                 self.get_logger().info('Moving in the right-down direction (Southeast)')
                 self.get_logger().info(f'(x_analog_value, z_analog_value) -> ({self.x_analog_value, self.z_analog_value})')
                 self.up_step(self.lss1)
 
             else:
-                self.get_logger().info(f'LSS1 reached bottom position: {self.lss0_beyond_bottom_limit()} (Southeast motion not allowed)')
+                self.get_logger().info(f'LSS1 reached bottom position limit for southeast motion: {self.lss1_beyond_bottom_limit_southeast_motion()} (Southeast motion not allowed)')
 
         elif (self.current_system_state == 'map'):
 
@@ -578,17 +576,7 @@ class HardwareInterfaceController(Node):
         msg = String()
         msg.data = request
         self.get_logger().info(f'The following request was sent to the state_manager node: {request}, on the topic: system_state_request')
-        self.set_system_state_by_request_publisher.publish(msg)
-
-    def calculate_time_to_run_rail_system(self, rpm):
-        """
-        Calculates and returns the period in seconds to run the rail system, 
-        based on a given rpm and the values of the circumference_of_wheel 
-        and the distance_to_travel variable.
-        """
-        revolutions = self.distance_to_travel/self.circumference_of_wheel
-        time = (60/np.abs(rpm))*revolutions
-        return time
+        self.set_system_state_by_request_publisher.publish(msg) 
 
     def move_rail_system(self, rpm, target_pos):
         """
@@ -599,7 +587,7 @@ class HardwareInterfaceController(Node):
 
         self.get_logger().info(f'Moving DuoArm to position {target_pos} on the y - axis')
         self.lss2.wheelRPM(rpm)
-        time.sleep(self.calculate_time_to_run_rail_system(rpm))
+        time.sleep(15)
         self.lss2.wheelRPM(0)
         self.rail_position = target_pos
 
@@ -615,20 +603,22 @@ class HardwareInterfaceController(Node):
         """
 
         if (self.rail_position == "A"):
-            self.move_rail_system(30, "B")
+            self.move_rail_system(100, "B")
             self.save_last_rail_position()
             self.get_logger().info("Target position reached -> Exiting the joystick_rail_control state")
             self.send_system_state_request('joystick_arm_control')
             self.wait_for_state_change('joystick_arm_control')
             self.ser_obj_controller.reset_input_buffer()
+            time.sleep(1)
 
         elif (self.rail_position == "B"):
-            self.move_rail_system(-30, "A")
+            self.move_rail_system(-100, "A")
             self.save_last_rail_position()
             self.get_logger().info("Target position reached -> Exiting the joystick_rail_control state")
             self.send_system_state_request('joystick_arm_control')
             self.wait_for_state_change('joystick_arm_control')
             self.ser_obj_controller.reset_input_buffer()
+            time.sleep(1)
 
         else: 
             self.get_logger().info('Check the boundary_path_and_rail_position.json file for an invalid rail position value (The value should either be A or B)')

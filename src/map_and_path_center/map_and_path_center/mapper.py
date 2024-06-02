@@ -71,7 +71,7 @@ class Mapper(Node):
     def start_mapping(self):
         """
         Begin the mapping process by making the motors limp, this is done by sending a message to MotorController.
-        After 25 sec the MotorController has set nullpoints, and the operator is prompted to move the arm to first set of boundarys.
+        After 15 sec the MotorController has set nullpoints, and the operator is prompted to move the arm to first set of boundarys.
         """
         # Make the motors limp
         self.set_null_points_pub.publish(String(data='start'))

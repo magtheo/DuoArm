@@ -29,8 +29,8 @@ class GPIOController(Node):
         """
         GPIO.setmode(GPIO.BCM)
         self.red_led_pin = 17
-        self.green_led_pin = 22
         self.blue_led_pin = 27
+        self.green_led_pin = 22
         GPIO.setup(self.red_led_pin, GPIO.OUT)
         GPIO.setup(self.green_led_pin, GPIO.OUT)
         GPIO.setup(self.blue_led_pin, GPIO.OUT)
