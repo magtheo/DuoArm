@@ -4,7 +4,7 @@ This repository contains the full software stack developed as part of a bachelor
 
 The project demonstrates structured and modular software engineering practices applied to robotics, including modular architecture, encapsulation, explicit state management, and robust communication across heterogeneous hardware components.
 
-**The full report can be found at in the repo root.**
+**The full report can be found at in /docs**
 
 ---
 
