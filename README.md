@@ -1,6 +1,6 @@
 # ROS 2 Bachelor Thesis – DuoArm System
 
-This repository contains the full software stack developed as part of a bachelor thesis focused on **ROS 2-based modular system design**, hardware integration, and state-driven control for the *DuoArm* robotic platform.
+This repository contains the full software stack developed as part of a bachelor thesis focused on ROS 2-based modular system design, hardware integration, and state-driven control.
 
 The project demonstrates structured and modular software engineering practices applied to robotics, including modular architecture, encapsulation, explicit state management, and robust communication across heterogeneous hardware components.
 
